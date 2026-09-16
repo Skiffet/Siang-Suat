@@ -19,7 +19,7 @@ import { usePlayer } from "./PlayerProvider";
 export const ROUND_OPTIONS = [1, 3, 5, 7, 9, 108];
 
 export function RoundsPicker({ compact = false }: { compact?: boolean }) {
-  const { rounds, round, setRounds, current } = usePlayer();
+  const { rounds, round, roundsActive, setRounds } = usePlayer();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -37,8 +37,14 @@ export function RoundsPicker({ compact = false }: { compact?: boolean }) {
     };
   }, [open]);
 
-  const counting = rounds > 1 && current != null;
-  const label = counting ? `${round}/${rounds} จบ` : rounds > 1 ? `${rounds} จบ` : "จบเดียว";
+  // The tally only means something while the part it counts is playing; during
+  // a chant's opening or closing the control still shows what is set.
+  const label =
+    rounds <= 1
+      ? "จบเดียว"
+      : roundsActive
+        ? `${round}/${rounds} จบ`
+        : `${rounds} จบ`;
 
   return (
     <div ref={ref} className="relative">

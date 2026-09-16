@@ -70,6 +70,8 @@ function buildQueue(chant: Chant, base: ChantWithAudio): QueuedChant[] {
     timingsExact: false,
     queue: [],
     rounds: part.rounds ?? 1,
+    parentSlug: chant.slug,
+    repeatable: part.rounds != null,
   }));
 }
 

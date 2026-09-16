@@ -34,6 +34,11 @@ interface PlayerValue {
   rounds: number;
   /** Which round is being chanted now, counting from one. */
   round: number;
+  /**
+   * Whether the part being played is the one the count applies to. False while
+   * a chant's opening or closing plays, where the tally has no meaning.
+   */
+  roundsActive: boolean;
   /** Set when a chant has no audio yet, so the UI can say so instead of stalling. */
   notice: string | null;
 
@@ -94,7 +99,7 @@ function shuffled(list: ChantWithAudio[], first: ChantWithAudio) {
 
 export function PlayerProvider({ children }: { children: React.ReactNode }) {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const [queue, setQueue] = useState<ChantWithAudio[]>([]);
+  const [queue, setQueue] = useState<QueuedChant[]>([]);
   const [index, setIndex] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [time, setTime] = useState(0);
@@ -107,7 +112,6 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
   const [sleepLeftSec, setSleepLeftSec] = useState<number | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [rate, setRateState] = useState(1);
-  const [rounds, setRoundsState] = useState(1);
   const [round, setRound] = useState(1);
 
   // `start` is memoised without the rate as a dependency, so it reads the
@@ -119,12 +123,33 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
   const roundsRef = useRef(1);
   const roundRef = useRef(1);
   const indexRef = useRef(0);
+  const queueRef = useRef<QueuedChant[]>([]);
 
   const current = queue[index] ?? null;
+
+  /**
+   * The entry the count belongs to.
+   *
+   * For a chant in parts that is the part marked repeatable, wherever we are
+   * within the chant — setting "5 จบ" during the opening means the stanza is
+   * held five times, not the opening. For everything else it is just the
+   * entry playing.
+   */
+  const roundsIndex = useMemo(() => {
+    const at = queue[index];
+    if (!at?.parentSlug) return index;
+    const found = queue.findIndex(
+      (c) => c.parentSlug === at.parentSlug && c.repeatable,
+    );
+    return found < 0 ? index : found;
+  }, [queue, index]);
+
+  const shownRounds = queue[roundsIndex]?.rounds ?? 1;
+  const roundsActive = roundsIndex === index;
   const upNext = queue[index + 1] ?? (repeat === "all" ? queue[0] ?? null : null);
 
   /** Load a track and start it. Kept in one place so every entry point matches. */
-  const start = useCallback((list: ChantWithAudio[], at: number) => {
+  const start = useCallback((list: QueuedChant[], at: number) => {
     const chant = list[at];
     if (!chant) return;
     if (!chant.audioUrl) {
@@ -133,6 +158,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
       return;
     }
     setNotice(null);
+    queueRef.current = list;
     setQueue(list);
     setIndex(at);
     indexRef.current = at;
@@ -140,10 +166,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
 
     // A sitting decides the count for each chant it holds; a chant played on
     // its own falls back to the count it is usually kept at.
-    const wanted =
-      (chant as Partial<QueuedChant>).rounds ?? chant.defaultRounds ?? 1;
-    roundsRef.current = wanted;
-    setRoundsState(wanted);
+    roundsRef.current = chant.rounds ?? chant.defaultRounds ?? 1;
     const el = audioRef.current;
     if (!el) return;
     el.src = chant.audioUrl;
@@ -248,11 +271,24 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
    * it resets to 1 whenever a new source loads.
    */
   const setRounds = useCallback((next: number) => {
-    roundsRef.current = next;
-    setRoundsState(next);
-    setQueue((q) =>
-      q.map((c, i) => (i === indexRef.current ? { ...c, rounds: next } : c)),
-    );
+    const q = queueRef.current;
+    const here = indexRef.current;
+    const at = q[here];
+    // A chant in parts puts its count on the part meant to be held, wherever
+    // within the chant the change was made.
+    let target = here;
+    if (at?.parentSlug) {
+      const found = q.findIndex(
+        (c) => c.parentSlug === at.parentSlug && c.repeatable,
+      );
+      if (found >= 0) target = found;
+    }
+    const updated = q.map((c, i) => (i === target ? { ...c, rounds: next } : c));
+    queueRef.current = updated;
+    setQueue(updated);
+    // Only touch the live counter when that part is the one playing; otherwise
+    // it takes effect when the part comes round.
+    if (target === here) roundsRef.current = next;
     // Lowering the count below where you already are ends the sitting on this
     // pass rather than retroactively finishing it.
     if (roundRef.current > next) {
@@ -393,8 +429,9 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
       expanded,
       sleepLeftSec,
       rate,
-      rounds,
+      rounds: shownRounds,
       round,
+      roundsActive,
       notice,
       play,
       playQueue,
@@ -412,7 +449,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
     }),
     [
       queue, index, current, upNext, playing, time, duration, shuffle, repeat,
-      expanded, sleepLeftSec, rate, rounds, round, notice, play, playQueue,
+      expanded, sleepLeftSec, rate, shownRounds, round, roundsActive, notice, play, playQueue,
       toggle, next, prev, seek, toggleShuffle, cycleRepeat, startSleepTimer,
       setRate, setRounds, isCurrent,
     ],

@@ -149,6 +149,14 @@ export interface Playlist {
 export interface QueuedChant extends ChantWithAudio {
   /** How many times through, resolved from playlist then chant then one. */
   rounds: number;
+  /** The chant this is a part of, when it is one part of several. */
+  parentSlug?: string;
+  /**
+   * True on the one part meant to be held for rounds. A count belongs to the
+   * chant, not to whichever part happens to be playing, so the control reads
+   * and writes this part wherever you are within the chant.
+   */
+  repeatable?: boolean;
 }
 
 /** A playlist with its chants resolved, plus the totals the UI prints. */

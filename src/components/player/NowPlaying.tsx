@@ -55,6 +55,7 @@ export function NowPlaying() {
     setRate,
     rounds,
     round,
+    roundsActive,
     setRounds,
   } = usePlayer();
 
@@ -293,7 +294,11 @@ export function NowPlaying() {
               }`}
             >
               <RepeatIcon size={16} />
-              {rounds > 1 ? `${round}/${rounds} จบ` : "จบเดียว"}
+              {rounds <= 1
+                ? "จบเดียว"
+                : roundsActive
+                  ? `${round}/${rounds} จบ`
+                  : `${rounds} จบ`}
             </button>
           </div>
         </div>
