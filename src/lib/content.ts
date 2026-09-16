@@ -1,6 +1,6 @@
 import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
-import { CATEGORY_ORDER } from "./categories";
+import { CATEGORY_LABELS, CATEGORY_ORDER } from "./categories";
 import type {
   AudioManifest,
   Chant,
@@ -173,6 +173,13 @@ export function getPlaylist(slug: string): PlaylistWithChants | undefined {
  *
  * Playable chants sort ahead of silent ones inside every rail — a demo should
  * never open on a row where the first cover does nothing.
+ *
+ * "บทสวดยอดนิยม" only ever shows the first eight chants, so once the
+ * catalogue passes eight, whatever falls after that slice has no rail of its
+ * own unless a category picks it up — a chant reachable only from inside a
+ * playlist page is otherwise invisible from home. A rail per category
+ * guarantees every chant appears in at least one row here, without needing
+ * anyone to remember to also curate it into a tag-based shelf.
  */
 export function getShelves(): Shelf[] {
   const chants = getChants();
@@ -182,11 +189,18 @@ export function getShelves(): Shelf[] {
     );
   const tagged = (tag: string) => playable(chants.filter((c) => c.tags?.includes(tag)));
 
-  return [
+  const curated: Shelf[] = [
     { slug: "popular", title: "บทสวดยอดนิยม", items: playable(chants).slice(0, 8) },
     { slug: "bedtime", title: "ฟังก่อนนอน", items: tagged("ก่อนนอน") },
     { slug: "today", title: "สำหรับวันนี้", items: tagged("ทุกวัน") },
-    { slug: "meditation", title: "นั่งสมาธิ", items: playable(chants.filter((c) => c.category === "meditation")) },
-    // A rail holding one cover reads as a mistake rather than as a shelf.
-  ].filter((shelf) => shelf.items.length > 1);
+  ];
+
+  const byCategory: Shelf[] = CATEGORY_ORDER.map((cat) => ({
+    slug: cat,
+    title: CATEGORY_LABELS[cat],
+    items: playable(chants.filter((c) => c.category === cat)),
+  }));
+
+  // A rail holding one cover reads as a mistake rather than as a shelf.
+  return [...curated, ...byCategory].filter((shelf) => shelf.items.length > 1);
 }
