@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import type { PlaylistWithChants } from "@/lib/types";
+import { isPlayingIn } from "@/lib/nowPlaying";
 import { Cover } from "./Cover";
 import { EqualizerIcon, PauseIcon, PlayIcon } from "./Icons";
 import { usePlayer } from "./player/PlayerProvider";
@@ -18,8 +19,7 @@ export function PlaylistGrid({ playlists }: { playlists: PlaylistWithChants[] })
   return (
     <div className="grid grid-cols-2 gap-2 px-4 lg:grid-cols-3 lg:px-0">
       {playlists.map((playlist) => {
-        const active =
-          current != null && playlist.chants.includes(current.slug);
+        const active = isPlayingIn(playlist.items, current?.slug);
         return (
           <Link
             key={playlist.slug}

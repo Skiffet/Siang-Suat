@@ -2,40 +2,20 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo, useState, useSyncExternalStore } from "react";
-import type { ChantWithAudio, PlaylistWithChants, QueuedChant } from "@/lib/types";
+import { useMemo, useSyncExternalStore } from "react";
+import type { ChantWithAudio, PlaylistWithChants } from "@/lib/types";
 import { formatDurationLong } from "@/lib/format";
 import {
-  loadMyPlaylists,
+  getMyPlaylistsServerSnapshot,
+  getMyPlaylistsSnapshot,
   newMyPlaylistId,
-  type MyPlaylist,
+  resolveMyPlaylist,
+  subscribeMyPlaylists,
 } from "@/lib/myPlaylists";
 import { Cover } from "./Cover";
 import { EqualizerIcon, PlusIcon } from "./Icons";
+import { isPlayingIn } from "@/lib/nowPlaying";
 import { usePlayer } from "./player/PlayerProvider";
-
-const neverChanges = () => () => {};
-
-/** Resolve a saved playlist into a queue, applying counts and the opening นะโม. */
-function resolve(
-  saved: MyPlaylist,
-  bySlug: Map<string, ChantWithAudio>,
-): QueuedChant[] {
-  const out: QueuedChant[] = [];
-  for (const entry of saved.entries) {
-    const spec = typeof entry === "string" ? { slug: entry } : entry;
-    const chant = bySlug.get(spec.slug);
-    if (!chant) continue;
-    if (typeof entry !== "string" && entry.namo) {
-      const namo = bySlug.get("namo-tassa");
-      if (namo && !out.some((c) => c.slug === "namo-tassa")) {
-        out.push({ ...namo, rounds: namo.defaultRounds ?? 1 });
-      }
-    }
-    out.push({ ...chant, rounds: spec.rounds ?? chant.defaultRounds ?? 1 });
-  }
-  return out;
-}
 
 /**
  * Playlists — the ones you made, and the ones we arranged.
@@ -53,16 +33,22 @@ export function PlaylistsView({
 }) {
   const router = useRouter();
   const { current, playing, playQueue } = usePlayer();
-  const bySlug = useMemo(() => new Map(chants.map((c) => [c.slug, c])), [chants]);
-
-  // Saved playlists live in the browser, so they cannot be read until it is there.
-  const onClient = useSyncExternalStore(neverChanges, () => true, () => false);
-  const [mine] = useState<MyPlaylist[]>(() =>
-    typeof window === "undefined" ? [] : loadMyPlaylists(),
+  const bySlug = useMemo(
+    () => new Map(chants.map((c) => [c.slug, c])),
+    [chants],
   );
 
-  const isPlaying = (slugs: string[]) =>
-    playing && current != null && slugs.some((s) => current.slug.startsWith(s));
+  // Reactive, not a one-shot read: creating, editing or deleting a playlist
+  // from its own editor navigates back here, and this list has to reflect
+  // that the moment it lands rather than on the next full page load.
+  const mine = useSyncExternalStore(
+    subscribeMyPlaylists,
+    getMyPlaylistsSnapshot,
+    getMyPlaylistsServerSnapshot,
+  );
+
+  const isPlaying = (items: { slug: string }[]) =>
+    playing && isPlayingIn(items, current?.slug);
 
   return (
     <div className="px-4 py-6 lg:px-8 lg:py-8">
@@ -94,17 +80,17 @@ export function PlaylistsView({
         </span>
       </button>
 
-      {onClient && mine.length > 0 && (
+      {mine.length > 0 && (
         <section className="mt-8">
           <h2 className="type-feature text-ink">ของฉัน</h2>
           <ul className="mt-3 space-y-1">
             {mine.map((saved) => {
-              const items = resolve(saved, bySlug);
+              const items = resolveMyPlaylist(saved, bySlug);
               const total = items.reduce(
                 (n, c) => n + (c.durationSec ?? 0) * c.rounds,
                 0,
               );
-              const live = isPlaying(items.map((c) => c.slug));
+              const live = isPlaying(items);
               return (
                 <li key={saved.id} className="flex items-center gap-2">
                   <button
@@ -150,7 +136,7 @@ export function PlaylistsView({
         </p>
         <ul className="mt-3 space-y-1">
           {playlists.map((playlist) => {
-            const live = isPlaying(playlist.items.map((c) => c.slug));
+            const live = isPlaying(playlist.items);
             return (
               <li key={playlist.slug}>
                 <Link

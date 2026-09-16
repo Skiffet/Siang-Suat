@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { IBM_Plex_Sans_Thai, Noto_Serif_Thai } from "next/font/google";
 import { AppShell } from "@/components/AppShell";
 import { PlayerProvider } from "@/components/player/PlayerProvider";
-import { getPlaylists } from "@/lib/content";
+import { getChants, getPlaylists } from "@/lib/content";
 import "./globals.css";
 
 /*
@@ -49,12 +49,15 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   // Read once here so the sidebar's playlist list is identical on every route.
   const playlists = getPlaylists();
+  // The sidebar needs this to resolve the counts and titles of playlists the
+  // listener made themselves, which are stored client-side by slug only.
+  const chants = getChants();
 
   return (
     <html lang="th" className={`${sans.variable} ${serif.variable}`}>
       <body>
         <PlayerProvider>
-          <AppShell playlists={playlists}>{children}</AppShell>
+          <AppShell playlists={playlists} chants={chants}>{children}</AppShell>
         </PlayerProvider>
       </body>
     </html>

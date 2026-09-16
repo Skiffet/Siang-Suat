@@ -1,6 +1,6 @@
 "use client";
 
-import type { PlaylistEntry } from "./types";
+import type { ChantWithAudio, PlaylistEntry, QueuedChant } from "./types";
 
 /**
  * Playlists the listener made themselves.
@@ -22,6 +22,22 @@ export interface MyPlaylist {
 
 const KEY = "siang-suad.my-playlists.v1";
 
+/**
+ * Everyone reading this list — the sidebar, the playlists screen, anything
+ * added later — has to see a save or delete immediately, including ones made
+ * by a different mounted component than the one doing the reading. A layout
+ * component like the sidebar mounts once and never remounts on navigation, so
+ * a one-shot read at mount would go stale the moment a playlist changes
+ * anywhere else in the app. `useSyncExternalStore` is the correct tool for
+ * exactly this, so this module exposes the subscribe/snapshot pair it needs
+ * rather than leaving each caller to invent its own polling or refetch timing.
+ */
+const listeners = new Set<() => void>();
+
+function notify() {
+  for (const l of listeners) l();
+}
+
 /** Storage throws in private windows and when site data is blocked. */
 function read(): MyPlaylist[] {
   try {
@@ -32,17 +48,66 @@ function read(): MyPlaylist[] {
   }
 }
 
+/**
+ * `getSnapshot` has to return the *same* reference across calls when nothing
+ * changed, or `useSyncExternalStore` sees a new array every render (a JSON
+ * parse always allocates one) and concludes the store never settles — React
+ * throws "Maximum update depth exceeded" rather than silently degrading.
+ * Caching on the raw string is cheap and exactly as fresh as localStorage
+ * itself: any write, from this tab or another, changes the string first.
+ */
+let cachedRaw: string | null | undefined;
+let cachedSnapshot: MyPlaylist[] = [];
+
 function write(list: MyPlaylist[]): boolean {
   try {
     localStorage.setItem(KEY, JSON.stringify(list));
+    notify();
     return true;
   } catch {
     return false;
   }
 }
 
+const EMPTY: MyPlaylist[] = [];
+
+/** For `useSyncExternalStore`'s subscribe argument. */
+export function subscribeMyPlaylists(onChange: () => void): () => void {
+  listeners.add(onChange);
+  // A write from another tab reaches this one as a native `storage` event
+  // rather than through the in-memory listener set above.
+  const onStorage = (e: StorageEvent) => {
+    if (e.key === KEY) onChange();
+  };
+  window.addEventListener("storage", onStorage);
+  return () => {
+    listeners.delete(onChange);
+    window.removeEventListener("storage", onStorage);
+  };
+}
+
+/** For `useSyncExternalStore`'s getServerSnapshot argument. */
+export function getMyPlaylistsServerSnapshot(): MyPlaylist[] {
+  return EMPTY;
+}
+
 export function loadMyPlaylists(): MyPlaylist[] {
   return read().sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+}
+
+/** For `useSyncExternalStore`'s getSnapshot argument — see the cache note above. */
+export function getMyPlaylistsSnapshot(): MyPlaylist[] {
+  let raw: string | null;
+  try {
+    raw = localStorage.getItem(KEY);
+  } catch {
+    raw = null;
+  }
+  if (raw !== cachedRaw) {
+    cachedRaw = raw;
+    cachedSnapshot = loadMyPlaylists();
+  }
+  return cachedSnapshot;
 }
 
 export function getMyPlaylist(id: string): MyPlaylist | undefined {
@@ -64,4 +129,30 @@ export function deleteMyPlaylist(id: string): boolean {
 
 export function newMyPlaylistId(): string {
   return `s${Date.now().toString(36)}`;
+}
+
+/**
+ * Resolve one saved playlist into a queue, the same way a content-authored
+ * one is resolved server-side: applying each entry's count and expanding the
+ * opening นะโม flag. Shared by the playlists screen and the sidebar so the
+ * two cannot drift on what a saved playlist actually contains.
+ */
+export function resolveMyPlaylist(
+  saved: MyPlaylist,
+  bySlug: Map<string, ChantWithAudio>,
+): QueuedChant[] {
+  const out: QueuedChant[] = [];
+  for (const entry of saved.entries) {
+    const spec = typeof entry === "string" ? { slug: entry } : entry;
+    const chant = bySlug.get(spec.slug);
+    if (!chant) continue;
+    if (typeof entry !== "string" && entry.namo) {
+      const namo = bySlug.get("namo-tassa");
+      if (namo && !out.some((c) => c.slug === "namo-tassa")) {
+        out.push({ ...namo, rounds: namo.defaultRounds ?? 1 });
+      }
+    }
+    out.push({ ...chant, rounds: spec.rounds ?? chant.defaultRounds ?? 1 });
+  }
+  return out;
 }

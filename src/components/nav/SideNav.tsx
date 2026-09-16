@@ -2,7 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { PlaylistWithChants } from "@/lib/types";
+import { useMemo, useSyncExternalStore } from "react";
+import type { ChantWithAudio, PlaylistWithChants } from "@/lib/types";
+import {
+  getMyPlaylistsServerSnapshot,
+  getMyPlaylistsSnapshot,
+  resolveMyPlaylist,
+  subscribeMyPlaylists,
+} from "@/lib/myPlaylists";
+import { isPlayingIn } from "@/lib/nowPlaying";
 import { Brand } from "../Brand";
 import { EqualizerIcon } from "../Icons";
 import { usePlayer } from "../player/PlayerProvider";
@@ -16,9 +24,28 @@ import { NavIcon } from "./NavIcon";
  * active entry is signalled by weight and a white fill rather than a coloured
  * background — the green is spent on playback, not on navigation chrome.
  */
-export function SideNav({ playlists }: { playlists: PlaylistWithChants[] }) {
+export function SideNav({
+  playlists,
+  chants,
+}: {
+  playlists: PlaylistWithChants[];
+  chants: ChantWithAudio[];
+}) {
   const pathname = usePathname();
   const { current, playing } = usePlayer();
+  const bySlug = useMemo(
+    () => new Map(chants.map((c) => [c.slug, c])),
+    [chants],
+  );
+
+  // Reactive rather than a one-shot read: this sidebar mounts once in the
+  // root layout and never remounts on navigation, so it has to hear about a
+  // save or delete made from any other page in the same session.
+  const mine = useSyncExternalStore(
+    subscribeMyPlaylists,
+    getMyPlaylistsSnapshot,
+    getMyPlaylistsServerSnapshot,
+  );
 
   return (
     <aside className="hidden w-[248px] shrink-0 flex-col gap-2 p-2 lg:flex xl:w-[280px]">
@@ -31,7 +58,9 @@ export function SideNav({ playlists }: { playlists: PlaylistWithChants[] }) {
         <ul>
           {NAV_ITEMS.map((item) => {
             const active =
-              item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+              item.href === "/"
+                ? pathname === "/"
+                : pathname.startsWith(item.href);
             return (
               <li key={item.href}>
                 <Link
@@ -58,9 +87,34 @@ export function SideNav({ playlists }: { playlists: PlaylistWithChants[] }) {
         </div>
 
         <ul className="no-scrollbar min-h-0 flex-1 overflow-y-auto px-2 pb-3">
+          {mine.map((saved) => {
+            const items = resolveMyPlaylist(saved, bySlug);
+            const nowPlaying = playing && isPlayingIn(items, current?.slug);
+            return (
+              <li key={saved.id}>
+                <Link
+                  href={`/playlist/edit/${saved.id}`}
+                  className="flex items-center gap-3 rounded-md px-3 py-2 transition-colors hover:bg-card"
+                >
+                  <span className="min-w-0 flex-1">
+                    <span
+                      className={`block truncate type-caption ${nowPlaying ? "text-green" : "text-ink"}`}
+                    >
+                      {saved.title}
+                    </span>
+                    <span className="block truncate type-small text-muted">
+                      {items.length} ตอน
+                    </span>
+                  </span>
+                  {nowPlaying && <EqualizerIcon size={14} />}
+                </Link>
+              </li>
+            );
+          })}
+
           {playlists.map((playlist) => {
             const nowPlaying =
-              playing && current != null && playlist.chants.includes(current.slug);
+              playing && isPlayingIn(playlist.items, current?.slug);
             return (
               <li key={playlist.slug}>
                 <Link

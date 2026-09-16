@@ -1,6 +1,7 @@
 "use client";
 
 import type { PlaylistWithChants } from "@/lib/types";
+import { isPlayingIn } from "@/lib/nowPlaying";
 import { formatDurationLong } from "@/lib/format";
 import { Cover } from "./Cover";
 import { TrackRow } from "./TrackRow";
@@ -9,7 +10,7 @@ import { PauseIcon, PlayIcon, ShuffleIcon } from "./Icons";
 
 export function PlaylistDetail({ playlist }: { playlist: PlaylistWithChants }) {
   const { playQueue, current, playing, toggle, shuffle, toggleShuffle } = usePlayer();
-  const active = current != null && playlist.chants.includes(current.slug);
+  const active = isPlayingIn(playlist.items, current?.slug);
   const playable = playlist.items.filter((c) => c.audioUrl).length;
 
   return (

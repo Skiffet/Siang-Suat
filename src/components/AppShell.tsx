@@ -1,6 +1,6 @@
 "use client";
 
-import type { PlaylistWithChants } from "@/lib/types";
+import type { ChantWithAudio, PlaylistWithChants } from "@/lib/types";
 import { BottomNav } from "./nav/BottomNav";
 import { SideNav } from "./nav/SideNav";
 import { NowPlaying } from "./player/NowPlaying";
@@ -16,9 +16,11 @@ import { usePlayer } from "./player/PlayerProvider";
  */
 export function AppShell({
   playlists,
+  chants,
   children,
 }: {
   playlists: PlaylistWithChants[];
+  chants: ChantWithAudio[];
   children: React.ReactNode;
 }) {
   const { current, notice } = usePlayer();
@@ -26,7 +28,7 @@ export function AppShell({
   return (
     <>
       <div className="flex min-h-dvh">
-        <SideNav playlists={playlists} />
+        <SideNav playlists={playlists} chants={chants} />
 
         <div className="min-w-0 flex-1 lg:p-2 lg:pl-0">
           <main
