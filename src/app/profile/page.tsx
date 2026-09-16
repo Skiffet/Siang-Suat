@@ -5,12 +5,6 @@ import { getChants, getPlaylists } from "@/lib/content";
 
 export const metadata: Metadata = { title: "โปรไฟล์" };
 
-const SETTINGS = [
-  { label: "คุณภาพเสียงและการดาวน์โหลด", hint: "สูง · ดาวน์โหลดเมื่อใช้ Wi-Fi" },
-  { label: "การแจ้งเตือนเวลาสวด", hint: "ทุกวัน 21:00 น." },
-  { label: "ขนาดตัวอักษรบทสวด", hint: "ปกติ" },
-  { label: "เกี่ยวกับเสียงสวด", hint: "เวอร์ชันสาธิต" },
-];
 
 export default function ProfilePage() {
   const chants = getChants();
@@ -69,27 +63,6 @@ export default function ProfilePage() {
         </ul>
       </section>
 
-      <section className="mt-8">
-        <h2 className="type-feature text-ink">การตั้งค่า</h2>
-        <ul className="mt-3 space-y-0.5">
-          {SETTINGS.map((item) => (
-            <li
-              key={item.label}
-              className="flex items-center justify-between gap-3 rounded-md px-3 py-3 transition-colors hover:bg-card-alt"
-            >
-              <span className="min-w-0">
-                <span className="block truncate type-caption text-ink">
-                  {item.label}
-                </span>
-                <span className="block truncate type-small text-muted">
-                  {item.hint}
-                </span>
-              </span>
-              <ChevronRightIcon size={14} className="shrink-0 text-muted" />
-            </li>
-          ))}
-        </ul>
-      </section>
     </div>
   );
 }

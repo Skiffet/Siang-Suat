@@ -4,17 +4,14 @@ import Link from "next/link";
 import { useState } from "react";
 import { Cover } from "../Cover";
 import {
-  CheckIcon,
   ChevronDownIcon,
   ClockIcon,
   MoreIcon,
   NextIcon,
   PauseIcon,
   PlayIcon,
-  PlusIcon,
   PrevIcon,
   RepeatIcon,
-  ShareIcon,
   ShuffleIcon,
   SpeedIcon,
   TextIcon,
@@ -59,7 +56,6 @@ export function NowPlaying() {
 
   const [sleepOpen, setSleepOpen] = useState(false);
   const [rateOpen, setRateOpen] = useState(false);
-  const [saved, setSaved] = useState(false);
   /** Swaps the art for the chant text, so reading along keeps the controls. */
   const [reading, setReading] = useState(false);
 
@@ -106,13 +102,8 @@ export function NowPlaying() {
               {current.subtitle ?? "เสียงสวด Podcast"}
             </p>
           </div>
-          <button
-            type="button"
-            aria-label="ตัวเลือกเพิ่มเติม"
-            className="grid size-9 place-items-center rounded-full text-ink transition-colors hover:bg-white/10"
-          >
-            <MoreIcon size={20} />
-          </button>
+          {/* Balances the collapse button, so the title stays centred. */}
+          <span className="size-9" />
         </header>
 
         {reading ? (
@@ -155,19 +146,6 @@ export function NowPlaying() {
             <h1 className="type-section text-ink">{current.title}</h1>
             <p className="mt-1 type-caption text-muted">เสียงสวด Podcast</p>
           </div>
-          <button
-            type="button"
-            onClick={() => setSaved((s) => !s)}
-            aria-label={saved ? "เอาออกจากรายการโปรด" : "บันทึกลงรายการโปรด"}
-            aria-pressed={saved}
-            className={`mt-1 grid size-8 shrink-0 place-items-center rounded-full transition-colors ${
-              saved
-                ? "bg-green text-on-green"
-                : "border border-line-light text-muted hover:text-ink"
-            }`}
-          >
-            {saved ? <CheckIcon size={16} /> : <PlusIcon size={16} />}
-          </button>
         </div>
 
         <Scrubber
@@ -294,23 +272,6 @@ export function NowPlaying() {
               {sleepLeftSec != null
                 ? `${Math.ceil(sleepLeftSec / 60)} นาที`
                 : "ตั้งเวลา"}
-            </button>
-            <button
-              type="button"
-              onClick={() => setSaved((s) => !s)}
-              className="flex items-center gap-2 rounded-full bg-mid px-4 py-2.5 type-small-bold text-ink transition-colors hover:bg-card"
-            >
-              {saved ? <CheckIcon size={16} /> : <PlusIcon size={16} />}
-              {saved ? "บันทึกแล้ว" : "บันทึก"}
-            </button>
-            <button
-              type="button"
-              className={`items-center gap-2 rounded-full bg-mid px-4 py-2.5 type-small-bold text-ink transition-colors hover:bg-card ${
-                reading ? "hidden" : "flex"
-              }`}
-            >
-              <ShareIcon size={16} />
-              แชร์
             </button>
           </div>
         </div>

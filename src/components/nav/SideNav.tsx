@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { PlaylistWithChants } from "@/lib/types";
 import { Brand } from "../Brand";
-import { EqualizerIcon, PlusIcon } from "../Icons";
+import { EqualizerIcon } from "../Icons";
 import { usePlayer } from "../player/PlayerProvider";
 import { NAV_ITEMS } from "./navItems";
 import { NavIcon } from "./NavIcon";
@@ -53,15 +53,8 @@ export function SideNav({ playlists }: { playlists: PlaylistWithChants[] }) {
       </nav>
 
       <div className="flex min-h-0 flex-1 flex-col rounded-lg bg-surface">
-        <div className="flex items-center justify-between px-5 py-4">
+        <div className="px-5 py-4">
           <h2 className="type-caption-bold text-muted">เพลย์ลิสต์ของคุณ</h2>
-          <button
-            type="button"
-            className="grid size-8 place-items-center rounded-full text-muted transition-colors hover:bg-mid hover:text-ink"
-            aria-label="สร้างเพลย์ลิสต์ใหม่"
-          >
-            <PlusIcon size={18} />
-          </button>
         </div>
 
         <ul className="no-scrollbar min-h-0 flex-1 overflow-y-auto px-2 pb-3">

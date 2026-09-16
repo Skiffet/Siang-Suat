@@ -8,7 +8,6 @@ import { Cover } from "./Cover";
 import { PlayButton } from "./PlayButton";
 import { Rail } from "./Rail";
 import { Transcript } from "./Transcript";
-import { DownloadIcon, MoreIcon, PlusIcon, ShareIcon } from "./Icons";
 
 /**
  * A chant's own page: the art, the controls, and the text.
@@ -68,34 +67,6 @@ export function ChantDetail({
 
         <div className="relative mt-6 flex items-center gap-4">
           <PlayButton chant={chant} size={56} />
-          <button
-            type="button"
-            aria-label="บันทึกลงรายการโปรด"
-            className="grid size-9 place-items-center rounded-full border border-line-light text-muted transition-colors hover:text-ink"
-          >
-            <PlusIcon size={18} />
-          </button>
-          <button
-            type="button"
-            aria-label="ดาวน์โหลดไว้ฟังออฟไลน์"
-            className="text-muted transition-colors hover:text-ink"
-          >
-            <DownloadIcon size={22} />
-          </button>
-          <button
-            type="button"
-            aria-label="แชร์"
-            className="text-muted transition-colors hover:text-ink"
-          >
-            <ShareIcon size={22} />
-          </button>
-          <button
-            type="button"
-            aria-label="ตัวเลือกเพิ่มเติม"
-            className="text-muted transition-colors hover:text-ink"
-          >
-            <MoreIcon size={22} />
-          </button>
         </div>
       </header>
 

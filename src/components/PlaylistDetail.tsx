@@ -5,14 +5,7 @@ import { formatDurationLong } from "@/lib/format";
 import { Cover } from "./Cover";
 import { TrackRow } from "./TrackRow";
 import { usePlayer } from "./player/PlayerProvider";
-import {
-  DownloadIcon,
-  MoreIcon,
-  PauseIcon,
-  PlayIcon,
-  PlusIcon,
-  ShuffleIcon,
-} from "./Icons";
+import { PauseIcon, PlayIcon, ShuffleIcon } from "./Icons";
 
 export function PlaylistDetail({ playlist }: { playlist: PlaylistWithChants }) {
   const { playQueue, current, playing, toggle, shuffle, toggleShuffle } = usePlayer();
@@ -79,27 +72,6 @@ export function PlaylistDetail({ playlist }: { playlist: PlaylistWithChants }) {
             className={`transition-colors ${shuffle ? "text-green" : "text-muted hover:text-ink"}`}
           >
             <ShuffleIcon size={24} />
-          </button>
-          <button
-            type="button"
-            aria-label="บันทึกเพลย์ลิสต์"
-            className="grid size-9 place-items-center rounded-full border border-line-light text-muted transition-colors hover:text-ink"
-          >
-            <PlusIcon size={18} />
-          </button>
-          <button
-            type="button"
-            aria-label="ดาวน์โหลดทั้งเพลย์ลิสต์"
-            className="text-muted transition-colors hover:text-ink"
-          >
-            <DownloadIcon size={22} />
-          </button>
-          <button
-            type="button"
-            aria-label="ตัวเลือกเพิ่มเติม"
-            className="text-muted transition-colors hover:text-ink"
-          >
-            <MoreIcon size={22} />
           </button>
         </div>
       </header>

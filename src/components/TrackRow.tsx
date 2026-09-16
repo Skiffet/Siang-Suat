@@ -6,7 +6,7 @@ import { formatTime } from "@/lib/format";
 import { CATEGORY_LABELS } from "@/lib/categories";
 import { Cover } from "./Cover";
 import { usePlayer } from "./player/PlayerProvider";
-import { EqualizerIcon, MoreIcon, PlayIcon } from "./Icons";
+import { EqualizerIcon, PlayIcon } from "./Icons";
 
 /**
  * A dense list row — the library and detail-page unit.
@@ -72,9 +72,6 @@ export function TrackRow({
         {chant.durationSec ? formatTime(chant.durationSec) : "เร็ว ๆ นี้"}
       </span>
 
-      <span className="hidden shrink-0 text-muted opacity-0 transition-opacity group-hover:opacity-100 sm:block">
-        <MoreIcon size={18} />
-      </span>
     </div>
   );
 }

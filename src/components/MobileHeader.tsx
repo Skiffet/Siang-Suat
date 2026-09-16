@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Brand } from "./Brand";
-import { BellIcon, SearchIcon } from "./Icons";
+import { SearchIcon } from "./Icons";
 
 /**
  * The mobile header: wordmark, notifications, avatar, and the search pill.
@@ -14,13 +14,6 @@ export function MobileHeader() {
       <div className="flex items-center justify-between gap-3">
         <Brand tagline />
         <div className="flex shrink-0 items-center gap-2">
-          <button
-            type="button"
-            aria-label="การแจ้งเตือน"
-            className="grid size-9 place-items-center rounded-full text-muted transition-colors hover:bg-mid hover:text-ink"
-          >
-            <BellIcon size={20} />
-          </button>
           <Link
             href="/profile"
             aria-label="โปรไฟล์"
