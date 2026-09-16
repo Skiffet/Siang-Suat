@@ -5,6 +5,7 @@ import type { ChantWithAudio } from "@/lib/types";
 import { CATEGORY_LABELS } from "@/lib/categories";
 import { formatDurationLong } from "@/lib/format";
 import { Cover } from "./Cover";
+import { usePlayer } from "./player/PlayerProvider";
 import { PlayButton } from "./PlayButton";
 import { Rail } from "./Rail";
 import { Transcript } from "./Transcript";
@@ -23,6 +24,11 @@ export function ChantDetail({
   related: ChantWithAudio[];
 }) {
   const tags = useMemo(() => chant.tags ?? [], [chant.tags]);
+  // While this chant is playing the count may have been changed, and the page
+  // should say what is actually set rather than what the file was authored
+  // with.
+  const { rounds: liveRounds, isCurrent } = usePlayer();
+  const playing = isCurrent(chant.slug);
 
   return (
     <article>
@@ -99,9 +105,15 @@ export function ChantDetail({
                   <h2 className="type-feature text-ink">
                     {chant.parts?.[i]?.label ?? `ท่อนที่ ${i + 1}`}
                   </h2>
-                  {part.rounds > 1 && (
-                    <span className="rounded-full bg-mid px-2 py-[2px] text-[10.5px] font-semibold leading-[1.33] text-ink">
-                      ท่อง {part.rounds} จบ · ปรับได้ตอนฟัง
+                  {part.repeatable && (
+                    <span
+                      className={`rounded-full px-2 py-[2px] text-[10.5px] font-semibold leading-[1.33] ${
+                        playing ? "bg-green text-on-green" : "bg-mid text-ink"
+                      }`}
+                    >
+                      {playing
+                        ? `ท่อง ${liveRounds} จบ`
+                        : `ท่อง ${part.rounds} จบ · ปรับได้ตอนฟัง`}
                     </span>
                   )}
                 </div>
