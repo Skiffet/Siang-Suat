@@ -174,12 +174,9 @@ export function getPlaylist(slug: string): PlaylistWithChants | undefined {
  * Playable chants sort ahead of silent ones inside every rail — a demo should
  * never open on a row where the first cover does nothing.
  *
- * "บทสวดแนะนำ" only ever shows the first eight chants, so once the
- * catalogue passes eight, whatever falls after that slice has no rail of its
- * own unless a category picks it up — a chant reachable only from inside a
- * playlist page is otherwise invisible from home. A rail per category
- * guarantees every chant appears in at least one row here, without needing
- * anyone to remember to also curate it into a tag-based shelf.
+ * A rail per category runs alongside "บทสวดทั้งหมด", so a chant is never
+ * reachable only from inside a playlist page — it shows up on home through
+ * its category even if a future tag-based shelf forgets to pick it up.
  */
 export function getShelves(): Shelf[] {
   const chants = getChants();
@@ -190,10 +187,10 @@ export function getShelves(): Shelf[] {
   const tagged = (tag: string) => playable(chants.filter((c) => c.tags?.includes(tag)));
 
   const curated: Shelf[] = [
-    // "แนะนำ" rather than "ยอดนิยม" (popular) — nothing here tracks plays or
-    // ranks by any real signal, it is just the first eight playable chants in
-    // catalogue order. Calling it "popular" would claim data that doesn't exist.
-    { slug: "suggested", title: "บทสวดแนะนำ", items: playable(chants).slice(0, 8) },
+    // "ทั้งหมด" rather than a curated-sounding name, and no slice — the same
+    // word /explore uses for its own full listing, so it has to mean the same
+    // thing here: every chant, not a top pick that quietly drops the rest.
+    { slug: "all", title: "บทสวดทั้งหมด", items: playable(chants) },
     { slug: "bedtime", title: "ฟังก่อนนอน", items: tagged("ก่อนนอน") },
   ];
 
