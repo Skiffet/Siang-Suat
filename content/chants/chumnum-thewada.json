@@ -263,52 +263,37 @@
       {
         "sourceIndex": 48,
         "repeatIndex": 0,
-        "startSec": 154.6
+        "startSec": 157.42
       },
       {
         "sourceIndex": 49,
         "repeatIndex": 0,
-        "startSec": 157.42
+        "startSec": 160.24
       },
       {
         "sourceIndex": 50,
         "repeatIndex": 0,
-        "startSec": 162.24
+        "startSec": 165.04
       },
       {
         "sourceIndex": 51,
         "repeatIndex": 0,
-        "startSec": 165.04
+        "startSec": 167.7
       },
       {
         "sourceIndex": 52,
         "repeatIndex": 0,
-        "startSec": 167.7
+        "startSec": 172.14
       },
       {
         "sourceIndex": 53,
         "repeatIndex": 0,
-        "startSec": 172.14
+        "startSec": 176.44
       },
       {
         "sourceIndex": 54,
         "repeatIndex": 0,
-        "startSec": 173.36
-      },
-      {
-        "sourceIndex": 55,
-        "repeatIndex": 0,
-        "startSec": 176.44
-      },
-      {
-        "sourceIndex": 56,
-        "repeatIndex": 0,
         "startSec": 180.68
-      },
-      {
-        "sourceIndex": 57,
-        "repeatIndex": 0,
-        "startSec": 181.94
       }
     ]
   },
@@ -523,27 +508,15 @@
     },
     {
       "kind": "pali",
-      "text": "ธัมมัสสะวะนะกาโล"
+      "text": "ธัมมัสสะวะนะกาโล อะยัมภะทันตา"
     },
     {
       "kind": "pali",
-      "text": "อะยัมภะทันตา"
+      "text": "ธัมมัสสะวะนะกาโล อะยัมภะทันตา"
     },
     {
       "kind": "pali",
-      "text": "ธัมมัสสะวะนะกาโล"
-    },
-    {
-      "kind": "pali",
-      "text": "อะยัมภะทันตา"
-    },
-    {
-      "kind": "pali",
-      "text": "ธัมมัสสะวะนะกาโล"
-    },
-    {
-      "kind": "pali",
-      "text": "อะยัมภะทันตา"
+      "text": "ธัมมัสสะวะนะกาโล อะยัมภะทันตา"
     }
   ]
 }

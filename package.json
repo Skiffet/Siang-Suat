@@ -15,7 +15,8 @@
     "audio:sections": "tsx scripts/audio/sections.ts",
     "audio:join": "tsx scripts/audio/join.ts",
     "audio:align": "tsx scripts/audio/align.ts",
-    "audio:check": "tsx scripts/audio/check-align.ts"
+    "audio:check": "tsx scripts/audio/check-align.ts",
+    "chant:build": "tsx scripts/audio/build.ts"
   },
   "dependencies": {
     "next": "16.3.5",
