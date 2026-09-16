@@ -144,9 +144,6 @@ function Editor({ id, chants }: { id: string; chants: ChantWithAudio[] }) {
         />
         <span className="min-w-0">
           <span className="block type-caption text-ink">ขึ้นต้นด้วยนะโม 3 จบ</span>
-          <span className="block type-small text-muted">
-            สวดครั้งเดียวตอนเริ่ม ไม่ใช่ก่อนทุกบท
-          </span>
         </span>
       </label>
 
