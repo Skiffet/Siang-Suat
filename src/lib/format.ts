@@ -21,6 +21,9 @@ export function greetingForHour(hour: number): string {
 /** "6 ชม. 18 นาที" — the long form used on playlist rows and headers. */
 export function formatDurationLong(seconds: number | null | undefined): string {
   if (!seconds || !Number.isFinite(seconds) || seconds <= 0) return "ยังไม่มีเสียง";
+  // Rounding to minutes turns anything under thirty seconds into "0 นาที",
+  // which reads as nothing at all when there is in fact something to play.
+  if (seconds < 60) return `${Math.round(seconds)} วินาที`;
   const total = Math.round(seconds / 60);
   const h = Math.floor(total / 60);
   const m = total % 60;

@@ -54,7 +54,7 @@ export function SideNav({ playlists }: { playlists: PlaylistWithChants[] }) {
 
       <div className="flex min-h-0 flex-1 flex-col rounded-lg bg-surface">
         <div className="px-5 py-4">
-          <h2 className="type-caption-bold text-muted">เพลย์ลิสต์ของคุณ</h2>
+          <h2 className="type-caption-bold text-muted">เพลย์ลิสต์</h2>
         </div>
 
         <ul className="no-scrollbar min-h-0 flex-1 overflow-y-auto px-2 pb-3">

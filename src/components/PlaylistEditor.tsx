@@ -5,11 +5,11 @@ import { useMemo, useState, useSyncExternalStore } from "react";
 import type { ChantWithAudio, PlaylistEntry } from "@/lib/types";
 import { formatDurationLong } from "@/lib/format";
 import {
-  deleteSitting,
-  getSitting,
-  newSittingId,
-  saveSitting,
-} from "@/lib/sittings";
+  deleteMyPlaylist,
+  getMyPlaylist,
+  newMyPlaylistId,
+  saveMyPlaylist,
+} from "@/lib/myPlaylists";
 import { Cover } from "./Cover";
 import { ROUND_OPTIONS } from "./player/RoundsPicker";
 import { CheckIcon, ChevronDownIcon, PlusIcon, SearchIcon } from "./Icons";
@@ -21,11 +21,11 @@ interface Row {
 }
 
 /**
- * Arrange a sitting: which chants, in what order, and how many times each.
+ * Build a playlist: which chants, in what order, and how many times each.
  *
  * The counts are the point. A คาถา is kept at nine or at three depending on
  * who is chanting and how much time they have, so the number belongs to the
- * sitting rather than to the chant — and to the person arranging it, not to
+ * playlist rather than to the chant — and to the person arranging it, not to
  * whoever wrote the content files.
  */
 const neverChanges = () => () => {};
@@ -36,7 +36,7 @@ const neverChanges = () => () => {};
  * client lets the editor below seed itself as it mounts instead, so it is
  * correct on its first paint.
  */
-export function SittingEditor(props: { id: string; chants: ChantWithAudio[] }) {
+export function PlaylistEditor(props: { id: string; chants: ChantWithAudio[] }) {
   const onClient = useSyncExternalStore(
     neverChanges,
     () => true,
@@ -50,7 +50,7 @@ function Editor({ id, chants }: { id: string; chants: ChantWithAudio[] }) {
   const router = useRouter();
   const bySlug = useMemo(() => new Map(chants.map((c) => [c.slug, c])), [chants]);
 
-  const saved = useMemo(() => getSitting(id), [id]);
+  const saved = useMemo(() => getMyPlaylist(id), [id]);
   const [title, setTitle] = useState(saved?.title ?? "");
   const [namo, setNamo] = useState(
     saved?.entries.some((e) => typeof e !== "string" && e.namo === true) ?? false,
@@ -100,9 +100,9 @@ function Editor({ id, chants }: { id: string; chants: ChantWithAudio[] }) {
       // นะโม opens the sitting, so it rides on the first entry.
       ...(namo && i === 0 ? { namo: true } : {}),
     }));
-    const ok = saveSitting({
+    const ok = saveMyPlaylist({
       id,
-      title: title.trim() || "การสวดของฉัน",
+      title: title.trim() || "เพลย์ลิสต์ของฉัน",
       cover: bySlug.get(rows[0]?.slug)?.cover ?? "temple-sunrise",
       entries,
     });
@@ -110,12 +110,12 @@ function Editor({ id, chants }: { id: string; chants: ChantWithAudio[] }) {
       setFailed(true);
       return;
     }
-    router.push("/library");
+    router.push("/playlist");
   }
 
   return (
     <div className="px-4 py-6 lg:px-8 lg:py-8">
-      <h1 className="type-section text-ink">จัดการสวดของคุณ</h1>
+      <h1 className="type-section text-ink">เพลย์ลิสต์ของฉัน</h1>
       <p className="mt-1 type-caption text-muted">
         เลือกบท เรียงลำดับ แล้วกำหนดว่าจะสวดบทละกี่จบ
       </p>
@@ -124,7 +124,7 @@ function Editor({ id, chants }: { id: string; chants: ChantWithAudio[] }) {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder="ตั้งชื่อ เช่น สวดเช้าของฉัน"
-        aria-label="ชื่อการสวด"
+        aria-label="ชื่อเพลย์ลิสต์"
         className="input-inset mt-5 w-full rounded-[500px] bg-mid px-5 py-3 type-caption text-ink outline-none transition-shadow placeholder:text-muted"
       />
 
@@ -327,8 +327,8 @@ function Editor({ id, chants }: { id: string; chants: ChantWithAudio[] }) {
           <button
             type="button"
             onClick={() => {
-              deleteSitting(id);
-              router.push("/library");
+              deleteMyPlaylist(id);
+              router.push("/playlist");
             }}
             className="rounded-full px-4 py-3 type-small-bold text-muted transition-colors hover:text-ink"
           >
@@ -340,4 +340,4 @@ function Editor({ id, chants }: { id: string; chants: ChantWithAudio[] }) {
   );
 }
 
-export { newSittingId };
+export { newMyPlaylistId };

@@ -40,7 +40,7 @@ export default function ProfilePage() {
       </section>
 
       <section className="mt-8">
-        <h2 className="type-feature text-ink">เพลย์ลิสต์ของคุณ</h2>
+        <h2 className="type-feature text-ink">เพลย์ลิสต์ที่จัดไว้ให้</h2>
         <ul className="mt-3 space-y-0.5">
           {playlists.map((playlist) => (
             <li key={playlist.slug}>

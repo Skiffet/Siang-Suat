@@ -1,0 +1,186 @@
+"use client";
+
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useMemo, useState, useSyncExternalStore } from "react";
+import type { ChantWithAudio, PlaylistWithChants, QueuedChant } from "@/lib/types";
+import { formatDurationLong } from "@/lib/format";
+import {
+  loadMyPlaylists,
+  newMyPlaylistId,
+  type MyPlaylist,
+} from "@/lib/myPlaylists";
+import { Cover } from "./Cover";
+import { EqualizerIcon, PlusIcon } from "./Icons";
+import { usePlayer } from "./player/PlayerProvider";
+
+const neverChanges = () => () => {};
+
+/** Resolve a saved playlist into a queue, applying counts and the opening นะโม. */
+function resolve(
+  saved: MyPlaylist,
+  bySlug: Map<string, ChantWithAudio>,
+): QueuedChant[] {
+  const out: QueuedChant[] = [];
+  for (const entry of saved.entries) {
+    const spec = typeof entry === "string" ? { slug: entry } : entry;
+    const chant = bySlug.get(spec.slug);
+    if (!chant) continue;
+    if (typeof entry !== "string" && entry.namo) {
+      const namo = bySlug.get("namo-tassa");
+      if (namo && !out.some((c) => c.slug === "namo-tassa")) {
+        out.push({ ...namo, rounds: namo.defaultRounds ?? 1 });
+      }
+    }
+    out.push({ ...chant, rounds: spec.rounds ?? chant.defaultRounds ?? 1 });
+  }
+  return out;
+}
+
+/**
+ * Playlists — the ones you made, and the ones we arranged.
+ *
+ * They are the same kind of thing, so they sit on one screen rather than
+ * being split across a library and a browse page. The difference is only who
+ * arranged them: yours can be edited, ours are shortcuts to start from.
+ */
+export function PlaylistsView({
+  playlists,
+  chants,
+}: {
+  playlists: PlaylistWithChants[];
+  chants: ChantWithAudio[];
+}) {
+  const router = useRouter();
+  const { current, playing, playQueue } = usePlayer();
+  const bySlug = useMemo(() => new Map(chants.map((c) => [c.slug, c])), [chants]);
+
+  // Saved playlists live in the browser, so they cannot be read until it is there.
+  const onClient = useSyncExternalStore(neverChanges, () => true, () => false);
+  const [mine] = useState<MyPlaylist[]>(() =>
+    typeof window === "undefined" ? [] : loadMyPlaylists(),
+  );
+
+  const isPlaying = (slugs: string[]) =>
+    playing && current != null && slugs.some((s) => current.slug.startsWith(s));
+
+  return (
+    <div className="px-4 py-6 lg:px-8 lg:py-8">
+      <h1 className="type-section text-ink">เพลย์ลิสต์</h1>
+      <p className="mt-1 type-caption text-muted">
+        จัดลำดับบทสวดและจำนวนจบเองได้ หรือเริ่มจากชุดที่จัดไว้ให้
+      </p>
+
+      {/*
+        The id is minted on the click rather than while rendering: it is made
+        from the clock, so rendering it would give the server and the browser
+        different answers and break hydration.
+      */}
+      <button
+        type="button"
+        onClick={() => router.push(`/playlist/edit/${newMyPlaylistId()}`)}
+        className="mt-5 flex w-full items-center gap-3 rounded-xl bg-surface px-4 py-4 text-left transition-colors hover:bg-card"
+      >
+        <span className="grid size-11 shrink-0 place-items-center rounded-full bg-green text-on-green">
+          <PlusIcon size={22} />
+        </span>
+        <span className="min-w-0">
+          <span className="block type-caption-bold text-ink">
+            สร้างเพลย์ลิสต์ใหม่
+          </span>
+          <span className="block type-small text-muted">
+            เลือกบท เรียงลำดับ กำหนดว่าบทไหนกี่จบ
+          </span>
+        </span>
+      </button>
+
+      {onClient && mine.length > 0 && (
+        <section className="mt-8">
+          <h2 className="type-feature text-ink">ของฉัน</h2>
+          <ul className="mt-3 space-y-1">
+            {mine.map((saved) => {
+              const items = resolve(saved, bySlug);
+              const total = items.reduce(
+                (n, c) => n + (c.durationSec ?? 0) * c.rounds,
+                0,
+              );
+              const live = isPlaying(items.map((c) => c.slug));
+              return (
+                <li key={saved.id} className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => playQueue(items)}
+                    className="flex min-w-0 flex-1 items-center gap-3 rounded-md px-2 py-2 text-left transition-colors hover:bg-card-alt"
+                  >
+                    <Cover
+                      src={saved.cover}
+                      alt={saved.title}
+                      sizes="48px"
+                      className="w-12 shrink-0"
+                    />
+                    <span className="min-w-0 flex-1">
+                      <span
+                        className={`block truncate type-caption-bold ${live ? "text-green" : "text-ink"}`}
+                      >
+                        {saved.title}
+                      </span>
+                      <span className="block truncate type-small text-muted">
+                        {items.length} บท · {formatDurationLong(total)}
+                      </span>
+                    </span>
+                    {live && <EqualizerIcon size={16} />}
+                  </button>
+                  <Link
+                    href={`/playlist/edit/${saved.id}`}
+                    className="shrink-0 rounded-full px-3 py-2 type-small-bold text-muted transition-colors hover:bg-mid hover:text-ink"
+                  >
+                    แก้ไข
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      )}
+
+      <section className="mt-8">
+        <h2 className="type-feature text-ink">จัดไว้ให้</h2>
+        <p className="mt-1 type-small text-muted">
+          ชุดสำเร็จสำหรับเริ่มเร็ว ๆ — กดแล้วสวดได้เลย
+        </p>
+        <ul className="mt-3 space-y-1">
+          {playlists.map((playlist) => {
+            const live = isPlaying(playlist.items.map((c) => c.slug));
+            return (
+              <li key={playlist.slug}>
+                <Link
+                  href={`/playlist/${playlist.slug}`}
+                  className="flex items-center gap-3 rounded-md px-2 py-2 transition-colors hover:bg-card-alt"
+                >
+                  <Cover
+                    src={playlist.cover}
+                    alt={playlist.title}
+                    sizes="48px"
+                    className="w-12 shrink-0"
+                  />
+                  <span className="min-w-0 flex-1">
+                    <span
+                      className={`block truncate type-caption-bold ${live ? "text-green" : "text-ink"}`}
+                    >
+                      {playlist.title}
+                    </span>
+                    <span className="block truncate type-small text-muted">
+                      {playlist.items.length} บท ·{" "}
+                      {formatDurationLong(playlist.totalSec)}
+                    </span>
+                  </span>
+                  {live && <EqualizerIcon size={16} />}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    </div>
+  );
+}

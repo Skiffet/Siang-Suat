@@ -2,7 +2,7 @@
 export const NAV_ITEMS = [
   { href: "/", label: "หน้าแรก", icon: "home" },
   { href: "/explore", label: "สำรวจ", icon: "search" },
-  { href: "/library", label: "ห้องสมุด", icon: "library" },
+  { href: "/playlist", label: "เพลย์ลิสต์", icon: "library" },
   { href: "/timer", label: "เวลาฟัง", icon: "clock" },
   { href: "/profile", label: "โปรไฟล์", icon: "user" },
 ] as const;

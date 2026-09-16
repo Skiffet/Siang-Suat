@@ -3,14 +3,15 @@
 import type { PlaylistEntry } from "./types";
 
 /**
- * Sittings the listener arranged themselves.
+ * Playlists the listener made themselves.
  *
- * There is no account and no server, so these live in the browser. That means
- * they belong to one device and one browser, and clearing site data takes
- * them with it — fine for arranging your own morning chanting, not a place to
- * keep anything you would be sorry to lose.
+ * The same idea as the ones in `content/playlists`, which are shortcuts we
+ * arranged for them; these are the ones they arranged. There is no account
+ * and no server, so they live in the browser — one device, one browser, and
+ * gone with the site data. Fine for arranging your own morning chanting, not
+ * a place to keep anything you would be sorry to lose.
  */
-export interface Sitting {
+export interface MyPlaylist {
   id: string;
   title: string;
   /** Cover stem, borrowed from the first chant so the row is never blank. */
@@ -19,19 +20,19 @@ export interface Sitting {
   updatedAt: string;
 }
 
-const KEY = "siang-suad.sittings.v1";
+const KEY = "siang-suad.my-playlists.v1";
 
 /** Storage throws in private windows and when site data is blocked. */
-function read(): Sitting[] {
+function read(): MyPlaylist[] {
   try {
     const raw = localStorage.getItem(KEY);
-    return raw ? (JSON.parse(raw) as Sitting[]) : [];
+    return raw ? (JSON.parse(raw) as MyPlaylist[]) : [];
   } catch {
     return [];
   }
 }
 
-function write(list: Sitting[]): boolean {
+function write(list: MyPlaylist[]): boolean {
   try {
     localStorage.setItem(KEY, JSON.stringify(list));
     return true;
@@ -40,15 +41,15 @@ function write(list: Sitting[]): boolean {
   }
 }
 
-export function loadSittings(): Sitting[] {
+export function loadMyPlaylists(): MyPlaylist[] {
   return read().sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
 }
 
-export function getSitting(id: string): Sitting | undefined {
+export function getMyPlaylist(id: string): MyPlaylist | undefined {
   return read().find((s) => s.id === id);
 }
 
-export function saveSitting(sitting: Omit<Sitting, "updatedAt">): boolean {
+export function saveMyPlaylist(sitting: Omit<MyPlaylist, "updatedAt">): boolean {
   const list = read();
   const at = list.findIndex((s) => s.id === sitting.id);
   const next = { ...sitting, updatedAt: new Date().toISOString() };
@@ -57,10 +58,10 @@ export function saveSitting(sitting: Omit<Sitting, "updatedAt">): boolean {
   return write(list);
 }
 
-export function deleteSitting(id: string): boolean {
+export function deleteMyPlaylist(id: string): boolean {
   return write(read().filter((s) => s.id !== id));
 }
 
-export function newSittingId(): string {
+export function newMyPlaylistId(): string {
   return `s${Date.now().toString(36)}`;
 }
