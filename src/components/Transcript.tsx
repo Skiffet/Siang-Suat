@@ -12,7 +12,14 @@ import { useLyrics } from "./useLyrics";
  * outside the pipeline have no timings, so the same text renders as a plain
  * reading panel rather than pretending to be in sync.
  */
-export function Transcript({ chant }: { chant: ChantWithAudio }) {
+export function Transcript({
+  chant,
+  heading = "บทสวดและคำแปล",
+}: {
+  chant: ChantWithAudio;
+  /** Null when a caller supplies its own heading, as the parts view does. */
+  heading?: string | null;
+}) {
   const { lines, activeIndex, synced, goTo } = useLyrics(chant);
   const listRef = useRef<HTMLOListElement>(null);
 
@@ -27,15 +34,17 @@ export function Transcript({ chant }: { chant: ChantWithAudio }) {
   if (lines.length === 0) return null;
 
   return (
-    <section className="mt-8">
-      <div className="flex items-baseline justify-between gap-4">
-        <h2 className="type-feature text-ink">บทสวดและคำแปล</h2>
-        {synced && (
-          <p className="type-small text-muted">แตะที่บรรทัดเพื่อข้ามไปฟัง</p>
-        )}
-      </div>
+    <section className={heading === null ? "mt-2" : "mt-8"}>
+      {heading !== null && (
+        <div className="flex items-baseline justify-between gap-4">
+          <h2 className="type-feature text-ink">{heading}</h2>
+          {synced && (
+            <p className="type-small text-muted">แตะที่บรรทัดเพื่อข้ามไปฟัง</p>
+          )}
+        </div>
+      )}
 
-      <ol ref={listRef} className="mt-4 max-w-[68ch] space-y-1">
+      <ol ref={listRef} className="mt-3 max-w-[68ch] space-y-1">
         {lines.map((line, i) => {
           const isActive = i === activeIndex;
           const pali = line.kind === "pali";

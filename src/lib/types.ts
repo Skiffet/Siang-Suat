@@ -86,6 +86,15 @@ export interface Chant {
    */
   cover: string;
   /**
+   * A chant delivered in parts, because one part of it is repeated.
+   *
+   * A คาถา runs an opening, then a stanza kept for as many rounds as the
+   * chanter wants, then a closing. Recorded as one file the count is fixed at
+   * whatever was said; recorded in parts, the repeated stanza becomes its own
+   * take and the count is the listener's again.
+   */
+  parts?: ChantPart[];
+  /**
    * A take recorded or synthesised outside `scripts/tts`, dropped straight
    * into `public/audio`. The manifest never sees these, so the file and its
    * length are declared here instead.
@@ -156,6 +165,19 @@ export interface Shelf {
   items: ChantWithAudio[];
 }
 
+export interface ChantPart {
+  file: string;
+  durationSec: number;
+  /** First and last of the chant's segments this part speaks, inclusive. */
+  segments: [number, number];
+  /** Line starts within this part's own file. */
+  timings?: SegmentTiming[];
+  /** Set on the part that is repeated — the count it is usually kept at. */
+  rounds?: number;
+  /** Shown above the part on the chant's page. */
+  label?: string;
+}
+
 export type ChantCategory =
   | "daily"
   | "blessing"
@@ -165,6 +187,12 @@ export type ChantCategory =
 
 /** A chant plus everything derived from the build: audio URL, duration, timings. */
 export interface ChantWithAudio extends Chant {
+  /**
+   * The parts as the player queues them, each carrying the parent's title and
+   * cover so a chant in parts still reads as one chant while it plays. Empty
+   * for the ordinary case of one chant, one file.
+   */
+  queue: QueuedChant[];
   audioUrl: string | null;
   /** Seconds. Null until the audio has been generated. */
   durationSec: number | null;

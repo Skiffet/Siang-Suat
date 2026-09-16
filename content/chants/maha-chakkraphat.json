@@ -1,0 +1,217 @@
+{
+  "slug": "maha-chakkraphat",
+  "title": "คาถามหาจักรพรรดิ",
+  "subtitle": "นะโมพุทธายะ พระพุทธะ ไตรรัตนะญาณ",
+  "category": "protection",
+  "description": "คาถาบทใหญ่สำหรับความเป็นสิริมงคลและคุ้มครองตน ขึ้นต้นด้วยบทบูชาพระรัตนตรัย แล้วท่องท่อน สัพเพ พุทธา ซ้ำตามกำลัง ปิดท้ายด้วยคำอธิษฐาน — ปรับจำนวนจบได้เอง",
+  "tags": [
+    "คาถา",
+    "คุ้มครอง",
+    "สิริมงคล"
+  ],
+  "voice": {
+    "rate": 0.9
+  },
+  "cover": "mountain-sunrise",
+  "segments": [
+    {
+      "kind": "thai",
+      "text": "คาถามหาจักรพรรดิ"
+    },
+    {
+      "kind": "pali",
+      "text": "นะโมพุทธายะ พระพุทธะ ไตรรัตนะญาณ"
+    },
+    {
+      "kind": "pali",
+      "text": "มณีนพรัตน์ สีสะหัสสะ สุธรรมา"
+    },
+    {
+      "kind": "pali",
+      "text": "พุทโธ ธัมโม สังโฆ"
+    },
+    {
+      "kind": "pali",
+      "text": "ยะธาพุทโมนะ พุทธะบูชา ธัมมะบูชา สังฆะบูชา"
+    },
+    {
+      "kind": "pali",
+      "text": "อัคคีทานัง วะรังคันธัง"
+    },
+    {
+      "kind": "pali",
+      "text": "สีวะลี จะ มะหาเถรัง"
+    },
+    {
+      "kind": "pali",
+      "text": "อะหัง วันทามิ ทูระโต"
+    },
+    {
+      "kind": "pali",
+      "text": "อะหัง วันทามิ ธาตุโย"
+    },
+    {
+      "kind": "pali",
+      "text": "อะหัง วันทามิ สัพพะโส"
+    },
+    {
+      "kind": "pali",
+      "text": "พุทธะ ธัมมะ สังฆะ ปูเชมิ"
+    },
+    {
+      "kind": "pali",
+      "text": "สัพเพ พุทธา สัพเพ ธัมมา สัพเพ สังฆา"
+    },
+    {
+      "kind": "pali",
+      "text": "พะลัปปัตตา ปัจเจกานัญจะ ยัง พะลัง"
+    },
+    {
+      "kind": "pali",
+      "text": "อะระหันตานัญจะ เตเชนะ"
+    },
+    {
+      "kind": "pali",
+      "text": "รักขัง พันธามิ สัพพะโส"
+    },
+    {
+      "kind": "pali",
+      "text": "พุทธัง อะธิฏฐามิ"
+    },
+    {
+      "kind": "pali",
+      "text": "ธัมมัง อะธิฏฐามิ"
+    },
+    {
+      "kind": "pali",
+      "text": "สังฆัง อะธิฏฐามิ"
+    }
+  ],
+  "parts": [
+    {
+      "file": "maha-chakkraphat-intro.m4a",
+      "durationSec": 40.2,
+      "segments": [
+        0,
+        10
+      ],
+      "label": "บทบูชา",
+      "timings": [
+        {
+          "sourceIndex": 0,
+          "repeatIndex": 0,
+          "startSec": 0.12
+        },
+        {
+          "sourceIndex": 1,
+          "repeatIndex": 0,
+          "startSec": 2.34
+        },
+        {
+          "sourceIndex": 2,
+          "repeatIndex": 0,
+          "startSec": 7.28
+        },
+        {
+          "sourceIndex": 3,
+          "repeatIndex": 0,
+          "startSec": 11.52
+        },
+        {
+          "sourceIndex": 4,
+          "repeatIndex": 0,
+          "startSec": 14.02
+        },
+        {
+          "sourceIndex": 5,
+          "repeatIndex": 0,
+          "startSec": 21.34
+        },
+        {
+          "sourceIndex": 6,
+          "repeatIndex": 0,
+          "startSec": 24.48
+        },
+        {
+          "sourceIndex": 7,
+          "repeatIndex": 0,
+          "startSec": 27.5
+        },
+        {
+          "sourceIndex": 8,
+          "repeatIndex": 0,
+          "startSec": 30.38
+        },
+        {
+          "sourceIndex": 9,
+          "repeatIndex": 0,
+          "startSec": 33.3
+        },
+        {
+          "sourceIndex": 10,
+          "repeatIndex": 0,
+          "startSec": 36.08
+        }
+      ]
+    },
+    {
+      "file": "maha-chakkraphat-sappe.m4a",
+      "durationSec": 18.5,
+      "segments": [
+        11,
+        14
+      ],
+      "label": "ท่อนท่องซ้ำ",
+      "rounds": 5,
+      "timings": [
+        {
+          "sourceIndex": 0,
+          "repeatIndex": 0,
+          "startSec": 0
+        },
+        {
+          "sourceIndex": 1,
+          "repeatIndex": 0,
+          "startSec": 4.06
+        },
+        {
+          "sourceIndex": 2,
+          "repeatIndex": 0,
+          "startSec": 10.12
+        },
+        {
+          "sourceIndex": 3,
+          "repeatIndex": 0,
+          "startSec": 14.48
+        }
+      ]
+    },
+    {
+      "file": "maha-chakkraphat-closing.m4a",
+      "durationSec": 7.3,
+      "segments": [
+        15,
+        17
+      ],
+      "label": "คำอธิษฐานปิด",
+      "timings": [
+        {
+          "sourceIndex": 0,
+          "repeatIndex": 0,
+          "startSec": 0
+        },
+        {
+          "sourceIndex": 1,
+          "repeatIndex": 0,
+          "startSec": 2.58
+        },
+        {
+          "sourceIndex": 2,
+          "repeatIndex": 0,
+          "startSec": 5.0
+        }
+      ]
+    }
+  ],
+  "defaultRounds": 1
+}

@@ -86,7 +86,32 @@ export function ChantDetail({
           </ul>
         )}
 
-        <Transcript chant={chant} />
+        {chant.queue.length > 0 ? (
+          /*
+           * A chant in parts shows each part under its own heading, because
+           * the shape is the point: you can see that the middle stanza is the
+           * one held for rounds, and how many.
+           */
+          <div className="mt-8 space-y-8">
+            {chant.queue.map((part, i) => (
+              <section key={part.slug}>
+                <div className="flex items-baseline gap-3">
+                  <h2 className="type-feature text-ink">
+                    {chant.parts?.[i]?.label ?? `ท่อนที่ ${i + 1}`}
+                  </h2>
+                  {part.rounds > 1 && (
+                    <span className="rounded-full bg-mid px-2 py-[2px] text-[10.5px] font-semibold leading-[1.33] text-ink">
+                      ท่อง {part.rounds} จบ · ปรับได้ตอนฟัง
+                    </span>
+                  )}
+                </div>
+                <Transcript chant={part} heading={null} />
+              </section>
+            ))}
+          </div>
+        ) : (
+          <Transcript chant={chant} />
+        )}
       </div>
 
       {related.length > 0 && (

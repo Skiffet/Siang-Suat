@@ -49,28 +49,64 @@ export function loadChants(): Chant[] {
   });
 }
 
+/**
+ * The parts of a chant, as the player queues them.
+ *
+ * Each part carries the parent's title and cover, so the now-playing bar reads
+ * the same the whole way through, and its own slice of the text so the
+ * follow-along shows what is being said rather than the whole chant.
+ */
+function buildQueue(chant: Chant, base: ChantWithAudio): QueuedChant[] {
+  if (!chant.parts?.length) return [];
+  return chant.parts.map((part, i) => ({
+    ...base,
+    // Parts share the chant's page; the slug stays unique so the player can
+    // tell one from another.
+    slug: `${chant.slug}#${i}`,
+    audioUrl: `/audio/${part.file}`,
+    durationSec: part.durationSec,
+    segments: chant.segments.slice(part.segments[0], part.segments[1] + 1),
+    timings: part.timings ?? [],
+    timingsExact: false,
+    queue: [],
+    rounds: part.rounds ?? 1,
+  }));
+}
+
 export function getChants(): ChantWithAudio[] {
   const manifest = readManifest();
   return loadChants().map((chant) => {
     const entry = manifest[chant.slug];
     // The pipeline's own output wins; `chant.audio` covers takes made elsewhere.
-    if (entry) {
-      return {
-        ...chant,
-        audioUrl: `/audio/${entry.file}`,
-        durationSec: entry.durationSec,
-        timings: entry.timings,
-        timingsExact: entry.timingsExact,
-      };
-    }
+    const base: ChantWithAudio = entry
+      ? {
+          ...chant,
+          audioUrl: `/audio/${entry.file}`,
+          durationSec: entry.durationSec,
+          timings: entry.timings,
+          timingsExact: entry.timingsExact,
+          queue: [],
+        }
+      : {
+          ...chant,
+          audioUrl: chant.audio ? `/audio/${chant.audio.file}` : null,
+          durationSec: chant.audio?.durationSec ?? null,
+          // Aligned from the audio itself rather than reported by a provider,
+          // so accurate to the pause before each line, not to the syllable.
+          timings: chant.audio?.timings ?? [],
+          timingsExact: false,
+          queue: [],
+        };
+
+    const queue = buildQueue(chant, base);
+    if (!queue.length) return base;
+    // A chant in parts has no single file; its length is the parts as they
+    // would be chanted, counting the repeated one's default.
     return {
-      ...chant,
-      audioUrl: chant.audio ? `/audio/${chant.audio.file}` : null,
-      durationSec: chant.audio?.durationSec ?? null,
-      // Aligned from the audio itself rather than reported by a provider, so
-      // accurate to the pause before each line rather than to the syllable.
-      timings: chant.audio?.timings ?? [],
-      timingsExact: false,
+      ...base,
+      queue,
+      audioUrl: queue[0].audioUrl,
+      durationSec: queue.reduce((n, q) => n + (q.durationSec ?? 0) * q.rounds, 0),
     };
   });
 }

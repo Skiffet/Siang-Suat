@@ -60,6 +60,28 @@ export function usePlayer(): PlayerValue {
   return value;
 }
 
+/**
+ * Replace any chant that comes in parts with those parts.
+ *
+ * A คาถา is one thing to browse and several things to play — an opening, a
+ * stanza held for however many rounds, a closing. Expanding here means every
+ * entry point queues it the same way, whether it was played from a rail, a
+ * playlist, or its own page.
+ */
+function expand(list: ChantWithAudio[]): QueuedChant[] {
+  return list.flatMap((chant) =>
+    chant.queue.length
+      ? chant.queue
+      : [
+          {
+            ...chant,
+            rounds:
+              (chant as Partial<QueuedChant>).rounds ?? chant.defaultRounds ?? 1,
+          },
+        ],
+  );
+}
+
 /** Fisher–Yates, keeping `first` at the head so shuffle never skips your pick. */
 function shuffled(list: ChantWithAudio[], first: ChantWithAudio) {
   const rest = list.filter((c) => c.slug !== first.slug);
@@ -135,8 +157,11 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
   const play = useCallback(
     (chant: ChantWithAudio, list?: ChantWithAudio[]) => {
       const base = list?.length ? list : [chant];
-      const ordered = shuffle ? shuffled(base, chant) : base;
-      const at = ordered.findIndex((c) => c.slug === chant.slug);
+      const ordered = expand(shuffle ? shuffled(base, chant) : base);
+      // A chant in parts is entered at its first part, whose slug is prefixed.
+      const at = ordered.findIndex(
+        (c) => c.slug === chant.slug || c.slug.startsWith(`${chant.slug}#`),
+      );
       start(ordered, at < 0 ? 0 : at);
     },
     [shuffle, start],
@@ -144,9 +169,10 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
 
   const playQueue = useCallback(
     (list: ChantWithAudio[], startAt = 0) => {
+      const queue = expand(list);
       // Pressing play on a playlist should land on something audible.
-      const firstPlayable = list.findIndex((c, i) => i >= startAt && c.audioUrl);
-      start(list, firstPlayable < 0 ? startAt : firstPlayable);
+      const firstPlayable = queue.findIndex((c, i) => i >= startAt && c.audioUrl);
+      start(queue, firstPlayable < 0 ? startAt : firstPlayable);
     },
     [start],
   );
@@ -243,7 +269,9 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const isCurrent = useCallback(
-    (slug: string) => current?.slug === slug,
+    (slug: string) =>
+      current != null &&
+      (current.slug === slug || current.slug.startsWith(`${slug}#`)),
     [current],
   );
 
