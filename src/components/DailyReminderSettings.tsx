@@ -131,12 +131,6 @@ export function DailyReminderSettings() {
           </div>
         )}
 
-        {settings.enabled && (
-          <p className="mt-3 type-small text-muted">
-            ใช้ได้เฉพาะตอนเปิดแท็บนี้ค้างไว้ (พับหน้าต่างได้ แต่ปิดแท็บหรือปิดเบราว์เซอร์แล้วจะไม่เตือน)
-          </p>
-        )}
-
         {justEnabled && (
           <p className="mt-3 type-small-bold text-green">
             ส่งแจ้งเตือนทดสอบไปแล้ว ลองดูที่การแจ้งเตือนของเครื่อง
