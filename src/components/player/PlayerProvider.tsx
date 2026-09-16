@@ -30,6 +30,10 @@ interface PlayerValue {
   sleepLeftSec: number | null;
   /** Playback rate, for people who chant faster or slower than the recording. */
   rate: number;
+  /** How many times through the chant this sitting is — 3 จบ, 9 จบ, 108 จบ. */
+  rounds: number;
+  /** Which round is being chanted now, counting from one. */
+  round: number;
   /** Set when a chant has no audio yet, so the UI can say so instead of stalling. */
   notice: string | null;
 
@@ -44,6 +48,7 @@ interface PlayerValue {
   setExpanded(open: boolean): void;
   startSleepTimer(minutes: number | null): void;
   setRate(rate: number): void;
+  setRounds(rounds: number): void;
   isCurrent(slug: string): boolean;
 }
 
@@ -80,11 +85,17 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
   const [sleepLeftSec, setSleepLeftSec] = useState<number | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [rate, setRateState] = useState(1);
+  const [rounds, setRoundsState] = useState(1);
+  const [round, setRound] = useState(1);
 
   // `start` is memoised without the rate as a dependency, so it reads the
   // current value through a ref. The ref is written where the rate changes,
   // never during render.
   const rateRef = useRef(1);
+  // The ended handler must not be rebuilt every time a round ticks over, or
+  // the listener is torn down mid-chant. Both are written only in callbacks.
+  const roundsRef = useRef(1);
+  const roundRef = useRef(1);
 
   const current = queue[index] ?? null;
   const upNext = queue[index + 1] ?? (repeat === "all" ? queue[0] ?? null : null);
@@ -107,6 +118,9 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
     el.src = chant.audioUrl;
     el.currentTime = 0;
     el.playbackRate = rateRef.current;
+    // A new chant starts its count over; the setting carries, the tally does not.
+    roundRef.current = 1;
+    setRound(1);
     void el.play().catch(() => setPlaying(false));
   }, []);
 
@@ -199,6 +213,17 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
    * property of the media element rather than something React re-renders, and
    * it resets to 1 whenever a new source loads.
    */
+  const setRounds = useCallback((next: number) => {
+    roundsRef.current = next;
+    setRoundsState(next);
+    // Lowering the count below where you already are ends the sitting on this
+    // pass rather than retroactively finishing it.
+    if (roundRef.current > next) {
+      roundRef.current = next;
+      setRound(next);
+    }
+  }, []);
+
   const setRate = useCallback((next: number) => {
     rateRef.current = next;
     setRateState(next);
@@ -221,12 +246,23 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
     const onPlay = () => setPlaying(true);
     const onPause = () => setPlaying(false);
     const onEnded = () => {
-      if (repeat === "one") {
+      // Rounds come first: a chant set to 3 จบ finishes all three before the
+      // queue or the repeat mode gets a say.
+      if (roundRef.current < roundsRef.current) {
+        roundRef.current += 1;
+        setRound(roundRef.current);
         el.currentTime = 0;
         void el.play();
-      } else {
-        step(1);
+        return;
       }
+      if (repeat === "one") {
+        roundRef.current = 1;
+        setRound(1);
+        el.currentTime = 0;
+        void el.play();
+        return;
+      }
+      step(1);
     };
     el.addEventListener("timeupdate", onTime);
     el.addEventListener("durationchange", onDuration);
@@ -318,6 +354,8 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
       expanded,
       sleepLeftSec,
       rate,
+      rounds,
+      round,
       notice,
       play,
       playQueue,
@@ -330,12 +368,14 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
       setExpanded,
       startSleepTimer,
       setRate,
+      setRounds,
       isCurrent,
     }),
     [
       queue, index, current, upNext, playing, time, duration, shuffle, repeat,
-      expanded, sleepLeftSec, rate, notice, play, playQueue, toggle, next, prev,
-      seek, toggleShuffle, cycleRepeat, startSleepTimer, setRate, isCurrent,
+      expanded, sleepLeftSec, rate, rounds, round, notice, play, playQueue,
+      toggle, next, prev, seek, toggleShuffle, cycleRepeat, startSleepTimer,
+      setRate, setRounds, isCurrent,
     ],
   );
 

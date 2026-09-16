@@ -12,6 +12,7 @@ import {
 } from "../Icons";
 import { usePlayer } from "./PlayerProvider";
 import { RatePicker } from "./RatePicker";
+import { RoundsPicker } from "./RoundsPicker";
 import { Scrubber } from "./Scrubber";
 
 /**
@@ -100,6 +101,7 @@ export function PlayerBar() {
 
         {/* Right: speed, and the chant page where the full text lives */}
         <div className="hidden w-[30%] items-center justify-end gap-2 lg:flex">
+          <RoundsPicker compact />
           <RatePicker />
           <Link
             href={`/chant/${current.slug}`}

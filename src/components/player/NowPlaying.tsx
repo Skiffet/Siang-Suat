@@ -19,6 +19,7 @@ import {
 import { PlayerLyrics } from "./PlayerLyrics";
 import { usePlayer } from "./PlayerProvider";
 import { RATE_OPTIONS } from "./RatePicker";
+import { ROUND_OPTIONS } from "./RoundsPicker";
 import { Scrubber } from "./Scrubber";
 
 const SLEEP_OPTIONS = [5, 10, 15, 30, 45, 60];
@@ -52,10 +53,14 @@ export function NowPlaying() {
     startSleepTimer,
     rate,
     setRate,
+    rounds,
+    round,
+    setRounds,
   } = usePlayer();
 
   const [sleepOpen, setSleepOpen] = useState(false);
   const [rateOpen, setRateOpen] = useState(false);
+  const [roundsOpen, setRoundsOpen] = useState(false);
   /** Swaps the art for the chant text, so reading along keeps the controls. */
   const [reading, setReading] = useState(false);
 
@@ -273,8 +278,53 @@ export function NowPlaying() {
                 ? `${Math.ceil(sleepLeftSec / 60)} นาที`
                 : "ตั้งเวลา"}
             </button>
+            <button
+              type="button"
+              onClick={() => {
+                setRoundsOpen((o) => !o);
+                setRateOpen(false);
+                setSleepOpen(false);
+              }}
+              aria-pressed={rounds > 1}
+              className={`flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full px-4 py-2.5 type-small-bold transition-colors ${
+                rounds > 1
+                  ? "bg-green text-on-green"
+                  : "bg-mid text-ink hover:bg-card"
+              }`}
+            >
+              <RepeatIcon size={16} />
+              {rounds > 1 ? `${round}/${rounds} จบ` : "จบเดียว"}
+            </button>
           </div>
         </div>
+
+        {roundsOpen && (
+          <div className="animate-fade-in mt-3 shrink-0 rounded-xl bg-card p-3 shadow-[var(--shadow-dialog)]">
+            <p className="px-1 pb-2 type-small text-muted">
+              สวดกี่จบ — เล่นซ้ำจนครบแล้วไปตอนถัดไป
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {ROUND_OPTIONS.map((n) => (
+                <button
+                  key={n}
+                  type="button"
+                  onClick={() => {
+                    setRounds(n);
+                    setRoundsOpen(false);
+                  }}
+                  aria-pressed={rounds === n}
+                  className={`rounded-full px-3.5 py-2 type-small-bold transition-colors ${
+                    rounds === n
+                      ? "bg-green text-on-green"
+                      : "bg-mid text-ink hover:bg-base"
+                  }`}
+                >
+                  {n === 1 ? "จบเดียว" : `${n} จบ`}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         {rateOpen && (
           <div className="animate-fade-in mt-3 shrink-0 rounded-xl bg-card p-3 shadow-[var(--shadow-dialog)]">
