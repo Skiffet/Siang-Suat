@@ -1,7 +1,6 @@
 "use client";
 
 import type { ChantWithAudio } from "@/lib/types";
-import { DailyReminderSettings } from "./DailyReminderSettings";
 import { TrackRow } from "./TrackRow";
 import { ClockIcon } from "./Icons";
 import { usePlayer } from "./player/PlayerProvider";
@@ -66,8 +65,6 @@ export function TimerView({ chants }: { chants: ChantWithAudio[] }) {
           )}
         </div>
       </section>
-
-      <DailyReminderSettings />
 
       <section className="mt-8">
         <h2 className="type-feature text-ink">บทที่ฟังได้ตอนนี้</h2>

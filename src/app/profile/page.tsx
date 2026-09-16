@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { DailyReminderSettings } from "@/components/DailyReminderSettings";
 import { LotusMark, ChevronRightIcon } from "@/components/Icons";
 import { getChants, getPlaylists } from "@/lib/content";
 
@@ -63,6 +64,7 @@ export default function ProfilePage() {
         </ul>
       </section>
 
+      <DailyReminderSettings />
     </div>
   );
 }
