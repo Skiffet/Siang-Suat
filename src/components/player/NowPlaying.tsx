@@ -21,17 +21,10 @@ import {
 } from "../Icons";
 import { PlayerLyrics } from "./PlayerLyrics";
 import { usePlayer } from "./PlayerProvider";
+import { RATE_OPTIONS } from "./RatePicker";
 import { Scrubber } from "./Scrubber";
 
 const SLEEP_OPTIONS = [5, 10, 15, 30, 45, 60];
-
-/**
- * Chanting speed. The range is narrower and finer than a podcast app's,
- * because this is meant for matching a pace you already keep rather than for
- * getting through the material faster — half steps around 1x are what a
- * reciter actually needs, and past 1.5x the words stop being chantable.
- */
-const RATE_OPTIONS = [0.75, 0.85, 1, 1.15, 1.25, 1.5];
 
 /**
  * The full-screen player.

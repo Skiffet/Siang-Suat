@@ -11,6 +11,7 @@ import {
   ChevronDownIcon,
 } from "../Icons";
 import { usePlayer } from "./PlayerProvider";
+import { RatePicker } from "./RatePicker";
 import { Scrubber } from "./Scrubber";
 
 /**
@@ -97,11 +98,12 @@ export function PlayerBar() {
           </div>
         </div>
 
-        {/* Right: the chant page, where the full text lives */}
-        <div className="hidden w-[30%] justify-end lg:flex">
+        {/* Right: speed, and the chant page where the full text lives */}
+        <div className="hidden w-[30%] items-center justify-end gap-2 lg:flex">
+          <RatePicker />
           <Link
             href={`/chant/${current.slug}`}
-            className="type-small-bold text-muted transition-colors hover:text-ink"
+            className="rounded-full px-3 py-1.5 type-small-bold text-muted transition-colors hover:bg-mid hover:text-ink"
           >
             เปิดบทสวด
           </Link>
