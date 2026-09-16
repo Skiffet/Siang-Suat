@@ -1,6 +1,7 @@
 "use client";
 
 import type { ChantWithAudio, PlaylistWithChants } from "@/lib/types";
+import { DailyReminderRunner } from "./DailyReminderRunner";
 import { BottomNav } from "./nav/BottomNav";
 import { SideNav } from "./nav/SideNav";
 import { NowPlaying } from "./player/NowPlaying";
@@ -56,6 +57,7 @@ export function AppShell({
       <PlayerBar />
       <BottomNav />
       <NowPlaying />
+      <DailyReminderRunner />
     </>
   );
 }
