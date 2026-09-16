@@ -156,7 +156,7 @@
     },
     {
       "file": "maha-chakkraphat-sappe.m4a",
-      "durationSec": 18.5,
+      "durationSec": 14.6,
       "segments": [
         11,
         14
@@ -167,22 +167,22 @@
         {
           "sourceIndex": 0,
           "repeatIndex": 0,
-          "startSec": 0
+          "startSec": 0.03
         },
         {
           "sourceIndex": 1,
           "repeatIndex": 0,
-          "startSec": 4.06
+          "startSec": 4.39
         },
         {
           "sourceIndex": 2,
           "repeatIndex": 0,
-          "startSec": 10.12
+          "startSec": 8.45
         },
         {
           "sourceIndex": 3,
           "repeatIndex": 0,
-          "startSec": 14.48
+          "startSec": 11.33
         }
       ]
     },
