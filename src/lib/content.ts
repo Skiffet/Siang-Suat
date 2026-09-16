@@ -192,14 +192,18 @@ export function getShelves(): Shelf[] {
   const curated: Shelf[] = [
     { slug: "popular", title: "บทสวดยอดนิยม", items: playable(chants).slice(0, 8) },
     { slug: "bedtime", title: "ฟังก่อนนอน", items: tagged("ก่อนนอน") },
-    { slug: "today", title: "สำหรับวันนี้", items: tagged("ทุกวัน") },
   ];
 
-  const byCategory: Shelf[] = CATEGORY_ORDER.map((cat) => ({
-    slug: cat,
-    title: CATEGORY_LABELS[cat],
-    items: playable(chants.filter((c) => c.category === cat)),
-  }));
+  // "daily" is dropped: its shelf and the tag-based "สำหรับวันนี้" above always
+  // pulled the same handful of chants, and neither actually varied by day —
+  // two rails for one static list read as a mistake, not as two picks.
+  const byCategory: Shelf[] = CATEGORY_ORDER.filter((cat) => cat !== "daily").map(
+    (cat) => ({
+      slug: cat,
+      title: CATEGORY_LABELS[cat],
+      items: playable(chants.filter((c) => c.category === cat)),
+    }),
+  );
 
   // A rail holding one cover reads as a mistake rather than as a shelf.
   return [...curated, ...byCategory].filter((shelf) => shelf.items.length > 1);
