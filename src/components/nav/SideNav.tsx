@@ -93,7 +93,7 @@ export function SideNav({
             return (
               <li key={saved.id}>
                 <Link
-                  href={`/playlist/edit/${saved.id}`}
+                  href={`/playlist/mine/${saved.id}`}
                   className="flex items-center gap-3 rounded-md px-3 py-2 transition-colors hover:bg-card"
                 >
                   <span className="min-w-0 flex-1">

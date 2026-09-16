@@ -32,7 +32,7 @@ export function PlaylistsView({
   chants: ChantWithAudio[];
 }) {
   const router = useRouter();
-  const { current, playing, playQueue } = usePlayer();
+  const { current, playing } = usePlayer();
   const bySlug = useMemo(
     () => new Map(chants.map((c) => [c.slug, c])),
     [chants],
@@ -92,11 +92,15 @@ export function PlaylistsView({
               );
               const live = isPlaying(items);
               return (
-                <li key={saved.id} className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => playQueue(items)}
-                    className="flex min-w-0 flex-1 items-center gap-3 rounded-md px-2 py-2 text-left transition-colors hover:bg-card-alt"
+                <li key={saved.id}>
+                  {/*
+                   * Same pattern as a curated playlist: the row opens the
+                   * view-and-play page rather than starting playback itself.
+                   * Editing is a separate, explicit action next to it.
+                   */}
+                  <Link
+                    href={`/playlist/mine/${saved.id}`}
+                    className="flex items-center gap-3 rounded-md px-2 py-2 transition-colors hover:bg-card-alt"
                   >
                     <Cover
                       src={saved.cover}
@@ -115,12 +119,6 @@ export function PlaylistsView({
                       </span>
                     </span>
                     {live && <EqualizerIcon size={16} />}
-                  </button>
-                  <Link
-                    href={`/playlist/edit/${saved.id}`}
-                    className="shrink-0 rounded-full px-3 py-2 type-small-bold text-muted transition-colors hover:bg-mid hover:text-ink"
-                  >
-                    แก้ไข
                   </Link>
                 </li>
               );

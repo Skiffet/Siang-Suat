@@ -169,6 +169,14 @@ export function SpeedIcon(p: IconProps) {
   );
 }
 
+export function PencilIcon(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M14.8 3.5a2.2 2.2 0 0 1 3.1 0l1.6 1.6a2.2 2.2 0 0 1 0 3.1L8.2 19.5a1 1 0 0 1-.45.26l-4.2 1.1a.7.7 0 0 1-.86-.85l1.1-4.2a1 1 0 0 1 .26-.46L14.8 3.5Zm2.4 1.4-1.6 1.6 1.9 1.9 1.6-1.6a.8.8 0 0 0 0-1.13l-.77-.77a.8.8 0 0 0-1.13 0ZM6 15.98l-.7 2.7 2.7-.7L16.9 9.1 15 7.2 6 15.98Z" />
+    </Svg>
+  );
+}
+
 export function TextIcon(p: IconProps) {
   return (
     <Svg {...p}>

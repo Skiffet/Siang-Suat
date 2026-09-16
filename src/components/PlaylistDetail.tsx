@@ -1,14 +1,22 @@
 "use client";
 
+import Link from "next/link";
 import type { PlaylistWithChants } from "@/lib/types";
 import { isPlayingIn } from "@/lib/nowPlaying";
 import { formatDurationLong } from "@/lib/format";
 import { Cover } from "./Cover";
 import { TrackRow } from "./TrackRow";
 import { usePlayer } from "./player/PlayerProvider";
-import { PauseIcon, PlayIcon, ShuffleIcon } from "./Icons";
+import { PauseIcon, PencilIcon, PlayIcon, ShuffleIcon } from "./Icons";
 
-export function PlaylistDetail({ playlist }: { playlist: PlaylistWithChants }) {
+export function PlaylistDetail({
+  playlist,
+  editHref,
+}: {
+  playlist: PlaylistWithChants;
+  /** Set only for a playlist the listener made — nothing else can be edited. */
+  editHref?: string;
+}) {
   const { playQueue, current, playing, toggle, shuffle, toggleShuffle } = usePlayer();
   const active = isPlayingIn(playlist.items, current?.slug);
   const playable = playlist.items.filter((c) => c.audioUrl).length;
@@ -74,6 +82,15 @@ export function PlaylistDetail({ playlist }: { playlist: PlaylistWithChants }) {
           >
             <ShuffleIcon size={24} />
           </button>
+          {editHref && (
+            <Link
+              href={editHref}
+              aria-label="แก้ไขเพลย์ลิสต์"
+              className="text-muted transition-colors hover:text-ink"
+            >
+              <PencilIcon size={22} />
+            </Link>
+          )}
         </div>
       </header>
 
