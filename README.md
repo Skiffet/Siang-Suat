@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# เสียงสวด
 
-## Getting Started
+Podcast สวดมนต์ — ฟังบทสวด ธรรมะ และเสียงนำสมาธิ พร้อมคำแปลอ่านตามได้
 
-First, run the development server:
+เนื้อหาทุกบทเก็บเป็น JSON ไฟล์เดียวที่ทั้งเว็บและตัวสร้างเสียงอ่านร่วมกัน
+เสียงสร้างด้วย TTS จากเครื่องผู้พัฒนา แล้ว commit ไฟล์ที่ได้ขึ้น repo —
+ตอน deploy จึงไม่ต้องใช้คีย์อะไรเลย
+
+## เริ่มใช้งาน
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+เปิด http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## โครงสร้าง
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+content/chants/*.json      บทสวด — เนื้อหา คำแปล ปก ข้อมูลเสียง
+content/playlists/*.json   เพลย์ลิสต์ อ้างถึงบทสวดด้วย slug
+public/covers/*.jpg        ปก 800px (แปลงมาจากต้นฉบับใน images/)
+public/audio/*.m4a|mp3     ไฟล์เสียง + manifest.json ที่มี timing รายบรรทัด
+src/lib/content.ts         อ่าน content/ ตอน build รวมกับ manifest
+src/components/player/     สถานะการเล่นทั้งหมด — audio ตัวเดียวใน context
+scripts/tts/               ตัวสร้างเสียง (รันที่เครื่อง ต้องใช้คีย์)
+scripts/audio/             เครื่องมือจัดการไฟล์เสียง (ไม่ต้องใช้คีย์)
+```
 
-## Learn More
+## เพิ่มบทสวดใหม่
 
-To learn more about Next.js, take a look at the following resources:
+1. สร้าง `content/chants/<slug>.json` — ดูไฟล์ที่มีอยู่เป็นตัวอย่าง
+   ต้องมี `cover` ชี้ไปที่ชื่อไฟล์ใน `public/covers/`
+2. ได้ไฟล์เสียงมา แล้วแต่กรณี:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+# เจนเองด้วย pipeline — ได้ timing รายบรรทัด ข้อความจะไฮไลต์ตามเสียง
+npm run tts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# ได้ไฟล์เสียงมาจากที่อื่น
+npm run audio:inspect เสียง.wav           # ดูว่ามีช่วงเงียบผิดปกติไหม
+npm run audio:trim เสียง.wav <ชื่อออก>     # ตัดหางเงียบ + แปลงเป็น AAC
+npm run audio:join <ชื่อออก> ท่อน1.wav ท่อน2.wav ...   # ต่อหลายท่อนเป็นบทเดียว
+```
 
-## Deploy on Vercel
+ไฟล์ที่ได้จาก `audio:trim` / `audio:join` ต้องประกาศไว้ในบทสวดเอง
+เพราะไม่ได้ผ่าน manifest:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```json
+"audio": { "file": "<ชื่อออก>.m4a", "durationSec": 369.2 }
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3. เพิ่ม slug เข้าเพลย์ลิสต์ใน `content/playlists/`
+
+บทที่ยังไม่มีไฟล์เสียงยังขึ้นในเว็บได้ แสดงว่า "เร็ว ๆ นี้" กดแล้วบอกว่ายังไม่มีเสียง
+
+## หมายเหตุเรื่องไฟล์
+
+`images/` ไม่ได้อยู่ใน git — เป็นต้นฉบับความละเอียดเต็มและ WAV ที่ยังไม่บีบ
+เก็บไว้ที่อื่น (Drive / R2) จำเป็นเฉพาะตอนอยากแปลงปกหรือเสียงใหม่
+
+`.env.local` ต้องใช้เฉพาะตอนรัน `npm run tts` ดูคีย์ที่ต้องตั้งได้จาก `.env.example`
+
+## Deploy
+
+ทุกหน้าเป็น static และไม่มี env var ที่ต้องใช้ตอนรัน ต่อ repo กับ Vercel
+แล้ว push ได้เลย ไม่ต้องตั้งค่าอะไรเพิ่ม

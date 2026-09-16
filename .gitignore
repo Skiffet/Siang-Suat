@@ -32,6 +32,8 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# ...but the template belongs in the repo, so people know what keys to set
+!.env.example
 
 # vercel
 .vercel
@@ -39,3 +41,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Source assets, not what the site serves.
+# `public/covers` and `public/audio` are the derived files the build ships;
+# these are the originals they came from — full-resolution art and unencoded
+# WAV takes, tens of megabytes that git would keep forever. Back them up
+# somewhere else (Drive, R2); they are only needed to re-derive the assets.
+/images/
+
+# Voice-comparison samples from `npm run tts:try`. Regenerable, and /test
+# degrades to an empty state without them.
+/public/audio/test/

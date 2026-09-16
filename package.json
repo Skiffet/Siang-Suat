@@ -6,7 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "tts": "tsx --env-file-if-exists=.env.local scripts/tts/generate.ts",
+    "tts:dry": "tsx --env-file-if-exists=.env.local scripts/tts/generate.ts --dry",
+    "tts:try": "tsx --env-file-if-exists=.env.local scripts/tts/try-voice.ts",
+    "audio:inspect": "tsx scripts/audio/inspect.ts",
+    "audio:trim": "tsx scripts/audio/trim.ts"
   },
   "dependencies": {
     "next": "16.3.5",
@@ -14,13 +19,18 @@
     "react-dom": "19.2.8"
   },
   "devDependencies": {
+    "@google-cloud/text-to-speech": "^7.1.0",
+    "@google/genai": "^2.22.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/ws": "^8.18.1",
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "tsx": "^4.23.13",
+    "typescript": "^5",
+    "ws": "^8.21.3"
   }
 }

@@ -1,0 +1,196 @@
+{
+  "metta": {
+    "slug": "metta",
+    "file": "metta.mp3",
+    "durationSec": 47.088,
+    "bytes": 282528,
+    "provider": "edge",
+    "voice": "th-TH-PremwadeeNeural",
+    "hash": "6587d885ec253d7d",
+    "generatedAt": "2026-09-16T03:38:39.657Z",
+    "timings": [
+      {
+        "sourceIndex": 0,
+        "repeatIndex": 0,
+        "startSec": 0
+      },
+      {
+        "sourceIndex": 1,
+        "repeatIndex": 0,
+        "startSec": 3.408
+      },
+      {
+        "sourceIndex": 2,
+        "repeatIndex": 0,
+        "startSec": 6.336
+      },
+      {
+        "sourceIndex": 3,
+        "repeatIndex": 0,
+        "startSec": 9.672
+      },
+      {
+        "sourceIndex": 4,
+        "repeatIndex": 0,
+        "startSec": 12.072
+      },
+      {
+        "sourceIndex": 5,
+        "repeatIndex": 0,
+        "startSec": 15.864
+      },
+      {
+        "sourceIndex": 6,
+        "repeatIndex": 0,
+        "startSec": 18.24
+      },
+      {
+        "sourceIndex": 7,
+        "repeatIndex": 0,
+        "startSec": 21.984
+      },
+      {
+        "sourceIndex": 8,
+        "repeatIndex": 0,
+        "startSec": 24.96
+      },
+      {
+        "sourceIndex": 9,
+        "repeatIndex": 0,
+        "startSec": 29.712
+      },
+      {
+        "sourceIndex": 10,
+        "repeatIndex": 0,
+        "startSec": 32.064
+      },
+      {
+        "sourceIndex": 11,
+        "repeatIndex": 0,
+        "startSec": 36.096
+      },
+      {
+        "sourceIndex": 12,
+        "repeatIndex": 0,
+        "startSec": 39.648
+      }
+    ],
+    "timingsExact": true
+  },
+  "namo-tassa": {
+    "slug": "namo-tassa",
+    "file": "namo-tassa.mp3",
+    "durationSec": 25.056,
+    "bytes": 150336,
+    "provider": "edge",
+    "voice": "th-TH-PremwadeeNeural",
+    "hash": "3d8a9a091c4a14d4",
+    "generatedAt": "2026-09-16T03:38:41.194Z",
+    "timings": [
+      {
+        "sourceIndex": 0,
+        "repeatIndex": 0,
+        "startSec": 0
+      },
+      {
+        "sourceIndex": 1,
+        "repeatIndex": 0,
+        "startSec": 3.144
+      },
+      {
+        "sourceIndex": 2,
+        "repeatIndex": 0,
+        "startSec": 5.256
+      },
+      {
+        "sourceIndex": 0,
+        "repeatIndex": 1,
+        "startSec": 8.52
+      },
+      {
+        "sourceIndex": 1,
+        "repeatIndex": 1,
+        "startSec": 11.664
+      },
+      {
+        "sourceIndex": 2,
+        "repeatIndex": 1,
+        "startSec": 13.776
+      },
+      {
+        "sourceIndex": 0,
+        "repeatIndex": 2,
+        "startSec": 17.04
+      },
+      {
+        "sourceIndex": 1,
+        "repeatIndex": 2,
+        "startSec": 20.184
+      },
+      {
+        "sourceIndex": 2,
+        "repeatIndex": 2,
+        "startSec": 22.296
+      }
+    ],
+    "timingsExact": true
+  },
+  "trisarana": {
+    "slug": "trisarana",
+    "file": "trisarana.mp3",
+    "durationSec": 33.72,
+    "bytes": 202320,
+    "provider": "edge",
+    "voice": "th-TH-PremwadeeNeural",
+    "hash": "2169f98b5c9655f8",
+    "generatedAt": "2026-09-16T03:38:46.205Z",
+    "timings": [
+      {
+        "sourceIndex": 0,
+        "repeatIndex": 0,
+        "startSec": 0
+      },
+      {
+        "sourceIndex": 1,
+        "repeatIndex": 0,
+        "startSec": 2.904
+      },
+      {
+        "sourceIndex": 2,
+        "repeatIndex": 0,
+        "startSec": 5.64
+      },
+      {
+        "sourceIndex": 3,
+        "repeatIndex": 0,
+        "startSec": 9.144
+      },
+      {
+        "sourceIndex": 4,
+        "repeatIndex": 0,
+        "startSec": 13.08
+      },
+      {
+        "sourceIndex": 5,
+        "repeatIndex": 0,
+        "startSec": 16.92
+      },
+      {
+        "sourceIndex": 6,
+        "repeatIndex": 0,
+        "startSec": 21.528
+      },
+      {
+        "sourceIndex": 7,
+        "repeatIndex": 0,
+        "startSec": 25.392
+      },
+      {
+        "sourceIndex": 8,
+        "repeatIndex": 0,
+        "startSec": 29.184
+      }
+    ],
+    "timingsExact": true
+  }
+}

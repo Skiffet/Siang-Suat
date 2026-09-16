@@ -1,0 +1,23 @@
+{
+  "slug": "metta-sabbe-satta",
+  "title": "แผ่เมตตาให้สรรพสัตว์",
+  "subtitle": "สัพเพ สัตตา อะเวรา โหนตุ",
+  "category": "meditation",
+  "description": "บทแผ่เมตตาออกไปยังสรรพสัตว์ทั้งหลายไม่มีประมาณ สวดต่อจากบทแผ่เมตตาให้ตนเอง เหมาะกับการปิดท้ายการนั่งสมาธิ",
+  "tags": ["แผ่เมตตา", "ก่อนนอน", "มีคำแปล", "สมาธิ"],
+  "voice": { "rate": 0.8, "styleHint": "อ่านช้ามาก อบอุ่น อ่อนโยน" },
+  "cover": "white-lotus",
+  "segments": [
+    { "kind": "thai", "text": "บทแผ่เมตตาให้สรรพสัตว์", "pauseAfterMs": 1500 },
+    { "kind": "pali", "text": "สัพเพ สัตตา", "pauseAfterMs": 800 },
+    { "kind": "translation", "text": "สัตว์ทั้งหลายทั้งปวง", "pauseAfterMs": 1000 },
+    { "kind": "pali", "text": "อะเวรา โหนตุ", "pauseAfterMs": 800 },
+    { "kind": "translation", "text": "จงเป็นผู้ไม่มีเวรต่อกันและกันเถิด", "pauseAfterMs": 1200 },
+    { "kind": "pali", "text": "อัพยาปัชฌา โหนตุ", "pauseAfterMs": 800 },
+    { "kind": "translation", "text": "จงเป็นผู้ไม่เบียดเบียนซึ่งกันและกันเถิด", "pauseAfterMs": 1200 },
+    { "kind": "pali", "text": "อะนีฆา โหนตุ", "pauseAfterMs": 800 },
+    { "kind": "translation", "text": "จงเป็นผู้ไม่มีความลำบากเถิด", "pauseAfterMs": 1200 },
+    { "kind": "pali", "text": "สุขี อัตตานัง ปะริหะรันตุ", "pauseAfterMs": 800 },
+    { "kind": "translation", "text": "จงมีความสุข รักษาตนให้พ้นจากทุกข์ภัยทั้งสิ้นเถิด", "pauseAfterMs": 2000 }
+  ]
+}
