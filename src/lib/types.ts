@@ -16,7 +16,15 @@ export type SegmentKind =
   /** Thai translation of the preceding Pali line. Read at a calm, normal pace. */
   | "translation"
   /** Deliberate silence. `text` is ignored. */
-  | "silence";
+  | "silence"
+  /**
+   * An instruction to the person chanting rather than something to read
+   * aloud — "(กราบ)" between the closing stanzas. Never spoken, but it does
+   * occupy time: the recital leaves a gap there for the prostration, so the
+   * cue carries that gap's timing and the highlight moves onto it while the
+   * listener bows.
+   */
+  | "cue";
 
 export interface ChantSegment {
   kind: SegmentKind;

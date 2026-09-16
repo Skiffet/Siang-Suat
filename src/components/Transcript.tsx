@@ -39,14 +39,19 @@ export function Transcript({ chant }: { chant: ChantWithAudio }) {
         {lines.map((line, i) => {
           const isActive = i === activeIndex;
           const pali = line.kind === "pali";
+          const cue = line.kind === "cue";
           return (
             <li key={i} data-line={i}>
               <button
                 type="button"
                 disabled={!synced}
                 onClick={() => goTo(line)}
-                className={`w-full rounded-md px-3 py-1 text-left transition-colors duration-300 ${
-                  pali ? "type-pali" : "type-caption"
+                className={`w-full rounded-md px-3 py-1 transition-colors duration-300 ${
+                  cue
+                    ? "text-center text-[12px] font-semibold uppercase tracking-[2px]"
+                    : pali
+                      ? "text-left type-pali"
+                      : "text-left type-caption"
                 } ${
                   isActive
                     ? "bg-white/[0.06] text-ink"

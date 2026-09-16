@@ -17,6 +17,12 @@
  * exactly rather than greedily — a breath misread early would otherwise push
  * every line after it onto the wrong words.
  *
+ * Cue lines — "(กราบ)" — are held out of that fit. They are never spoken, so
+ * there is no speech to measure them against, but they are not weightless
+ * either: the recital stops while the prostration is made. So the spoken
+ * lines are fitted first, and each cue then takes the silence that follows
+ * the line before it, which is exactly the gap left for bowing.
+ *
  *   npx tsx scripts/audio/align.ts <slug> [--dry]
  */
 import { readFileSync, writeFileSync } from "node:fs";
@@ -46,14 +52,27 @@ if (!chant.audio) {
 }
 
 /** The lines the player will show, in order, with repeats expanded. */
-const lines: { sourceIndex: number; repeatIndex: number; text: string }[] = [];
+const lines: {
+  sourceIndex: number;
+  repeatIndex: number;
+  text: string;
+  cue: boolean;
+}[] = [];
 for (let r = 0; r < (chant.repeat ?? 1); r++) {
   chant.segments.forEach((seg, i) => {
     if (seg.kind !== "silence") {
-      lines.push({ sourceIndex: i, repeatIndex: r, text: seg.text });
+      lines.push({
+        sourceIndex: i,
+        repeatIndex: r,
+        text: seg.text,
+        cue: seg.kind === "cue",
+      });
     }
   });
 }
+
+/** Only the spoken lines are fitted against the audio. */
+const spoken = lines.filter((l) => !l.cue);
 
 // The published file is AAC; afconvert already backs the trim and join steps.
 const wavPath = join(tmpdir(), `${slug}.align.wav`);
@@ -96,22 +115,30 @@ env.forEach((v, i) => {
   quiet = 0;
 });
 
-if (candidates.length < lines.length - 1) {
+if (candidates.length < spoken.length - 1) {
   console.error(
-    `${slug}: เจอรอยต่อ ${candidates.length} จุด แต่ต้องแบ่ง ${lines.length} วรรค — ` +
+    `${slug}: เจอรอยต่อ ${candidates.length} จุด แต่ต้องแบ่ง ${spoken.length} วรรค — ` +
       `เสียงเว้นจังหวะน้อยเกินกว่าจะแบ่งได้`,
   );
   process.exit(1);
 }
 
+/** When speech last stops before a given moment — where a prostration begins. */
+function speechEndsBefore(t: number) {
+  for (let i = Math.min(env.length, Math.floor(t / STEP)) - 1; i >= 0; i--) {
+    if (env[i] > floor) return (i + 1) * STEP;
+  }
+  return t;
+}
+
 // Each line should take a share of the audio proportional to its text.
-const charTotal = lines.reduce((n, l) => n + l.text.length, 0);
-const want = lines.map((l) => ((total - speechStart) * l.text.length) / charTotal);
+const charTotal = spoken.reduce((n, l) => n + l.text.length, 0);
+const want = spoken.map((l) => ((total - speechStart) * l.text.length) / charTotal);
 
 // Positions a boundary may sit at: the start of speech, each candidate, the end.
 const pos = [speechStart, ...candidates.map((c) => c.at), total];
 const gapOf = [0, ...candidates.map((c) => c.gap), 0];
-const N = lines.length;
+const N = spoken.length;
 const M = pos.length;
 
 /**
@@ -159,24 +186,50 @@ for (let j = N; j >= 1; j--) {
 }
 cuts.unshift(0);
 
-const timings: SegmentTiming[] = lines.map((line, i) => ({
-  sourceIndex: line.sourceIndex,
-  repeatIndex: line.repeatIndex,
-  // Land just before the first syllable rather than a beat after it.
-  startSec: Math.max(0, Number((pos[cuts[i]] - 0.12).toFixed(3))),
-}));
+// Walk the display order, pulling starts from the fit for spoken lines and
+// from the surrounding silence for cues.
+const timings: SegmentTiming[] = [];
+let s_i = 0;
+lines.forEach((line) => {
+  let startSec: number;
+  if (!line.cue) {
+    // Land just before the first syllable rather than a beat after it.
+    startSec = pos[cuts[s_i]] - 0.12;
+    s_i++;
+  } else {
+    // The bow begins the moment the line before it stops being spoken, and
+    // runs until the next line starts — or the end of the take.
+    const nextStart = s_i < N ? pos[cuts[s_i]] : total;
+    startSec = speechEndsBefore(nextStart);
+  }
+  timings.push({
+    sourceIndex: line.sourceIndex,
+    repeatIndex: line.repeatIndex,
+    startSec: Math.max(0, Number(startSec.toFixed(3))),
+  });
+});
 
 const mmss = (s: number) =>
   `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
 
-console.log(`\n${slug} — ${N} วรรค จาก ${candidates.length} รอยต่อที่เจอ\n`);
+const cueCount = lines.length - N;
+console.log(
+  `\n${slug} — ${N} วรรคที่สวด` +
+    (cueCount ? ` + ${cueCount} จังหวะกราบ` : "") +
+    `, จาก ${candidates.length} รอยต่อที่เจอ\n`,
+);
 timings.forEach((t, i) => {
-  const dur = pos[cuts[i + 1]] - pos[cuts[i]];
-  const off = dur - want[i];
+  const dur = (timings[i + 1]?.startSec ?? total) - t.startSec;
+  const note = lines[i].cue
+    ? "เงียบ (กราบ)"
+    : (() => {
+        const w = want[lines.slice(0, i).filter((l) => !l.cue).length];
+        const off = dur - w;
+        return `คาด ${w.toFixed(1)}s, ${off >= 0 ? "+" : ""}${off.toFixed(1)}`;
+      })();
   console.log(
     `  ${String(i + 1).padStart(2)}. ${mmss(t.startSec)}  ${dur.toFixed(1)}s ` +
-      `(คาด ${want[i].toFixed(1)}s, ${off >= 0 ? "+" : ""}${off.toFixed(1)})  ` +
-      lines[i].text.slice(0, 40),
+      `(${note})  ${lines[i].text.slice(0, 40)}`,
   );
 });
 

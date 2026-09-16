@@ -28,14 +28,20 @@ if (!timings?.length) {
 }
 
 const lines = chant.segments.filter((s) => s.kind !== "silence");
+/** Cues are silence by design, so they have no text length to be judged against. */
+const isCue = (i: number) => lines[i]?.kind === "cue";
 const total = chant.audio!.durationSec;
-const charTotal = lines.reduce((n, l) => n + l.text.length, 0);
+const charTotal = lines.reduce(
+  (n, l) => n + (l.kind === "cue" ? 0 : l.text.length),
+  0,
+);
 
-const rows = timings.map((t, i) => {
+const rows = timings.flatMap((t, i) => {
+  if (isCue(t.sourceIndex)) return [];
   const text = lines[t.sourceIndex]?.text ?? "";
   const dur = (timings[i + 1]?.startSec ?? total) - t.startSec;
   const want = (total * text.length) / charTotal;
-  return { text, dur, want, rel: Math.abs(dur - want) / want };
+  return [{ text, dur, want, rel: Math.abs(dur - want) / want }];
 });
 
 const median = (xs: number[]) =>
@@ -45,7 +51,12 @@ const medRel = median(rows.map((r) => r.rel));
 const within = (limit: number) =>
   Math.round((rows.filter((r) => r.rel <= limit).length / rows.length) * 100);
 
-console.log(`\n${slug} — ${rows.length} วรรค, ${total}s`);
+const cues = timings.length - rows.length;
+console.log(
+  `\n${slug} — ${rows.length} วรรคที่สวด` +
+    (cues ? ` (+ ${cues} จังหวะกราบ ไม่นำมาคิด)` : "") +
+    `, ${total}s`,
+);
 console.log(`  คลาดจากที่ควรเป็น (ค่ากลาง): ${(medRel * 100).toFixed(0)}%`);
 console.log(`  อยู่ในเกณฑ์ ±30%: ${within(0.3)}%   ±50%: ${within(0.5)}%`);
 

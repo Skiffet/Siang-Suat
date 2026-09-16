@@ -39,6 +39,7 @@ const RATE_BY_KIND: Record<SegmentKind, number> = {
   thai: 1.0,
   translation: 0.95,
   silence: 1.0,
+  cue: 1.0, // never spoken; the rate is here only to satisfy the record
 };
 
 export function buildPlan(chant: Chant, lexicon: Lexicon): SpeechPlan {
@@ -86,7 +87,10 @@ export function buildPlan(chant: Chant, lexicon: Lexicon): SpeechPlan {
 }
 
 function defaultPause(kind: SegmentKind): number {
-  return kind === "pali" ? 600 : 400;
+  if (kind === "pali") return 600;
+  // A prostration needs long enough to actually make one.
+  if (kind === "cue") return 2000;
+  return 400;
 }
 
 /** Stable fingerprint of everything that affects the audio. Unchanged means no
