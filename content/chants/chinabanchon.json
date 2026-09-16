@@ -1,0 +1,668 @@
+{
+  "slug": "chinabanchon",
+  "title": "คาถาชินบัญชร",
+  "subtitle": "ชะยาสะนาคะตา พุทธา",
+  "description": "บทอัญเชิญพระพุทธเจ้าและพระอรหันต์มาสถิตรอบกาย เพื่อเป็นเกราะคุ้มครอง",
+  "tags": [
+    "คาถา",
+    "คุ้มครอง"
+  ],
+  "cover": "forest-monk",
+  "category": "protection",
+  "segments": [
+    {
+      "kind": "thai",
+      "text": "คาถาชินบัญชร"
+    },
+    {
+      "kind": "pali",
+      "text": "ปุตตะกาโม ละเภ ปุตตัง"
+    },
+    {
+      "kind": "pali",
+      "text": "ธะนะกาโม ละเภ ธะนัง"
+    },
+    {
+      "kind": "pali",
+      "text": "อัตถิ กาเย กายะญายะ"
+    },
+    {
+      "kind": "pali",
+      "text": "เทวานัง ปิยะตัง สุตวา"
+    },
+    {
+      "kind": "pali",
+      "text": "อิติปิ โส ภะคะวา"
+    },
+    {
+      "kind": "pali",
+      "text": "ยะมะราชาโน ท้าวเวสสุวัณโณ"
+    },
+    {
+      "kind": "pali",
+      "text": "มะระณัง สุขัง อะระหัง สุคะโต นะโมพุทธายะ"
+    },
+    {
+      "kind": "pali",
+      "text": "ชะยาสะนาคะตา พุทธา"
+    },
+    {
+      "kind": "pali",
+      "text": "เชตะวา มารัง สะวาหะนัง"
+    },
+    {
+      "kind": "pali",
+      "text": "จะตุสัจจาสะภัง ระสัง"
+    },
+    {
+      "kind": "pali",
+      "text": "เยปิวิงสุ นราสะภา"
+    },
+    {
+      "kind": "pali",
+      "text": "ตัณหังกะราทะโย พุทธา"
+    },
+    {
+      "kind": "pali",
+      "text": "อัฏฐะวีสะติ นายะกา"
+    },
+    {
+      "kind": "pali",
+      "text": "สัพเพ ปะติฏฐิตา มัยหัง"
+    },
+    {
+      "kind": "pali",
+      "text": "มัตถะเก เต มุนิสสะรา"
+    },
+    {
+      "kind": "pali",
+      "text": "สีเส ปะติฏฐิโต มัยหัง พุทโธ"
+    },
+    {
+      "kind": "pali",
+      "text": "ธัมโม ทวิโลจะเน"
+    },
+    {
+      "kind": "pali",
+      "text": "สังโฆ ปะติฏฐิโต มัยหัง"
+    },
+    {
+      "kind": "pali",
+      "text": "อุเรสัพพะคุณากะโร"
+    },
+    {
+      "kind": "pali",
+      "text": "หะทะเย เม อะนุรุทโธ"
+    },
+    {
+      "kind": "pali",
+      "text": "สารีปุตโต จะ ทักขิเณ"
+    },
+    {
+      "kind": "pali",
+      "text": "โกณฑัญโญ ปิฏฐิภาคัสมิง"
+    },
+    {
+      "kind": "pali",
+      "text": "โมคคัลลาโน จะ วามะเก"
+    },
+    {
+      "kind": "pali",
+      "text": "ทักขิเณ สะวะเน มัยหัง"
+    },
+    {
+      "kind": "pali",
+      "text": "อาสุง อานันทะราหุโล"
+    },
+    {
+      "kind": "pali",
+      "text": "กัสสะโป จะ มะหานาโม"
+    },
+    {
+      "kind": "pali",
+      "text": "อุภาสุง วามะโสตักเก"
+    },
+    {
+      "kind": "pali",
+      "text": "เกสันเต ปิฏฐิภาคัสมิง"
+    },
+    {
+      "kind": "pali",
+      "text": "สุริโย วะ ปะภังกะโร"
+    },
+    {
+      "kind": "pali",
+      "text": "นิสินโน สิริสัมปันโน"
+    },
+    {
+      "kind": "pali",
+      "text": "โสภิโต มุนิปุงคะโว"
+    },
+    {
+      "kind": "pali",
+      "text": "กุมาระกัสสะโป เถโร"
+    },
+    {
+      "kind": "pali",
+      "text": "มะเหสี จิตตะวาทะโก"
+    },
+    {
+      "kind": "pali",
+      "text": "โส มัยหัง วะทะเน นิจจัง"
+    },
+    {
+      "kind": "pali",
+      "text": "ปะติฏฐาสิ คุณากะโร"
+    },
+    {
+      "kind": "pali",
+      "text": "ปุณโณ อังคุลิมาโล จะ"
+    },
+    {
+      "kind": "pali",
+      "text": "อุปาลี นันทะสีวะลี"
+    },
+    {
+      "kind": "pali",
+      "text": "เถรา ปัญจะ อิเม ชาตา"
+    },
+    {
+      "kind": "pali",
+      "text": "นะลาเต ติละกา มะมะ"
+    },
+    {
+      "kind": "pali",
+      "text": "เสสาสีติ มะหาเถรา"
+    },
+    {
+      "kind": "pali",
+      "text": "วิชิตา ชินะสาวะกา"
+    },
+    {
+      "kind": "pali",
+      "text": "เอเตสีติ มะหาเถรา"
+    },
+    {
+      "kind": "pali",
+      "text": "ชิตะวันโต ชิโนระสา"
+    },
+    {
+      "kind": "pali",
+      "text": "ชะลันตา สีละเตเชนะ"
+    },
+    {
+      "kind": "pali",
+      "text": "อังคะมังเคสุ สัณฐิตา"
+    },
+    {
+      "kind": "pali",
+      "text": "ระตะนัง ปุระโต อาสิ"
+    },
+    {
+      "kind": "pali",
+      "text": "ทักขิเณ เมตตะสุตตะกัง"
+    },
+    {
+      "kind": "pali",
+      "text": "ธะชัคคัง ปัจฉะโต อาสิ"
+    },
+    {
+      "kind": "pali",
+      "text": "วาเม อังคุลิมาละกัง"
+    },
+    {
+      "kind": "pali",
+      "text": "ขันธะโมระปะริตตัญจะ"
+    },
+    {
+      "kind": "pali",
+      "text": "อาฏานาฏิยะสุตตะกัง"
+    },
+    {
+      "kind": "pali",
+      "text": "อากาเส ฉะทะนัง อาสิ"
+    },
+    {
+      "kind": "pali",
+      "text": "เสษา ปาการะสัณฐิตา"
+    },
+    {
+      "kind": "pali",
+      "text": "ชินานานาวะระสังยุตตา"
+    },
+    {
+      "kind": "pali",
+      "text": "สัตตะปาการะลังกะตา"
+    },
+    {
+      "kind": "pali",
+      "text": "วาตะปิตตาทิสัญชาตา"
+    },
+    {
+      "kind": "pali",
+      "text": "พาหิรัชฌัตตุปัททะวา"
+    },
+    {
+      "kind": "pali",
+      "text": "อะเสษา วินะยัง ยันตุ"
+    },
+    {
+      "kind": "pali",
+      "text": "อะนันตะชินะเตชะสา"
+    },
+    {
+      "kind": "pali",
+      "text": "วะสะโต เม สะกิจเจนะ"
+    },
+    {
+      "kind": "pali",
+      "text": "สะทา สัมพุทธะปัญชะเร"
+    },
+    {
+      "kind": "pali",
+      "text": "ชินะปัญชะระมัชฌิมหิ"
+    },
+    {
+      "kind": "pali",
+      "text": "วิหะรันตัง มะฮีตะเล"
+    },
+    {
+      "kind": "pali",
+      "text": "สะทา ปาเลนตุ มัง สัพเพ"
+    },
+    {
+      "kind": "pali",
+      "text": "เต มะหาปุริสาสะภา"
+    },
+    {
+      "kind": "pali",
+      "text": "อิจเจวะมันโต สุคุตโต สุรักโข"
+    },
+    {
+      "kind": "pali",
+      "text": "ชินานุภาเวนะ ชิตุปัททะโว"
+    },
+    {
+      "kind": "pali",
+      "text": "ธัมมานุภาเวนะ ชิตาริสังโฆ"
+    },
+    {
+      "kind": "pali",
+      "text": "สังฆานุภาเวนะ ชิตันตะราโย"
+    },
+    {
+      "kind": "pali",
+      "text": "สัทธัมมานุภาวะปาลิโต"
+    },
+    {
+      "kind": "pali",
+      "text": "จะรามิ ชินะปัญชะเรติ"
+    }
+  ],
+  "audio": {
+    "file": "chinabanchon.m4a",
+    "durationSec": 185.7,
+    "timings": [
+      {
+        "sourceIndex": 0,
+        "repeatIndex": 0,
+        "startSec": 0.06
+      },
+      {
+        "sourceIndex": 1,
+        "repeatIndex": 0,
+        "startSec": 2.4
+      },
+      {
+        "sourceIndex": 2,
+        "repeatIndex": 0,
+        "startSec": 7.14
+      },
+      {
+        "sourceIndex": 3,
+        "repeatIndex": 0,
+        "startSec": 9.66
+      },
+      {
+        "sourceIndex": 4,
+        "repeatIndex": 0,
+        "startSec": 12.38
+      },
+      {
+        "sourceIndex": 5,
+        "repeatIndex": 0,
+        "startSec": 14.42
+      },
+      {
+        "sourceIndex": 6,
+        "repeatIndex": 0,
+        "startSec": 16.2
+      },
+      {
+        "sourceIndex": 7,
+        "repeatIndex": 0,
+        "startSec": 19.62
+      },
+      {
+        "sourceIndex": 8,
+        "repeatIndex": 0,
+        "startSec": 23.3
+      },
+      {
+        "sourceIndex": 9,
+        "repeatIndex": 0,
+        "startSec": 25.64
+      },
+      {
+        "sourceIndex": 10,
+        "repeatIndex": 0,
+        "startSec": 28.22
+      },
+      {
+        "sourceIndex": 11,
+        "repeatIndex": 0,
+        "startSec": 30.64
+      },
+      {
+        "sourceIndex": 12,
+        "repeatIndex": 0,
+        "startSec": 33.5
+      },
+      {
+        "sourceIndex": 13,
+        "repeatIndex": 0,
+        "startSec": 35.86
+      },
+      {
+        "sourceIndex": 14,
+        "repeatIndex": 0,
+        "startSec": 38.24
+      },
+      {
+        "sourceIndex": 15,
+        "repeatIndex": 0,
+        "startSec": 40.8
+      },
+      {
+        "sourceIndex": 16,
+        "repeatIndex": 0,
+        "startSec": 43.62
+      },
+      {
+        "sourceIndex": 17,
+        "repeatIndex": 0,
+        "startSec": 46.1
+      },
+      {
+        "sourceIndex": 18,
+        "repeatIndex": 0,
+        "startSec": 48.76
+      },
+      {
+        "sourceIndex": 19,
+        "repeatIndex": 0,
+        "startSec": 51.36
+      },
+      {
+        "sourceIndex": 20,
+        "repeatIndex": 0,
+        "startSec": 54.14
+      },
+      {
+        "sourceIndex": 21,
+        "repeatIndex": 0,
+        "startSec": 56.44
+      },
+      {
+        "sourceIndex": 22,
+        "repeatIndex": 0,
+        "startSec": 58.96
+      },
+      {
+        "sourceIndex": 23,
+        "repeatIndex": 0,
+        "startSec": 61.58
+      },
+      {
+        "sourceIndex": 24,
+        "repeatIndex": 0,
+        "startSec": 64.46
+      },
+      {
+        "sourceIndex": 25,
+        "repeatIndex": 0,
+        "startSec": 66.76
+      },
+      {
+        "sourceIndex": 26,
+        "repeatIndex": 0,
+        "startSec": 69.2
+      },
+      {
+        "sourceIndex": 27,
+        "repeatIndex": 0,
+        "startSec": 71.58
+      },
+      {
+        "sourceIndex": 28,
+        "repeatIndex": 0,
+        "startSec": 74.38
+      },
+      {
+        "sourceIndex": 29,
+        "repeatIndex": 0,
+        "startSec": 76.98
+      },
+      {
+        "sourceIndex": 30,
+        "repeatIndex": 0,
+        "startSec": 79.3
+      },
+      {
+        "sourceIndex": 31,
+        "repeatIndex": 0,
+        "startSec": 81.76
+      },
+      {
+        "sourceIndex": 32,
+        "repeatIndex": 0,
+        "startSec": 84.52
+      },
+      {
+        "sourceIndex": 33,
+        "repeatIndex": 0,
+        "startSec": 86.84
+      },
+      {
+        "sourceIndex": 34,
+        "repeatIndex": 0,
+        "startSec": 89.18
+      },
+      {
+        "sourceIndex": 35,
+        "repeatIndex": 0,
+        "startSec": 91.46
+      },
+      {
+        "sourceIndex": 36,
+        "repeatIndex": 0,
+        "startSec": 94.36
+      },
+      {
+        "sourceIndex": 37,
+        "repeatIndex": 0,
+        "startSec": 96.64
+      },
+      {
+        "sourceIndex": 38,
+        "repeatIndex": 0,
+        "startSec": 98.92
+      },
+      {
+        "sourceIndex": 39,
+        "repeatIndex": 0,
+        "startSec": 101.5
+      },
+      {
+        "sourceIndex": 40,
+        "repeatIndex": 0,
+        "startSec": 103.94
+      },
+      {
+        "sourceIndex": 41,
+        "repeatIndex": 0,
+        "startSec": 106.54
+      },
+      {
+        "sourceIndex": 42,
+        "repeatIndex": 0,
+        "startSec": 109.02
+      },
+      {
+        "sourceIndex": 43,
+        "repeatIndex": 0,
+        "startSec": 111.48
+      },
+      {
+        "sourceIndex": 44,
+        "repeatIndex": 0,
+        "startSec": 114.22
+      },
+      {
+        "sourceIndex": 45,
+        "repeatIndex": 0,
+        "startSec": 116.58
+      },
+      {
+        "sourceIndex": 46,
+        "repeatIndex": 0,
+        "startSec": 119.46
+      },
+      {
+        "sourceIndex": 47,
+        "repeatIndex": 0,
+        "startSec": 121.7
+      },
+      {
+        "sourceIndex": 48,
+        "repeatIndex": 0,
+        "startSec": 124.16
+      },
+      {
+        "sourceIndex": 49,
+        "repeatIndex": 0,
+        "startSec": 126.48
+      },
+      {
+        "sourceIndex": 50,
+        "repeatIndex": 0,
+        "startSec": 129.04
+      },
+      {
+        "sourceIndex": 51,
+        "repeatIndex": 0,
+        "startSec": 131.36
+      },
+      {
+        "sourceIndex": 52,
+        "repeatIndex": 0,
+        "startSec": 133.76
+      },
+      {
+        "sourceIndex": 53,
+        "repeatIndex": 0,
+        "startSec": 136.02
+      },
+      {
+        "sourceIndex": 54,
+        "repeatIndex": 0,
+        "startSec": 138.84
+      },
+      {
+        "sourceIndex": 55,
+        "repeatIndex": 0,
+        "startSec": 141.28
+      },
+      {
+        "sourceIndex": 56,
+        "repeatIndex": 0,
+        "startSec": 143.82
+      },
+      {
+        "sourceIndex": 57,
+        "repeatIndex": 0,
+        "startSec": 146.3
+      },
+      {
+        "sourceIndex": 58,
+        "repeatIndex": 0,
+        "startSec": 148.72
+      },
+      {
+        "sourceIndex": 59,
+        "repeatIndex": 0,
+        "startSec": 151.02
+      },
+      {
+        "sourceIndex": 60,
+        "repeatIndex": 0,
+        "startSec": 153.32
+      },
+      {
+        "sourceIndex": 61,
+        "repeatIndex": 0,
+        "startSec": 155.54
+      },
+      {
+        "sourceIndex": 62,
+        "repeatIndex": 0,
+        "startSec": 158.2
+      },
+      {
+        "sourceIndex": 63,
+        "repeatIndex": 0,
+        "startSec": 160.42
+      },
+      {
+        "sourceIndex": 64,
+        "repeatIndex": 0,
+        "startSec": 162.72
+      },
+      {
+        "sourceIndex": 65,
+        "repeatIndex": 0,
+        "startSec": 165.4
+      },
+      {
+        "sourceIndex": 66,
+        "repeatIndex": 0,
+        "startSec": 167.96
+      },
+      {
+        "sourceIndex": 67,
+        "repeatIndex": 0,
+        "startSec": 171.04
+      },
+      {
+        "sourceIndex": 68,
+        "repeatIndex": 0,
+        "startSec": 174.1
+      },
+      {
+        "sourceIndex": 69,
+        "repeatIndex": 0,
+        "startSec": 177.5
+      },
+      {
+        "sourceIndex": 70,
+        "repeatIndex": 0,
+        "startSec": 180.86
+      },
+      {
+        "sourceIndex": 71,
+        "repeatIndex": 0,
+        "startSec": 183.46
+      }
+    ]
+  }
+}

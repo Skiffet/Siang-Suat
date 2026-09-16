@@ -1,0 +1,137 @@
+{
+  "slug": "yantun",
+  "title": "คาถายันทุน",
+  "subtitle": "ยันทุนนิมิตตัง อะวะมังคะลัญจะ",
+  "description": "คาถาขอให้ลางร้ายและสิ่งอัปมงคลสลายไปด้วยอานุภาพพระพุทธ พระธรรม พระสงฆ์",
+  "tags": [
+    "คาถา",
+    "คุ้มครอง"
+  ],
+  "cover": "reclining-buddha",
+  "category": "protection",
+  "segments": [
+    {
+      "kind": "thai",
+      "text": "คาถายันทุน"
+    },
+    {
+      "kind": "pali",
+      "text": "ยันทุนนิมิตตัง อะวะมังคะลัญจะ"
+    },
+    {
+      "kind": "pali",
+      "text": "โยจามะนาโป สะกุณัสสะ สัทโธ"
+    },
+    {
+      "kind": "pali",
+      "text": "ปาปัคคะโห ทุสสุปินัง อะกันตัง"
+    },
+    {
+      "kind": "pali",
+      "text": "พุทธานุภาเวนะ วินาสะเมนตุ"
+    },
+    {
+      "kind": "pali",
+      "text": "ยันทุนนิมิตตัง อะวะมังคะลัญจะ"
+    },
+    {
+      "kind": "pali",
+      "text": "โยจามะนาโป สะกุณัสสะ สัทโธ"
+    },
+    {
+      "kind": "pali",
+      "text": "ปาปัคคะโห ทุสสุปินัง อะกันตัง"
+    },
+    {
+      "kind": "pali",
+      "text": "ธัมมานุภาเวนะ วินาสะเมนตุ"
+    },
+    {
+      "kind": "pali",
+      "text": "ยันทุนนิมิตตัง อะวะมังคะลัญจะ"
+    },
+    {
+      "kind": "pali",
+      "text": "โยจามะนาโป สะกุณัสสะ สัทโธ"
+    },
+    {
+      "kind": "pali",
+      "text": "ปาปัคคะโห ทุสสุปินัง อะกันตัง"
+    },
+    {
+      "kind": "pali",
+      "text": "สังฆานุภาเวนะ วินาสะเมนตุ"
+    }
+  ],
+  "audio": {
+    "file": "yantun.m4a",
+    "durationSec": 54.4,
+    "timings": [
+      {
+        "sourceIndex": 0,
+        "repeatIndex": 0,
+        "startSec": 0.14
+      },
+      {
+        "sourceIndex": 1,
+        "repeatIndex": 0,
+        "startSec": 2.94
+      },
+      {
+        "sourceIndex": 2,
+        "repeatIndex": 0,
+        "startSec": 7.46
+      },
+      {
+        "sourceIndex": 3,
+        "repeatIndex": 0,
+        "startSec": 10.08
+      },
+      {
+        "sourceIndex": 4,
+        "repeatIndex": 0,
+        "startSec": 14.76
+      },
+      {
+        "sourceIndex": 5,
+        "repeatIndex": 0,
+        "startSec": 19.26
+      },
+      {
+        "sourceIndex": 6,
+        "repeatIndex": 0,
+        "startSec": 23.54
+      },
+      {
+        "sourceIndex": 7,
+        "repeatIndex": 0,
+        "startSec": 28.32
+      },
+      {
+        "sourceIndex": 8,
+        "repeatIndex": 0,
+        "startSec": 32.92
+      },
+      {
+        "sourceIndex": 9,
+        "repeatIndex": 0,
+        "startSec": 37.3
+      },
+      {
+        "sourceIndex": 10,
+        "repeatIndex": 0,
+        "startSec": 41.68
+      },
+      {
+        "sourceIndex": 11,
+        "repeatIndex": 0,
+        "startSec": 46.32
+      },
+      {
+        "sourceIndex": 12,
+        "repeatIndex": 0,
+        "startSec": 50.74
+      }
+    ]
+  }
+}

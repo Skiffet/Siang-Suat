@@ -1,0 +1,92 @@
+{
+  "slug": "itipiso-backward",
+  "title": "พระคาถาอิติปิโสถอยหลัง",
+  "subtitle": "ติ วา คะ ภะ โธ พุท นัง สา",
+  "description": "บทอิติปิโสที่สวดย้อนจากท้ายมาต้นทีละพยางค์",
+  "tags": [
+    "คาถา",
+    "คุ้มครอง"
+  ],
+  "cover": "misty-road",
+  "category": "protection",
+  "segments": [
+    {
+      "kind": "thai",
+      "text": "พระคาถาอิติปิโสถอยหลัง"
+    },
+    {
+      "kind": "pali",
+      "text": "ติ วา คะ ภะ โธ พุท นัง สา"
+    },
+    {
+      "kind": "pali",
+      "text": "นุส มะ วะ เท ถา สัต ถิ ระ"
+    },
+    {
+      "kind": "pali",
+      "text": "สา มะ ทัม สะ ริ ปุ โร ตะ"
+    },
+    {
+      "kind": "pali",
+      "text": "นุต อะ ทู วิ กะ โล โต คะ"
+    },
+    {
+      "kind": "pali",
+      "text": "สุ โน ปัน สัม ณะ ระ จะ ชา"
+    },
+    {
+      "kind": "pali",
+      "text": "วิช โธ พุท สัม มา สัม หัง ระ"
+    },
+    {
+      "kind": "pali",
+      "text": "อะ วา คะ ภะ โส ปิ ติ อิ"
+    }
+  ],
+  "audio": {
+    "file": "itipiso-backward.m4a",
+    "durationSec": 54.5,
+    "timings": [
+      {
+        "sourceIndex": 0,
+        "repeatIndex": 0,
+        "startSec": 0.12
+      },
+      {
+        "sourceIndex": 1,
+        "repeatIndex": 0,
+        "startSec": 5.86
+      },
+      {
+        "sourceIndex": 2,
+        "repeatIndex": 0,
+        "startSec": 12.92
+      },
+      {
+        "sourceIndex": 3,
+        "repeatIndex": 0,
+        "startSec": 21.1
+      },
+      {
+        "sourceIndex": 4,
+        "repeatIndex": 0,
+        "startSec": 28.42
+      },
+      {
+        "sourceIndex": 5,
+        "repeatIndex": 0,
+        "startSec": 36
+      },
+      {
+        "sourceIndex": 6,
+        "repeatIndex": 0,
+        "startSec": 42.04
+      },
+      {
+        "sourceIndex": 7,
+        "repeatIndex": 0,
+        "startSec": 48.78
+      }
+    ]
+  }
+}
