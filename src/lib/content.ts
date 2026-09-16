@@ -187,5 +187,6 @@ export function getShelves(): Shelf[] {
     { slug: "bedtime", title: "ฟังก่อนนอน", items: tagged("ก่อนนอน") },
     { slug: "today", title: "สำหรับวันนี้", items: tagged("ทุกวัน") },
     { slug: "meditation", title: "นั่งสมาธิ", items: playable(chants.filter((c) => c.category === "meditation")) },
-  ].filter((shelf) => shelf.items.length > 0);
+    // A rail holding one cover reads as a mistake rather than as a shelf.
+  ].filter((shelf) => shelf.items.length > 1);
 }

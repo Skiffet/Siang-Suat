@@ -4,9 +4,11 @@
   "description": "บทปริตรสำหรับความเป็นสิริมงคล คุ้มครองตนเองและคนที่เรารัก",
   "cover": "reclining-buddha",
   "chants": [
-    "maha-chakkraphat",
-    "bojjhanga",
-    "itipiso",
+    {
+      "slug": "maha-chakkraphat",
+      "namo": true
+    },
+    "phra-phuttha-chao",
     "ratanattaya"
   ]
 }

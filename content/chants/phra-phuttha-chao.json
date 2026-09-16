@@ -1,0 +1,86 @@
+{
+  "slug": "phra-phuttha-chao",
+  "title": "คาถาพระพุทธเจ้า",
+  "subtitle": "อิติปิโส วิเสเสอิ",
+  "category": "protection",
+  "description": "คาถาสั้นสำหรับความคุ้มครองและสิริมงคล ท่องซ้ำได้ตามกำลัง นิยมท่องก่อนออกจากบ้านหรือก่อนเริ่มงานสำคัญ",
+  "tags": [
+    "คาถา",
+    "คุ้มครอง",
+    "สั้น"
+  ],
+  "cover": "white-lotus",
+  "defaultRounds": 1,
+  "segments": [
+    {
+      "kind": "thai",
+      "text": "คาถาพระพุทธเจ้า"
+    },
+    {
+      "kind": "pali",
+      "text": "อิติปิโส วิเสเสอิ"
+    },
+    {
+      "kind": "pali",
+      "text": "อิเสเส พุทธะนาเมอิ"
+    },
+    {
+      "kind": "pali",
+      "text": "อิเมนา พุทธะตังโสอิ"
+    },
+    {
+      "kind": "pali",
+      "text": "อิโสตัง พุทธะปิติอิ"
+    }
+  ],
+  "parts": [
+    {
+      "file": "phra-phuttha-chao-intro.m4a",
+      "durationSec": 3.4,
+      "segments": [
+        0,
+        0
+      ],
+      "label": "ชื่อบท",
+      "timings": [
+        {
+          "sourceIndex": 0,
+          "repeatIndex": 0,
+          "startSec": 0.1
+        }
+      ]
+    },
+    {
+      "file": "phra-phuttha-chao-verse.m4a",
+      "durationSec": 13.6,
+      "segments": [
+        1,
+        4
+      ],
+      "label": "ตัวคาถา",
+      "rounds": 3,
+      "timings": [
+        {
+          "sourceIndex": 0,
+          "repeatIndex": 0,
+          "startSec": 0.0
+        },
+        {
+          "sourceIndex": 1,
+          "repeatIndex": 0,
+          "startSec": 3.5
+        },
+        {
+          "sourceIndex": 2,
+          "repeatIndex": 0,
+          "startSec": 7.16
+        },
+        {
+          "sourceIndex": 3,
+          "repeatIndex": 0,
+          "startSec": 10.56
+        }
+      ]
+    }
+  ]
+}
