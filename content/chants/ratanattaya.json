@@ -1,7 +1,7 @@
 {
   "slug": "ratanattaya",
   "title": "คำนมัสการพระรัตนตรัย",
-  "subtitle": "อะระหัง สัมมาสัมพุทโธ ภะคะวา",
+  "subtitle": "โย โส ภะคะวา อะระหัง สัมมาสัมพุทโธ",
   "category": "daily",
   "description": "บทกราบพระรัตนตรัยที่ใช้เปิดการสวดมนต์ทุกครั้ง นอบน้อมพระพุทธ พระธรรม พระสงฆ์ ทีละพระรัตนะ กราบหนึ่งครั้งเมื่อจบแต่ละท่อน สวดบาลีล้วน ไม่มีคำแปลคั่น",
   "tags": [
@@ -17,7 +17,89 @@
   "cover": "temple-sunrise",
   "audio": {
     "file": "ratanattaya.m4a",
-    "durationSec": 83.3
+    "durationSec": 83.3,
+    "timings": [
+      {
+        "sourceIndex": 0,
+        "repeatIndex": 0,
+        "startSec": 0.16
+      },
+      {
+        "sourceIndex": 1,
+        "repeatIndex": 0,
+        "startSec": 5.8
+      },
+      {
+        "sourceIndex": 2,
+        "repeatIndex": 0,
+        "startSec": 10.86
+      },
+      {
+        "sourceIndex": 3,
+        "repeatIndex": 0,
+        "startSec": 15.6
+      },
+      {
+        "sourceIndex": 4,
+        "repeatIndex": 0,
+        "startSec": 21.26
+      },
+      {
+        "sourceIndex": 5,
+        "repeatIndex": 0,
+        "startSec": 26.24
+      },
+      {
+        "sourceIndex": 6,
+        "repeatIndex": 0,
+        "startSec": 34.7
+      },
+      {
+        "sourceIndex": 7,
+        "repeatIndex": 0,
+        "startSec": 40.86
+      },
+      {
+        "sourceIndex": 8,
+        "repeatIndex": 0,
+        "startSec": 45.04
+      },
+      {
+        "sourceIndex": 9,
+        "repeatIndex": 0,
+        "startSec": 52.26
+      },
+      {
+        "sourceIndex": 10,
+        "repeatIndex": 0,
+        "startSec": 57.42
+      },
+      {
+        "sourceIndex": 11,
+        "repeatIndex": 0,
+        "startSec": 61.54
+      },
+      {
+        "sourceIndex": 12,
+        "repeatIndex": 0,
+        "startSec": 67.18
+      },
+      {
+        "sourceIndex": 13,
+        "repeatIndex": 0,
+        "startSec": 71.16
+      },
+      {
+        "sourceIndex": 14,
+        "repeatIndex": 0,
+        "startSec": 75.34
+      },
+      {
+        "sourceIndex": 15,
+        "repeatIndex": 0,
+        "startSec": 80.22
+      }
+    ]
   },
   "segments": [
     {
