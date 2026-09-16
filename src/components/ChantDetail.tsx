@@ -99,7 +99,13 @@ export function ChantDetail({
         </div>
 
         <div className="relative mt-6 flex items-center gap-4">
-          <PlayButton chant={chant} size={56} />
+          {/*
+           * Without a queue, playback stops dead the moment this one chant
+           * ends — the related rail below is the only other thing already on
+           * this page, so it doubles as where listening continues to rather
+           * than leaving the audio to just stop.
+           */}
+          <PlayButton chant={chant} queue={[chant, ...related]} size={56} />
         </div>
       </header>
 
