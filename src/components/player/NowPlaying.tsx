@@ -16,7 +16,9 @@ import {
   RepeatIcon,
   ShareIcon,
   ShuffleIcon,
+  TextIcon,
 } from "../Icons";
+import { PlayerLyrics } from "./PlayerLyrics";
 import { usePlayer } from "./PlayerProvider";
 import { Scrubber } from "./Scrubber";
 
@@ -53,11 +55,17 @@ export function NowPlaying() {
 
   const [sleepOpen, setSleepOpen] = useState(false);
   const [saved, setSaved] = useState(false);
+  /** Swaps the art for the chant text, so reading along keeps the controls. */
+  const [reading, setReading] = useState(false);
 
   if (!current || !expanded) return null;
 
   return (
-    <div className="animate-rise fixed inset-0 z-50 overflow-y-auto bg-base">
+    <div
+      className={`animate-rise fixed inset-0 z-50 bg-base ${
+        reading ? "overflow-hidden" : "overflow-y-auto"
+      }`}
+    >
       {/* The wash that lifts the art's colour behind the controls. */}
       <div
         aria-hidden
@@ -71,7 +79,11 @@ export function NowPlaying() {
         }}
       />
 
-      <div className="relative mx-auto flex min-h-full w-full max-w-[420px] flex-col px-5 pb-10 pt-[calc(12px+env(safe-area-inset-top))]">
+      <div
+        className={`relative mx-auto flex w-full max-w-[420px] flex-col px-5 pb-10 pt-[calc(12px+env(safe-area-inset-top))] ${
+          reading ? "h-full" : "min-h-full"
+        }`}
+      >
         <header className="flex items-center justify-between py-2">
           <button
             type="button"
@@ -98,18 +110,40 @@ export function NowPlaying() {
           </button>
         </header>
 
-        <div className="mt-6">
-          <Cover
-            src={current.cover}
-            alt={current.title}
-            sizes="(min-width: 420px) 380px, 90vw"
-            rounded="rounded-lg"
-            preload
-            className="shadow-[var(--shadow-dialog)]"
-          />
-        </div>
+        {reading ? (
+          <>
+            <div className="mb-1 mt-5 flex shrink-0 items-center gap-3 border-b border-white/5 pb-4">
+              <Cover
+                src={current.cover}
+                alt={current.title}
+                sizes="56px"
+                className="w-14 shrink-0"
+              />
+              <div className="min-w-0">
+                <h1 className="truncate type-caption-bold text-ink">
+                  {current.title}
+                </h1>
+                <p className="truncate type-small text-muted">เสียงสวด Podcast</p>
+              </div>
+            </div>
+            <PlayerLyrics chant={current} />
+          </>
+        ) : (
+          <div className="mt-6">
+            <Cover
+              src={current.cover}
+              alt={current.title}
+              sizes="(min-width: 420px) 380px, 90vw"
+              rounded="rounded-lg"
+              preload
+              className="shadow-[var(--shadow-dialog)]"
+            />
+          </div>
+        )}
 
-        <div className="mt-7 flex items-start justify-between gap-4">
+        <div
+          className={`flex items-start justify-between gap-4 ${reading ? "hidden" : "mt-7"}`}
+        >
           <div className="min-w-0">
             <h1 className="type-section text-ink">{current.title}</h1>
             <p className="mt-1 type-caption text-muted">เสียงสวด Podcast</p>
@@ -129,9 +163,14 @@ export function NowPlaying() {
           </button>
         </div>
 
-        <Scrubber time={time} duration={duration} onSeek={seek} className="mt-6" />
+        <Scrubber
+          time={time}
+          duration={duration}
+          onSeek={seek}
+          className={reading ? "mt-2 shrink-0" : "mt-6"}
+        />
 
-        <div className="mt-4 flex items-center justify-between">
+        <div className="mt-4 flex shrink-0 items-center justify-between">
           <button
             type="button"
             onClick={toggleShuffle}
@@ -192,8 +231,21 @@ export function NowPlaying() {
           </button>
         </div>
 
-        {/* Sleep timer, save, share — the three things people reach for at night. */}
-        <div className="mt-7 flex items-center justify-center gap-2">
+        {/* Reading, sleep timer, save — what people reach for at night. */}
+        <div
+          className={`flex shrink-0 items-center justify-center gap-2 ${reading ? "mt-4" : "mt-7"}`}
+        >
+          <button
+            type="button"
+            onClick={() => setReading((r) => !r)}
+            aria-pressed={reading}
+            className={`flex items-center gap-2 rounded-full px-4 py-2.5 type-small-bold transition-colors ${
+              reading ? "bg-green text-on-green" : "bg-mid text-ink hover:bg-card"
+            }`}
+          >
+            <TextIcon size={16} />
+            บทสวด
+          </button>
           <button
             type="button"
             onClick={() => setSleepOpen((o) => !o)}
@@ -218,7 +270,9 @@ export function NowPlaying() {
           </button>
           <button
             type="button"
-            className="flex items-center gap-2 rounded-full bg-mid px-4 py-2.5 type-small-bold text-ink transition-colors hover:bg-card"
+            className={`items-center gap-2 rounded-full bg-mid px-4 py-2.5 type-small-bold text-ink transition-colors hover:bg-card ${
+              reading ? "hidden" : "flex"
+            }`}
           >
             <ShareIcon size={16} />
             แชร์
@@ -260,7 +314,7 @@ export function NowPlaying() {
           </div>
         )}
 
-        {upNext && (
+        {upNext && !reading && (
           <div className="mt-7 rounded-xl bg-surface p-4">
             <p className="type-small-bold text-muted">กำลังเล่นถัดไป</p>
             <Link
@@ -287,13 +341,15 @@ export function NowPlaying() {
           </div>
         )}
 
-        <Link
-          href={`/chant/${current.slug}`}
-          onClick={() => setExpanded(false)}
-          className="mt-5 block rounded-xl border border-line py-3 text-center type-small-bold text-muted transition-colors hover:border-line-light hover:text-ink"
-        >
-          อ่านบทสวดพร้อมคำแปล
-        </Link>
+        {!reading && (
+          <Link
+            href={`/chant/${current.slug}`}
+            onClick={() => setExpanded(false)}
+            className="mt-5 block rounded-xl border border-line py-3 text-center type-small-bold text-muted transition-colors hover:border-line-light hover:text-ink"
+          >
+            เปิดหน้าบทสวดเต็ม
+          </Link>
+        )}
       </div>
     </div>
   );

@@ -161,6 +161,14 @@ export function ShareIcon(p: IconProps) {
   );
 }
 
+export function TextIcon(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M4 4.9a.9.9 0 0 1 .9-.9h14.2a.9.9 0 0 1 0 1.8H4.9a.9.9 0 0 1-.9-.9Zm0 4.7a.9.9 0 0 1 .9-.9h14.2a.9.9 0 1 1 0 1.8H4.9a.9.9 0 0 1-.9-.9Zm0 4.7a.9.9 0 0 1 .9-.9h9.3a.9.9 0 1 1 0 1.8H4.9a.9.9 0 0 1-.9-.9Zm0 4.7a.9.9 0 0 1 .9-.9h12a.9.9 0 1 1 0 1.8h-12a.9.9 0 0 1-.9-.9Z" />
+    </Svg>
+  );
+}
+
 export function MoreIcon(p: IconProps) {
   return (
     <Svg {...p}>
