@@ -1,0 +1,147 @@
+{
+  "slug": "ngoen-laan",
+  "title": "คาถาเงินล้าน",
+  "subtitle": "สัมปะจิตฉามิ",
+  "category": "blessing",
+  "description": "คาถาเสริมโชคลาภและความมั่งคั่ง นิยมท่องก่อนค้าขายหรือทำธุรกิจ ท่องซ้ำได้ตามกำลัง",
+  "tags": [
+    "คาถา",
+    "โชคลาภ",
+    "มงคล"
+  ],
+  "cover": "mountain-sunrise",
+  "segments": [
+    {
+      "kind": "thai",
+      "text": "คาถาเงินล้าน"
+    },
+    {
+      "kind": "pali",
+      "text": "สัมปะจิตฉามิ นาสังสิโม"
+    },
+    {
+      "kind": "pali",
+      "text": "พรหมา จะ มหาเทวา สัพเพยักขา ปะรายันติ"
+    },
+    {
+      "kind": "pali",
+      "text": "พรหมา จะ มหาเทวา อภิลาภา ภะวันตุ เม"
+    },
+    {
+      "kind": "pali",
+      "text": "มหาปุญโญ มหาลาโภ ภะวันตุ เม มิเตพาหุหะติ"
+    },
+    {
+      "kind": "pali",
+      "text": "พุทธะ มะอะอุ นะโมพุทธายะ วิระทะโย"
+    },
+    {
+      "kind": "pali",
+      "text": "วิระโคนายัง วิระหิงสา"
+    },
+    {
+      "kind": "pali",
+      "text": "วิระทาสี วิระทาสา วิระอิตถิโย"
+    },
+    {
+      "kind": "pali",
+      "text": "พุทธัสสะ มานีมามะ"
+    },
+    {
+      "kind": "pali",
+      "text": "พุทธัสสะ สวาโหม สัมปะติจฉามิ"
+    },
+    {
+      "kind": "pali",
+      "text": "เพ็งๆ พาๆ หาๆ ฤาๆ"
+    },
+    {
+      "kind": "pali",
+      "text": "ตะกรุดเม เมสัมมุกขา สัพพาหะระติ เตสัมมุกขา"
+    },
+    {
+      "kind": "pali",
+      "text": "เร่งอภิญญาใหญ่ โสตตัตตะภิญญา"
+    },
+    {
+      "kind": "pali",
+      "text": "สัมปะติจฉามิ สัมจิตฉามิ"
+    }
+  ],
+  "audio": {
+    "file": "ngoen-laan.m4a",
+    "durationSec": 68.7,
+    "timings": [
+      {
+        "sourceIndex": 0,
+        "repeatIndex": 0,
+        "startSec": 0.18
+      },
+      {
+        "sourceIndex": 1,
+        "repeatIndex": 0,
+        "startSec": 2.62
+      },
+      {
+        "sourceIndex": 2,
+        "repeatIndex": 0,
+        "startSec": 7.36
+      },
+      {
+        "sourceIndex": 3,
+        "repeatIndex": 0,
+        "startSec": 13.3
+      },
+      {
+        "sourceIndex": 4,
+        "repeatIndex": 0,
+        "startSec": 19.26
+      },
+      {
+        "sourceIndex": 5,
+        "repeatIndex": 0,
+        "startSec": 27.2
+      },
+      {
+        "sourceIndex": 6,
+        "repeatIndex": 0,
+        "startSec": 33.26
+      },
+      {
+        "sourceIndex": 7,
+        "repeatIndex": 0,
+        "startSec": 37.26
+      },
+      {
+        "sourceIndex": 8,
+        "repeatIndex": 0,
+        "startSec": 43.42
+      },
+      {
+        "sourceIndex": 9,
+        "repeatIndex": 0,
+        "startSec": 46.28
+      },
+      {
+        "sourceIndex": 10,
+        "repeatIndex": 0,
+        "startSec": 51.34
+      },
+      {
+        "sourceIndex": 11,
+        "repeatIndex": 0,
+        "startSec": 54.86
+      },
+      {
+        "sourceIndex": 12,
+        "repeatIndex": 0,
+        "startSec": 61.66
+      },
+      {
+        "sourceIndex": 13,
+        "repeatIndex": 0,
+        "startSec": 65.72
+      }
+    ]
+  }
+}
