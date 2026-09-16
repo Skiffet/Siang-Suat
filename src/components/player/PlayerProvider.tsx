@@ -14,11 +14,11 @@ import type { ChantWithAudio, QueuedChant } from "@/lib/types";
 export type RepeatMode = "off" | "all" | "one";
 
 interface PlayerValue {
-  queue: ChantWithAudio[];
+  queue: QueuedChant[];
   index: number;
-  current: ChantWithAudio | null;
+  current: QueuedChant | null;
   /** The chant queued after this one — what the "กำลังเล่นถัดไป" panel shows. */
-  upNext: ChantWithAudio | null;
+  upNext: QueuedChant | null;
   playing: boolean;
   time: number;
   duration: number;

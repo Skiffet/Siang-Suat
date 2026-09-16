@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useRef } from "react";
 import type { ChantWithAudio } from "@/lib/types";
 import { CATEGORY_LABELS } from "@/lib/categories";
 import { formatDurationLong } from "@/lib/format";
@@ -27,8 +28,34 @@ export function ChantDetail({
   // While this chant is playing the count may have been changed, and the page
   // should say what is actually set rather than what the file was authored
   // with.
-  const { rounds: liveRounds, isCurrent } = usePlayer();
+  const { rounds: liveRounds, isCurrent, current } = usePlayer();
   const playing = isCurrent(chant.slug);
+
+  /**
+   * Follow the queue to whatever plays next.
+   *
+   * This page is read while chanting — hands are together, not on the mouse
+   * — so once a playlist moves on to the next chant, the page has to move
+   * with it rather than wait to be clicked through. It only follows a
+   * transition that happened while this chant was actually the one playing
+   * here; opening a chant's page while something else already plays in the
+   * background must not immediately bounce you to that other page.
+   */
+  const router = useRouter();
+  const wasPlayingHereRef = useRef(false);
+  useEffect(() => {
+    const nextSlug = current ? (current.parentSlug ?? current.slug) : null;
+    if (nextSlug === chant.slug) {
+      wasPlayingHereRef.current = true;
+      return;
+    }
+    if (wasPlayingHereRef.current && nextSlug) {
+      // replace, not push — the back button should leave the reading view in
+      // one step rather than stepping backward through every track a
+      // playlist happened to auto-advance through.
+      router.replace(`/chant/${nextSlug}`);
+    }
+  }, [current, chant.slug, router]);
 
   return (
     <article>
