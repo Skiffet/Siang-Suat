@@ -17,7 +17,7 @@
   "cover": "candle-lotus",
   "audio": {
     "file": "khama-ratanattaya.m4a",
-    "durationSec": 132.5,
+    "durationSec": 98.2,
     "timings": [
       {
         "sourceIndex": 0,
@@ -27,102 +27,82 @@
       {
         "sourceIndex": 1,
         "repeatIndex": 0,
-        "startSec": 8.18
+        "startSec": 8.64
       },
       {
         "sourceIndex": 2,
         "repeatIndex": 0,
-        "startSec": 16.4
+        "startSec": 15.02
       },
       {
         "sourceIndex": 3,
         "repeatIndex": 0,
-        "startSec": 24.72
+        "startSec": 20.3
       },
       {
         "sourceIndex": 4,
         "repeatIndex": 0,
-        "startSec": 33.34
+        "startSec": 26.38
       },
       {
         "sourceIndex": 5,
         "repeatIndex": 0,
-        "startSec": 42.94
+        "startSec": 29.26
       },
       {
         "sourceIndex": 6,
         "repeatIndex": 0,
-        "startSec": 49.34
+        "startSec": 39.86
       },
       {
         "sourceIndex": 7,
         "repeatIndex": 0,
-        "startSec": 54.62
+        "startSec": 43.86
       },
       {
         "sourceIndex": 8,
         "repeatIndex": 0,
-        "startSec": 60.7
+        "startSec": 48.1
       },
       {
         "sourceIndex": 9,
         "repeatIndex": 0,
-        "startSec": 63.56
+        "startSec": 52.64
       },
       {
         "sourceIndex": 10,
         "repeatIndex": 0,
-        "startSec": 74.18
+        "startSec": 57.1
       },
       {
         "sourceIndex": 11,
         "repeatIndex": 0,
-        "startSec": 78.18
+        "startSec": 66.1
       },
       {
         "sourceIndex": 12,
         "repeatIndex": 0,
-        "startSec": 82.42
+        "startSec": 69.56
       },
       {
         "sourceIndex": 13,
         "repeatIndex": 0,
-        "startSec": 86.94
+        "startSec": 75.26
       },
       {
         "sourceIndex": 14,
         "repeatIndex": 0,
-        "startSec": 91.42
+        "startSec": 79.5
       },
       {
         "sourceIndex": 15,
         "repeatIndex": 0,
-        "startSec": 100.42
+        "startSec": 86.28
       },
       {
         "sourceIndex": 16,
         "repeatIndex": 0,
-        "startSec": 103.88
-      },
-      {
-        "sourceIndex": 17,
-        "repeatIndex": 0,
-        "startSec": 109.58
-      },
-      {
-        "sourceIndex": 18,
-        "repeatIndex": 0,
-        "startSec": 113.8
-      },
-      {
-        "sourceIndex": 19,
-        "repeatIndex": 0,
-        "startSec": 120.6
-      },
-      {
-        "sourceIndex": 20,
-        "repeatIndex": 0,
-        "startSec": 128.1
+        "startSec": 93.78
       }
     ]
   },
@@ -130,22 +110,6 @@
     {
       "kind": "thai",
       "text": "บทสวดมนต์ หลวงพ่อฤาษีลิงดำ บทขอขมาพระรัตนตรัย"
-    },
-    {
-      "kind": "pali",
-      "text": "นะโม ตัสสะ ภะคะวะโต อะระหะโต สัมมาสัมพุทธัสสะ"
-    },
-    {
-      "kind": "pali",
-      "text": "นะโม ตัสสะ ภะคะวะโต อะระหะโต สัมมาสัมพุทธัสสะ"
-    },
-    {
-      "kind": "pali",
-      "text": "นะโม ตัสสะ ภะคะวะโต อะระหะโต สัมมาสัมพุทธัสสะ"
-    },
-    {
-      "kind": "translation",
-      "text": "ขอนอบน้อม แด่พระผู้มีพระภาค อรหันตสัมมาสัมพุทธเจ้า พระองค์นั้น"
     },
     {
       "kind": "pali",

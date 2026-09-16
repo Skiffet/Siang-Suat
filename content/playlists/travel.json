@@ -3,5 +3,12 @@
   "title": "ฟังระหว่างเดินทาง",
   "description": "ข้อคิดธรรมะและบทสวดสั้น ฟังเพลิน ๆ ระหว่างขับรถหรือเดินทางไกล",
   "cover": "misty-road",
-  "chants": ["travel-dhamma", "namo-tassa", "trisarana", "metta"]
+  "chants": [
+    {
+      "slug": "travel-dhamma",
+      "namo": true
+    },
+    "trisarana",
+    "metta"
+  ]
 }

@@ -4,9 +4,11 @@
   "description": "ลำดับบทสวดทำวัตรเช้าอย่างย่อ เริ่มวันด้วยใจที่ตั้งมั่น",
   "cover": "temple-sunrise",
   "chants": [
-    "chumnum-thewada",
+    {
+      "slug": "chumnum-thewada",
+      "namo": true
+    },
     "ratanattaya",
-    "namo-tassa",
     "trisarana",
     "itipiso",
     "sil-ha"
