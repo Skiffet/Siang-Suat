@@ -65,9 +65,17 @@ export interface Chant {
   tags?: string[];
   /**
    * How many times the whole chant repeats, the way it is recited in practice
-   * (นะโม 3 จบ). The pipeline expands this before synthesis.
+   * (นะโม 3 จบ). The pipeline expands this before synthesis — this is baked
+   * into the recording, and is not the same as `defaultRounds`, which is how
+   * many times a listener plays that recording.
    */
   repeat?: number;
+  /**
+   * The count this chant is usually kept at — 9 จบ for a คาถา, once for a
+   * บทสวด. A starting point, not a rule: a playlist can say otherwise and the
+   * listener can change it mid-sitting.
+   */
+  defaultRounds?: number;
   /** Silence between repeats, in milliseconds. */
   pauseBetweenRepeatsMs?: number;
   voice?: VoiceConfig;
@@ -99,18 +107,45 @@ export interface Chant {
  * A hand-curated shelf of chants — what the library screen lists and what the
  * player queues when you press play on a cover.
  */
+/**
+ * One chant's place in a sitting.
+ *
+ * A bare slug is the common case and stays writable as a plain string. The
+ * object form is for when the sitting departs from the chant's own defaults —
+ * a different count, or นะโม said first.
+ */
+export type PlaylistEntry =
+  | string
+  | {
+      slug: string;
+      /** Overrides the chant's `defaultRounds` for this sitting. */
+      rounds?: number;
+      /**
+       * Say นะโม ตัสสะ before this chant. It opens a sitting rather than each
+       * chant within one, so in practice this is set on the first entry only.
+       */
+      namo?: boolean;
+    };
+
 export interface Playlist {
   slug: string;
   title: string;
   description: string;
   cover: string;
-  /** Chant slugs, in listening order. */
-  chants: string[];
+  /** The order of the sitting. */
+  chants: PlaylistEntry[];
+}
+
+/** A chant as a playlist plays it — the chant, plus how this sitting treats it. */
+export interface QueuedChant extends ChantWithAudio {
+  /** How many times through, resolved from playlist then chant then one. */
+  rounds: number;
 }
 
 /** A playlist with its chants resolved, plus the totals the UI prints. */
 export interface PlaylistWithChants extends Playlist {
-  items: ChantWithAudio[];
+  items: QueuedChant[];
+  /** Total listening time, counting every round. */
   totalSec: number;
 }
 

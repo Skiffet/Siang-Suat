@@ -7,7 +7,9 @@ import type {
   ChantCategory,
   ChantWithAudio,
   Playlist,
+  PlaylistEntry,
   PlaylistWithChants,
+  QueuedChant,
   Shelf,
 } from "./types";
 
@@ -15,6 +17,9 @@ const CONTENT_DIR = join(process.cwd(), "content");
 const CHANTS_DIR = join(CONTENT_DIR, "chants");
 const PLAYLISTS_DIR = join(CONTENT_DIR, "playlists");
 const MANIFEST_PATH = join(process.cwd(), "public", "audio", "manifest.json");
+
+/** The chant a sitting opens with, when a playlist entry asks for it. */
+const NAMO_SLUG = "namo-tassa";
 
 // Re-exported so server callers have one import for content and its labels.
 export { CATEGORY_LABELS, CATEGORY_ORDER } from "./categories";
@@ -80,17 +85,43 @@ export function getUsedCategories(chants: ChantWithAudio[]): ChantCategory[] {
   return CATEGORY_ORDER.filter((c) => used.has(c));
 }
 
+/** A sitting can say how a chant is treated; otherwise the chant's own default stands. */
+function resolveEntry(
+  entry: PlaylistEntry,
+  bySlug: Map<string, ChantWithAudio>,
+): { chant: QueuedChant; namo: boolean } | null {
+  const spec = typeof entry === "string" ? { slug: entry } : entry;
+  const chant = bySlug.get(spec.slug);
+  if (!chant) return null;
+  return {
+    chant: { ...chant, rounds: spec.rounds ?? chant.defaultRounds ?? 1 },
+    namo: typeof entry === "string" ? false : Boolean(entry.namo),
+  };
+}
+
 export function getPlaylists(): PlaylistWithChants[] {
   const chants = getChants();
   const bySlug = new Map(chants.map((c) => [c.slug, c]));
+
   return readJsonDir<Playlist>(PLAYLISTS_DIR).map((playlist) => {
-    const items = playlist.chants
-      .map((slug) => bySlug.get(slug))
-      .filter((c): c is ChantWithAudio => Boolean(c));
+    const items: QueuedChant[] = [];
+    for (const entry of playlist.chants) {
+      const resolved = resolveEntry(entry, bySlug);
+      if (!resolved) continue;
+      // นะโม opens the sitting, so it goes into the queue ahead of the chant
+      // that asked for it rather than being part of that chant.
+      if (resolved.namo) {
+        const namo = bySlug.get(NAMO_SLUG);
+        if (namo && !items.some((i) => i.slug === NAMO_SLUG)) {
+          items.push({ ...namo, rounds: namo.defaultRounds ?? 1 });
+        }
+      }
+      items.push(resolved.chant);
+    }
     return {
       ...playlist,
       items,
-      totalSec: items.reduce((sum, c) => sum + (c.durationSec ?? 0), 0),
+      totalSec: items.reduce((sum, c) => sum + (c.durationSec ?? 0) * c.rounds, 0),
     };
   });
 }

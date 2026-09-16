@@ -9,7 +9,7 @@ import {
   useRef,
   useState,
 } from "react";
-import type { ChantWithAudio } from "@/lib/types";
+import type { ChantWithAudio, QueuedChant } from "@/lib/types";
 
 export type RepeatMode = "off" | "all" | "one";
 
@@ -96,6 +96,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
   // the listener is torn down mid-chant. Both are written only in callbacks.
   const roundsRef = useRef(1);
   const roundRef = useRef(1);
+  const indexRef = useRef(0);
 
   const current = queue[index] ?? null;
   const upNext = queue[index + 1] ?? (repeat === "all" ? queue[0] ?? null : null);
@@ -112,13 +113,20 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
     setNotice(null);
     setQueue(list);
     setIndex(at);
+    indexRef.current = at;
     setTime(0);
+
+    // A sitting decides the count for each chant it holds; a chant played on
+    // its own falls back to the count it is usually kept at.
+    const wanted =
+      (chant as Partial<QueuedChant>).rounds ?? chant.defaultRounds ?? 1;
+    roundsRef.current = wanted;
+    setRoundsState(wanted);
     const el = audioRef.current;
     if (!el) return;
     el.src = chant.audioUrl;
     el.currentTime = 0;
     el.playbackRate = rateRef.current;
-    // A new chant starts its count over; the setting carries, the tally does not.
     roundRef.current = 1;
     setRound(1);
     void el.play().catch(() => setPlaying(false));
@@ -216,6 +224,9 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
   const setRounds = useCallback((next: number) => {
     roundsRef.current = next;
     setRoundsState(next);
+    setQueue((q) =>
+      q.map((c, i) => (i === indexRef.current ? { ...c, rounds: next } : c)),
+    );
     // Lowering the count below where you already are ends the sitting on this
     // pass rather than retroactively finishing it.
     if (roundRef.current > next) {
