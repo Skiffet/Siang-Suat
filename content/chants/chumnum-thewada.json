@@ -18,7 +18,299 @@
   "cover": "moon-lake",
   "audio": {
     "file": "chumnum-thewada.m4a",
-    "durationSec": 184.5
+    "durationSec": 184.5,
+    "timings": [
+      {
+        "sourceIndex": 0,
+        "repeatIndex": 0,
+        "startSec": 0
+      },
+      {
+        "sourceIndex": 1,
+        "repeatIndex": 0,
+        "startSec": 6.12
+      },
+      {
+        "sourceIndex": 2,
+        "repeatIndex": 0,
+        "startSec": 9.42
+      },
+      {
+        "sourceIndex": 3,
+        "repeatIndex": 0,
+        "startSec": 12.58
+      },
+      {
+        "sourceIndex": 4,
+        "repeatIndex": 0,
+        "startSec": 15.96
+      },
+      {
+        "sourceIndex": 5,
+        "repeatIndex": 0,
+        "startSec": 19.58
+      },
+      {
+        "sourceIndex": 6,
+        "repeatIndex": 0,
+        "startSec": 22.7
+      },
+      {
+        "sourceIndex": 7,
+        "repeatIndex": 0,
+        "startSec": 25.98
+      },
+      {
+        "sourceIndex": 8,
+        "repeatIndex": 0,
+        "startSec": 29.32
+      },
+      {
+        "sourceIndex": 9,
+        "repeatIndex": 0,
+        "startSec": 32.54
+      },
+      {
+        "sourceIndex": 10,
+        "repeatIndex": 0,
+        "startSec": 36.12
+      },
+      {
+        "sourceIndex": 11,
+        "repeatIndex": 0,
+        "startSec": 39.52
+      },
+      {
+        "sourceIndex": 12,
+        "repeatIndex": 0,
+        "startSec": 42.84
+      },
+      {
+        "sourceIndex": 13,
+        "repeatIndex": 0,
+        "startSec": 46.08
+      },
+      {
+        "sourceIndex": 14,
+        "repeatIndex": 0,
+        "startSec": 49.62
+      },
+      {
+        "sourceIndex": 15,
+        "repeatIndex": 0,
+        "startSec": 52.78
+      },
+      {
+        "sourceIndex": 16,
+        "repeatIndex": 0,
+        "startSec": 56.1
+      },
+      {
+        "sourceIndex": 17,
+        "repeatIndex": 0,
+        "startSec": 59.4
+      },
+      {
+        "sourceIndex": 18,
+        "repeatIndex": 0,
+        "startSec": 62.6
+      },
+      {
+        "sourceIndex": 19,
+        "repeatIndex": 0,
+        "startSec": 66.14
+      },
+      {
+        "sourceIndex": 20,
+        "repeatIndex": 0,
+        "startSec": 69.48
+      },
+      {
+        "sourceIndex": 21,
+        "repeatIndex": 0,
+        "startSec": 72.76
+      },
+      {
+        "sourceIndex": 22,
+        "repeatIndex": 0,
+        "startSec": 75.78
+      },
+      {
+        "sourceIndex": 23,
+        "repeatIndex": 0,
+        "startSec": 79.26
+      },
+      {
+        "sourceIndex": 24,
+        "repeatIndex": 0,
+        "startSec": 82.46
+      },
+      {
+        "sourceIndex": 25,
+        "repeatIndex": 0,
+        "startSec": 85.72
+      },
+      {
+        "sourceIndex": 26,
+        "repeatIndex": 0,
+        "startSec": 89.04
+      },
+      {
+        "sourceIndex": 27,
+        "repeatIndex": 0,
+        "startSec": 92.24
+      },
+      {
+        "sourceIndex": 28,
+        "repeatIndex": 0,
+        "startSec": 95.56
+      },
+      {
+        "sourceIndex": 29,
+        "repeatIndex": 0,
+        "startSec": 98.4
+      },
+      {
+        "sourceIndex": 30,
+        "repeatIndex": 0,
+        "startSec": 101.34
+      },
+      {
+        "sourceIndex": 31,
+        "repeatIndex": 0,
+        "startSec": 103.68
+      },
+      {
+        "sourceIndex": 32,
+        "repeatIndex": 0,
+        "startSec": 106.8
+      },
+      {
+        "sourceIndex": 33,
+        "repeatIndex": 0,
+        "startSec": 109.56
+      },
+      {
+        "sourceIndex": 34,
+        "repeatIndex": 0,
+        "startSec": 112.24
+      },
+      {
+        "sourceIndex": 35,
+        "repeatIndex": 0,
+        "startSec": 115.14
+      },
+      {
+        "sourceIndex": 36,
+        "repeatIndex": 0,
+        "startSec": 118.2
+      },
+      {
+        "sourceIndex": 37,
+        "repeatIndex": 0,
+        "startSec": 121.46
+      },
+      {
+        "sourceIndex": 38,
+        "repeatIndex": 0,
+        "startSec": 124.3
+      },
+      {
+        "sourceIndex": 39,
+        "repeatIndex": 0,
+        "startSec": 127.04
+      },
+      {
+        "sourceIndex": 40,
+        "repeatIndex": 0,
+        "startSec": 129.9
+      },
+      {
+        "sourceIndex": 41,
+        "repeatIndex": 0,
+        "startSec": 132.78
+      },
+      {
+        "sourceIndex": 42,
+        "repeatIndex": 0,
+        "startSec": 135.98
+      },
+      {
+        "sourceIndex": 43,
+        "repeatIndex": 0,
+        "startSec": 138.8
+      },
+      {
+        "sourceIndex": 44,
+        "repeatIndex": 0,
+        "startSec": 142.22
+      },
+      {
+        "sourceIndex": 45,
+        "repeatIndex": 0,
+        "startSec": 145.18
+      },
+      {
+        "sourceIndex": 46,
+        "repeatIndex": 0,
+        "startSec": 149.54
+      },
+      {
+        "sourceIndex": 47,
+        "repeatIndex": 0,
+        "startSec": 152.48
+      },
+      {
+        "sourceIndex": 48,
+        "repeatIndex": 0,
+        "startSec": 154.6
+      },
+      {
+        "sourceIndex": 49,
+        "repeatIndex": 0,
+        "startSec": 157.42
+      },
+      {
+        "sourceIndex": 50,
+        "repeatIndex": 0,
+        "startSec": 162.24
+      },
+      {
+        "sourceIndex": 51,
+        "repeatIndex": 0,
+        "startSec": 165.04
+      },
+      {
+        "sourceIndex": 52,
+        "repeatIndex": 0,
+        "startSec": 167.7
+      },
+      {
+        "sourceIndex": 53,
+        "repeatIndex": 0,
+        "startSec": 172.14
+      },
+      {
+        "sourceIndex": 54,
+        "repeatIndex": 0,
+        "startSec": 173.36
+      },
+      {
+        "sourceIndex": 55,
+        "repeatIndex": 0,
+        "startSec": 176.44
+      },
+      {
+        "sourceIndex": 56,
+        "repeatIndex": 0,
+        "startSec": 180.68
+      },
+      {
+        "sourceIndex": 57,
+        "repeatIndex": 0,
+        "startSec": 181.94
+      }
+    ]
   },
   "segments": [
     {

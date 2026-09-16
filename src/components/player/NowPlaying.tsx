@@ -16,6 +16,7 @@ import {
   RepeatIcon,
   ShareIcon,
   ShuffleIcon,
+  SpeedIcon,
   TextIcon,
 } from "../Icons";
 import { PlayerLyrics } from "./PlayerLyrics";
@@ -23,6 +24,14 @@ import { usePlayer } from "./PlayerProvider";
 import { Scrubber } from "./Scrubber";
 
 const SLEEP_OPTIONS = [5, 10, 15, 30, 45, 60];
+
+/**
+ * Chanting speed. The range is narrower and finer than a podcast app's,
+ * because this is meant for matching a pace you already keep rather than for
+ * getting through the material faster — half steps around 1x are what a
+ * reciter actually needs, and past 1.5x the words stop being chantable.
+ */
+const RATE_OPTIONS = [0.75, 0.85, 1, 1.15, 1.25, 1.5];
 
 /**
  * The full-screen player.
@@ -51,9 +60,12 @@ export function NowPlaying() {
     upNext,
     sleepLeftSec,
     startSleepTimer,
+    rate,
+    setRate,
   } = usePlayer();
 
   const [sleepOpen, setSleepOpen] = useState(false);
+  const [rateOpen, setRateOpen] = useState(false);
   const [saved, setSaved] = useState(false);
   /** Swaps the art for the chant text, so reading along keeps the controls. */
   const [reading, setReading] = useState(false);
@@ -123,7 +135,9 @@ export function NowPlaying() {
                 <h1 className="truncate type-caption-bold text-ink">
                   {current.title}
                 </h1>
-                <p className="truncate type-small text-muted">เสียงสวด Podcast</p>
+                <p className="truncate type-small text-muted">
+                  เสียงสวด Podcast
+                </p>
               </div>
             </div>
             <PlayerLyrics chant={current} />
@@ -218,7 +232,11 @@ export function NowPlaying() {
             type="button"
             onClick={cycleRepeat}
             aria-label={
-              repeat === "one" ? "เล่นซ้ำตอนนี้" : repeat === "all" ? "เล่นซ้ำทั้งหมด" : "ไม่เล่นซ้ำ"
+              repeat === "one"
+                ? "เล่นซ้ำตอนนี้"
+                : repeat === "all"
+                  ? "เล่นซ้ำทั้งหมด"
+                  : "ไม่เล่นซ้ำ"
             }
             className={`relative grid size-10 place-items-center rounded-full transition-colors ${
               repeat === "off" ? "text-muted hover:text-ink" : "text-green"
@@ -226,61 +244,114 @@ export function NowPlaying() {
           >
             <RepeatIcon size={20} />
             {repeat === "one" && (
-              <span className="absolute -bottom-0.5 type-micro font-bold">1</span>
+              <span className="absolute -bottom-0.5 type-micro font-bold">
+                1
+              </span>
             )}
           </button>
         </div>
 
         {/* Reading, sleep timer, save — what people reach for at night. */}
         <div
-          className={`flex shrink-0 items-center justify-center gap-2 ${reading ? "mt-4" : "mt-7"}`}
+          className={`no-scrollbar -mx-5 shrink-0 overflow-x-auto px-5 ${reading ? "mt-4" : "mt-7"}`}
         >
-          <button
-            type="button"
-            onClick={() => setReading((r) => !r)}
-            aria-pressed={reading}
-            className={`flex items-center gap-2 rounded-full px-4 py-2.5 type-small-bold transition-colors ${
-              reading ? "bg-green text-on-green" : "bg-mid text-ink hover:bg-card"
-            }`}
-          >
-            <TextIcon size={16} />
-            บทสวด
-          </button>
-          <button
-            type="button"
-            onClick={() => setSleepOpen((o) => !o)}
-            className={`flex items-center gap-2 rounded-full px-4 py-2.5 type-small-bold transition-colors ${
-              sleepLeftSec != null
-                ? "bg-green text-on-green"
-                : "bg-mid text-ink hover:bg-card"
-            }`}
-          >
-            <ClockIcon size={16} />
-            {sleepLeftSec != null
-              ? `${Math.ceil(sleepLeftSec / 60)} นาที`
-              : "ตั้งเวลา"}
-          </button>
-          <button
-            type="button"
-            onClick={() => setSaved((s) => !s)}
-            className="flex items-center gap-2 rounded-full bg-mid px-4 py-2.5 type-small-bold text-ink transition-colors hover:bg-card"
-          >
-            {saved ? <CheckIcon size={16} /> : <PlusIcon size={16} />}
-            {saved ? "บันทึกแล้ว" : "บันทึก"}
-          </button>
-          <button
-            type="button"
-            className={`items-center gap-2 rounded-full bg-mid px-4 py-2.5 type-small-bold text-ink transition-colors hover:bg-card ${
-              reading ? "hidden" : "flex"
-            }`}
-          >
-            <ShareIcon size={16} />
-            แชร์
-          </button>
+          <div className="mx-auto flex w-max items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setReading((r) => !r)}
+              aria-pressed={reading}
+              className={`flex items-center gap-2 shrink-0 whitespace-nowrap rounded-full px-4 py-2.5 type-small-bold transition-colors ${
+                reading
+                  ? "bg-green text-on-green"
+                  : "bg-mid text-ink hover:bg-card"
+              }`}
+            >
+              <TextIcon size={16} />
+              บทสวด
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setRateOpen((o) => !o);
+                setSleepOpen(false);
+              }}
+              aria-pressed={rate !== 1}
+              className={`flex items-center gap-1.5 shrink-0 whitespace-nowrap rounded-full px-4 py-2.5 type-small-bold transition-colors ${
+                rate !== 1
+                  ? "bg-green text-on-green"
+                  : "bg-mid text-ink hover:bg-card"
+              }`}
+            >
+              <SpeedIcon size={16} />
+              {rate}x
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setSleepOpen((o) => !o);
+                setRateOpen(false);
+              }}
+              className={`flex items-center gap-2 shrink-0 whitespace-nowrap rounded-full px-4 py-2.5 type-small-bold transition-colors ${
+                sleepLeftSec != null
+                  ? "bg-green text-on-green"
+                  : "bg-mid text-ink hover:bg-card"
+              }`}
+            >
+              <ClockIcon size={16} />
+              {sleepLeftSec != null
+                ? `${Math.ceil(sleepLeftSec / 60)} นาที`
+                : "ตั้งเวลา"}
+            </button>
+            <button
+              type="button"
+              onClick={() => setSaved((s) => !s)}
+              className="flex items-center gap-2 rounded-full bg-mid px-4 py-2.5 type-small-bold text-ink transition-colors hover:bg-card"
+            >
+              {saved ? <CheckIcon size={16} /> : <PlusIcon size={16} />}
+              {saved ? "บันทึกแล้ว" : "บันทึก"}
+            </button>
+            <button
+              type="button"
+              className={`items-center gap-2 rounded-full bg-mid px-4 py-2.5 type-small-bold text-ink transition-colors hover:bg-card ${
+                reading ? "hidden" : "flex"
+              }`}
+            >
+              <ShareIcon size={16} />
+              แชร์
+            </button>
+          </div>
         </div>
 
+        {rateOpen && (
+          <div className="animate-fade-in mt-3 shrink-0 rounded-xl bg-card p-3 shadow-[var(--shadow-dialog)]">
+            <p className="px-1 pb-2 type-small text-muted">
+              ความเร็วในการสวด — เสียงยังคงระดับเดิม ไม่แหลมขึ้น
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {RATE_OPTIONS.map((r) => (
+                <button
+                  key={r}
+                  type="button"
+                  onClick={() => {
+                    setRate(r);
+                    setRateOpen(false);
+                  }}
+                  aria-pressed={rate === r}
+                  className={`rounded-full px-3.5 py-2 type-small-bold transition-colors ${
+                    rate === r
+                      ? "bg-green text-on-green"
+                      : "bg-mid text-ink hover:bg-base"
+                  }`}
+                >
+                  {r === 1 ? "ปกติ" : `${r}x`}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         {sleepOpen && (
-          <div className="animate-fade-in mt-3 rounded-xl bg-card p-3 shadow-[var(--shadow-dialog)]">
+          <div className="animate-fade-in mt-3 shrink-0 rounded-xl bg-card p-3 shadow-[var(--shadow-dialog)]">
             <p className="px-1 pb-2 type-small text-muted">
               หยุดเล่นอัตโนมัติหลังจาก
             </p>

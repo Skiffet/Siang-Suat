@@ -1,12 +1,17 @@
 /**
  * Does an alignment hold up?
  *
- * Matching the number of speech runs to the number of lines does not prove the
- * runs landed on the right lines — a split missed in one place and an extra
- * one made somewhere else still totals correctly. But a correct mapping has a
- * property a wrong one does not: a line twice as long takes about twice as
- * long to say. Comparing each run's length against its text's length is
- * therefore a check the alignment cannot fake.
+ * Matching speech to lines is easy to get wrong in a way that still looks
+ * plausible, so the result gets checked before it ships. The property a
+ * correct alignment has and a wrong one does not: a line twice as long takes
+ * about twice as long to say.
+ *
+ * The check is how far each line's measured length sits from what its text
+ * length predicts, reported as a median so a couple of odd lines cannot
+ * rescue or condemn the whole chant. Correlation is reported too, but only
+ * where it means anything — a chant whose lines are all the same length has
+ * no spread for a correlation to measure, and r collapses toward noise even
+ * when every line is within a tenth of a second of where it belongs.
  */
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -24,43 +29,54 @@ if (!timings?.length) {
 
 const lines = chant.segments.filter((s) => s.kind !== "silence");
 const total = chant.audio!.durationSec;
+const charTotal = lines.reduce((n, l) => n + l.text.length, 0);
 
 const rows = timings.map((t, i) => {
-  const next = timings[i + 1]?.startSec ?? total;
-  return {
-    text: lines[t.sourceIndex]?.text ?? "",
-    chars: (lines[t.sourceIndex]?.text ?? "").length,
-    dur: next - t.startSec,
-    start: t.startSec,
-  };
+  const text = lines[t.sourceIndex]?.text ?? "";
+  const dur = (timings[i + 1]?.startSec ?? total) - t.startSec;
+  const want = (total * text.length) / charTotal;
+  return { text, dur, want, rel: Math.abs(dur - want) / want };
 });
 
-const mean = (xs: number[]) => xs.reduce((a, b) => a + b, 0) / xs.length;
-const mc = mean(rows.map((r) => r.chars));
-const md = mean(rows.map((r) => r.dur));
-const cov = mean(rows.map((r) => (r.chars - mc) * (r.dur - md)));
-const sc = Math.sqrt(mean(rows.map((r) => (r.chars - mc) ** 2)));
-const sd = Math.sqrt(mean(rows.map((r) => (r.dur - md) ** 2)));
-const r = cov / (sc * sd);
+const median = (xs: number[]) =>
+  [...xs].sort((a, b) => a - b)[Math.floor(xs.length / 2)];
 
-// Seconds per character, which should be roughly the same for every line.
-const rates = rows.map((row) => row.dur / Math.max(1, row.chars));
-const medianRate = [...rates].sort((a, b) => a - b)[Math.floor(rates.length / 2)];
+const medRel = median(rows.map((r) => r.rel));
+const within = (limit: number) =>
+  Math.round((rows.filter((r) => r.rel <= limit).length / rows.length) * 100);
 
 console.log(`\n${slug} — ${rows.length} วรรค, ${total}s`);
-console.log(`  ความสัมพันธ์ ความยาวข้อความ ↔ ความยาวเสียง: r = ${r.toFixed(2)}`);
-console.log(`  ${r > 0.8 ? "✓ จับคู่น่าเชื่อถือ" : r > 0.5 ? "~ พอใช้ อาจมีบางวรรคเพี้ยน" : "✗ จับคู่ผิด — อย่าใช้"}`);
+console.log(`  คลาดจากที่ควรเป็น (ค่ากลาง): ${(medRel * 100).toFixed(0)}%`);
+console.log(`  อยู่ในเกณฑ์ ±30%: ${within(0.3)}%   ±50%: ${within(0.5)}%`);
 
-const odd = rows
-  .map((row, i) => ({ ...row, i, ratio: rates[i] / medianRate }))
-  .filter((row) => row.ratio > 2 || row.ratio < 0.4);
+// Correlation only says something when the lines differ in length.
+const chars = rows.map((r) => r.text.length);
+const mc = chars.reduce((a, b) => a + b, 0) / chars.length;
+const spread = Math.sqrt(chars.reduce((s, c) => s + (c - mc) ** 2, 0) / chars.length) / mc;
+if (spread > 0.25) {
+  const durs = rows.map((r) => r.dur);
+  const md = durs.reduce((a, b) => a + b, 0) / durs.length;
+  const cov = chars.reduce((s, c, i) => s + (c - mc) * (durs[i] - md), 0) / chars.length;
+  const sc = Math.sqrt(chars.reduce((s, c) => s + (c - mc) ** 2, 0) / chars.length);
+  const sd = Math.sqrt(durs.reduce((s, d) => s + (d - md) ** 2, 0) / durs.length);
+  console.log(`  ความสัมพันธ์ ยาว↔นาน: r = ${(cov / (sc * sd)).toFixed(2)}`);
+} else {
+  console.log(`  (ทุกวรรคยาวใกล้กัน — ค่า r ใช้ตัดสินไม่ได้)`);
+}
 
-if (odd.length) {
-  console.log(`\n  วรรคที่ผิดจังหวะชัดเจน (${odd.length} จาก ${rows.length}):`);
-  for (const o of odd.slice(0, 8)) {
+const ok = medRel <= 0.25 && within(0.5) >= 85;
+const shaky = medRel <= 0.4 && within(0.5) >= 70;
+console.log(`  ${ok ? "✓ จับคู่น่าเชื่อถือ" : shaky ? "~ พอใช้ ควรฟังตรวจ" : "✗ จับคู่ผิด — อย่าใช้"}`);
+
+const worst = rows
+  .map((r, i) => ({ ...r, i }))
+  .filter((r) => r.rel > 0.6)
+  .sort((a, b) => b.rel - a.rel);
+if (worst.length) {
+  console.log(`\n  วรรคที่คลาดมากที่สุด (${worst.length} จาก ${rows.length}):`);
+  for (const w of worst.slice(0, 6)) {
     console.log(
-      `    #${String(o.i + 1).padStart(2)} ${o.dur.toFixed(1)}s สำหรับ ${o.chars} ตัวอักษร ` +
-        `(${o.ratio.toFixed(1)}x ปกติ)  ${o.text.slice(0, 40)}`,
+      `    #${String(w.i + 1).padStart(2)} ได้ ${w.dur.toFixed(1)}s ควรเป็น ${w.want.toFixed(1)}s  ${w.text.slice(0, 36)}`,
     );
   }
 }

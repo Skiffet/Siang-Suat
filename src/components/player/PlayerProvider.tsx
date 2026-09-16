@@ -28,6 +28,8 @@ interface PlayerValue {
   expanded: boolean;
   /** Seconds left on the sleep timer, or null when none is running. */
   sleepLeftSec: number | null;
+  /** Playback rate, for people who chant faster or slower than the recording. */
+  rate: number;
   /** Set when a chant has no audio yet, so the UI can say so instead of stalling. */
   notice: string | null;
 
@@ -41,6 +43,7 @@ interface PlayerValue {
   cycleRepeat(): void;
   setExpanded(open: boolean): void;
   startSleepTimer(minutes: number | null): void;
+  setRate(rate: number): void;
   isCurrent(slug: string): boolean;
 }
 
@@ -76,6 +79,12 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
   const [sleepAt, setSleepAt] = useState<number | null>(null);
   const [sleepLeftSec, setSleepLeftSec] = useState<number | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  const [rate, setRateState] = useState(1);
+
+  // `start` is memoised without the rate as a dependency, so it reads the
+  // current value through a ref. The ref is written where the rate changes,
+  // never during render.
+  const rateRef = useRef(1);
 
   const current = queue[index] ?? null;
   const upNext = queue[index + 1] ?? (repeat === "all" ? queue[0] ?? null : null);
@@ -97,6 +106,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
     if (!el) return;
     el.src = chant.audioUrl;
     el.currentTime = 0;
+    el.playbackRate = rateRef.current;
     void el.play().catch(() => setPlaying(false));
   }, []);
 
@@ -182,6 +192,18 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
     }
     setSleepAt(Date.now() + minutes * 60_000);
     setSleepLeftSec(minutes * 60);
+  }, []);
+
+  /**
+   * Changing the rate has to touch the element directly: `playbackRate` is a
+   * property of the media element rather than something React re-renders, and
+   * it resets to 1 whenever a new source loads.
+   */
+  const setRate = useCallback((next: number) => {
+    rateRef.current = next;
+    setRateState(next);
+    const el = audioRef.current;
+    if (el) el.playbackRate = next;
   }, []);
 
   const isCurrent = useCallback(
@@ -295,6 +317,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
       repeat,
       expanded,
       sleepLeftSec,
+      rate,
       notice,
       play,
       playQueue,
@@ -306,12 +329,13 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
       cycleRepeat,
       setExpanded,
       startSleepTimer,
+      setRate,
       isCurrent,
     }),
     [
       queue, index, current, upNext, playing, time, duration, shuffle, repeat,
-      expanded, sleepLeftSec, notice, play, playQueue, toggle, next, prev, seek,
-      toggleShuffle, cycleRepeat, startSleepTimer, isCurrent,
+      expanded, sleepLeftSec, rate, notice, play, playQueue, toggle, next, prev,
+      seek, toggleShuffle, cycleRepeat, startSleepTimer, setRate, isCurrent,
     ],
   );
 

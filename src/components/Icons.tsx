@@ -161,6 +161,14 @@ export function ShareIcon(p: IconProps) {
   );
 }
 
+export function SpeedIcon(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M12 4a9 9 0 0 1 7.8 13.5.9.9 0 0 1-.78.45H4.98a.9.9 0 0 1-.78-.45A9 9 0 0 1 12 4Zm0 1.8a7.2 7.2 0 0 0-6.4 10.35h12.8A7.2 7.2 0 0 0 12 5.8Zm4.05 3.03a.9.9 0 0 1 .12 1.27l-2.9 3.45a2 2 0 1 1-1.38-1.16l2.89-3.44a.9.9 0 0 1 1.27-.12Z" />
+    </Svg>
+  );
+}
+
 export function TextIcon(p: IconProps) {
   return (
     <Svg {...p}>

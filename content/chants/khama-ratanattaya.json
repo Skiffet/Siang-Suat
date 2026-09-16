@@ -17,7 +17,114 @@
   "cover": "candle-lotus",
   "audio": {
     "file": "khama-ratanattaya.m4a",
-    "durationSec": 132.5
+    "durationSec": 132.5,
+    "timings": [
+      {
+        "sourceIndex": 0,
+        "repeatIndex": 0,
+        "startSec": 0.14
+      },
+      {
+        "sourceIndex": 1,
+        "repeatIndex": 0,
+        "startSec": 8.18
+      },
+      {
+        "sourceIndex": 2,
+        "repeatIndex": 0,
+        "startSec": 16.4
+      },
+      {
+        "sourceIndex": 3,
+        "repeatIndex": 0,
+        "startSec": 24.72
+      },
+      {
+        "sourceIndex": 4,
+        "repeatIndex": 0,
+        "startSec": 33.34
+      },
+      {
+        "sourceIndex": 5,
+        "repeatIndex": 0,
+        "startSec": 42.94
+      },
+      {
+        "sourceIndex": 6,
+        "repeatIndex": 0,
+        "startSec": 49.34
+      },
+      {
+        "sourceIndex": 7,
+        "repeatIndex": 0,
+        "startSec": 54.62
+      },
+      {
+        "sourceIndex": 8,
+        "repeatIndex": 0,
+        "startSec": 60.7
+      },
+      {
+        "sourceIndex": 9,
+        "repeatIndex": 0,
+        "startSec": 63.56
+      },
+      {
+        "sourceIndex": 10,
+        "repeatIndex": 0,
+        "startSec": 74.18
+      },
+      {
+        "sourceIndex": 11,
+        "repeatIndex": 0,
+        "startSec": 78.18
+      },
+      {
+        "sourceIndex": 12,
+        "repeatIndex": 0,
+        "startSec": 82.42
+      },
+      {
+        "sourceIndex": 13,
+        "repeatIndex": 0,
+        "startSec": 86.94
+      },
+      {
+        "sourceIndex": 14,
+        "repeatIndex": 0,
+        "startSec": 91.42
+      },
+      {
+        "sourceIndex": 15,
+        "repeatIndex": 0,
+        "startSec": 100.42
+      },
+      {
+        "sourceIndex": 16,
+        "repeatIndex": 0,
+        "startSec": 103.88
+      },
+      {
+        "sourceIndex": 17,
+        "repeatIndex": 0,
+        "startSec": 109.58
+      },
+      {
+        "sourceIndex": 18,
+        "repeatIndex": 0,
+        "startSec": 113.8
+      },
+      {
+        "sourceIndex": 19,
+        "repeatIndex": 0,
+        "startSec": 120.6
+      },
+      {
+        "sourceIndex": 20,
+        "repeatIndex": 0,
+        "startSec": 128.1
+      }
+    ]
   },
   "segments": [
     {
@@ -26,175 +133,59 @@
     },
     {
       "kind": "pali",
-      "text": "นะโม ตัสสะ"
+      "text": "นะโม ตัสสะ ภะคะวะโต อะระหะโต สัมมาสัมพุทธัสสะ"
     },
     {
       "kind": "pali",
-      "text": "ภะคะวะโต"
+      "text": "นะโม ตัสสะ ภะคะวะโต อะระหะโต สัมมาสัมพุทธัสสะ"
     },
     {
       "kind": "pali",
-      "text": "อะระหะโต"
-    },
-    {
-      "kind": "pali",
-      "text": "สัมมาสัมพุทธัสสะ"
-    },
-    {
-      "kind": "pali",
-      "text": "นะโม ตัสสะ"
-    },
-    {
-      "kind": "pali",
-      "text": "ภะคะวะโต"
-    },
-    {
-      "kind": "pali",
-      "text": "อะระหะโต"
-    },
-    {
-      "kind": "pali",
-      "text": "สัมมาสัมพุทธัสสะ"
-    },
-    {
-      "kind": "pali",
-      "text": "นะโม ตัสสะ"
-    },
-    {
-      "kind": "pali",
-      "text": "ภะคะวะโต"
-    },
-    {
-      "kind": "pali",
-      "text": "อะระหะโต"
-    },
-    {
-      "kind": "pali",
-      "text": "สัมมาสัมพุทธัสสะ"
+      "text": "นะโม ตัสสะ ภะคะวะโต อะระหะโต สัมมาสัมพุทธัสสะ"
     },
     {
       "kind": "translation",
-      "text": "ขอนอบน้อม"
-    },
-    {
-      "kind": "translation",
-      "text": "แด่พระผู้มีพระภาค"
-    },
-    {
-      "kind": "translation",
-      "text": "อรหันตสัมมาสัมพุทธเจ้า"
-    },
-    {
-      "kind": "translation",
-      "text": "พระองค์นั้น"
+      "text": "ขอนอบน้อม แด่พระผู้มีพระภาค อรหันตสัมมาสัมพุทธเจ้า พระองค์นั้น"
     },
     {
       "kind": "pali",
-      "text": "สัพพัง"
+      "text": "สัพพัง อะปะราธัง ขะมะถะ เม ภันเต"
     },
     {
       "kind": "pali",
-      "text": "อะปะราธัง"
+      "text": "อุกาสะ ทะวารัตตะเยนะ กะตัง"
     },
     {
       "kind": "pali",
-      "text": "ขะมะถะ เม"
+      "text": "สัพพัง อะปะราธัง ขะมะถะ เม ภันเต"
     },
     {
       "kind": "pali",
-      "text": "ภันเต"
-    },
-    {
-      "kind": "pali",
-      "text": "อุกาสะ"
-    },
-    {
-      "kind": "pali",
-      "text": "ทะวารัตตะเยนะ"
-    },
-    {
-      "kind": "pali",
-      "text": "กะตัง"
-    },
-    {
-      "kind": "pali",
-      "text": "สัพพัง"
-    },
-    {
-      "kind": "pali",
-      "text": "อะปะราธัง"
-    },
-    {
-      "kind": "pali",
-      "text": "ขะมะถะ เม"
-    },
-    {
-      "kind": "pali",
-      "text": "ภันเต"
-    },
-    {
-      "kind": "pali",
-      "text": "อุกาสะ"
-    },
-    {
-      "kind": "pali",
-      "text": "ขะมามิ"
-    },
-    {
-      "kind": "pali",
-      "text": "ภันเต"
+      "text": "อุกาสะ ขะมามิ ภันเต"
     },
     {
       "kind": "thai",
-      "text": "หากข้าพระพุทธเจ้า"
+      "text": "หากข้าพระพุทธเจ้า ได้เคยประมาทพลาดพลั้งล่วงเกิน ต่อพระรัตนตรัย"
     },
     {
       "kind": "thai",
-      "text": "ได้เคยประมาทพลาดพลั้งล่วงเกิน"
+      "text": "อันมีพระพุทธเจ้า ทุกๆ พระองค์"
     },
     {
       "kind": "thai",
-      "text": "ต่อพระรัตนตรัย"
+      "text": "พระปัจเจกพุทธเจ้า ทุกๆ พระองค์"
     },
     {
       "kind": "thai",
-      "text": "อันมีพระพุทธเจ้า"
+      "text": "พระธรรม และพระอริยสงฆ์ทั้งหลาย"
     },
     {
       "kind": "thai",
-      "text": "ทุกๆ พระองค์"
+      "text": "ในชาติก่อนก็ดี ชาตินี้ก็ดี"
     },
     {
       "kind": "thai",
-      "text": "พระปัจเจกพุทธเจ้า"
-    },
-    {
-      "kind": "thai",
-      "text": "ทุกๆ พระองค์"
-    },
-    {
-      "kind": "thai",
-      "text": "พระธรรม"
-    },
-    {
-      "kind": "thai",
-      "text": "และพระอริยสงฆ์ทั้งหลาย"
-    },
-    {
-      "kind": "thai",
-      "text": "ในชาติก่อนก็ดี"
-    },
-    {
-      "kind": "thai",
-      "text": "ชาตินี้ก็ดี"
-    },
-    {
-      "kind": "thai",
-      "text": "ด้วยทางกายหรือวาจาก็ดี"
-    },
-    {
-      "kind": "thai",
-      "text": "และด้วยเจตนาหรือไม่มีเจตนาก็ดี"
+      "text": "ด้วยทางกายหรือวาจาก็ดี และด้วยเจตนาหรือไม่มีเจตนาก็ดี"
     },
     {
       "kind": "thai",
@@ -202,47 +193,23 @@
     },
     {
       "kind": "thai",
-      "text": "ขอองค์สมเด็จพระสัมมาสัมพุทธเจ้า"
+      "text": "ขอองค์สมเด็จพระสัมมาสัมพุทธเจ้า ทุกๆ พระองค์"
     },
     {
       "kind": "thai",
-      "text": "ทุกๆ พระองค์"
+      "text": "พระปัจเจกพุทธเจ้า ทุกๆ พระองค์"
     },
     {
       "kind": "thai",
-      "text": "พระปัจเจกพุทธเจ้า"
+      "text": "พระธรรม พระอริยสงฆ์ทั้งหลาย และผู้มีพระคุณทุกท่าน"
     },
     {
       "kind": "thai",
-      "text": "ทุกๆ พระองค์"
+      "text": "ได้โปรดอดโทษให้แก่ข้าพระพุทธเจ้า ตั้งแต่บัดนี้เป็นต้นไป"
     },
     {
       "kind": "thai",
-      "text": "พระธรรม"
-    },
-    {
-      "kind": "thai",
-      "text": "พระอริยสงฆ์ทั้งหลาย"
-    },
-    {
-      "kind": "thai",
-      "text": "และผู้มีพระคุณทุกท่าน"
-    },
-    {
-      "kind": "thai",
-      "text": "ได้โปรดอดโทษให้แก่ข้าพระพุทธเจ้า"
-    },
-    {
-      "kind": "thai",
-      "text": "ตั้งแต่บัดนี้เป็นต้นไป"
-    },
-    {
-      "kind": "thai",
-      "text": "ตราบเท่าเข้าสู่พระนิพพาน"
-    },
-    {
-      "kind": "thai",
-      "text": "ด้วยเทอญ"
+      "text": "ตราบเท่าเข้าสู่พระนิพพาน ด้วยเทอญ"
     }
   ]
 }
