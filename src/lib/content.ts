@@ -62,7 +62,9 @@ export function getChants(): ChantWithAudio[] {
       ...chant,
       audioUrl: chant.audio ? `/audio/${chant.audio.file}` : null,
       durationSec: chant.audio?.durationSec ?? null,
-      timings: [],
+      // Aligned from the audio itself rather than reported by a provider, so
+      // accurate to the pause before each line rather than to the syllable.
+      timings: chant.audio?.timings ?? [],
       timingsExact: false,
     };
   });

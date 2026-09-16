@@ -11,7 +11,11 @@
     "tts:dry": "tsx --env-file-if-exists=.env.local scripts/tts/generate.ts --dry",
     "tts:try": "tsx --env-file-if-exists=.env.local scripts/tts/try-voice.ts",
     "audio:inspect": "tsx scripts/audio/inspect.ts",
-    "audio:trim": "tsx scripts/audio/trim.ts"
+    "audio:trim": "tsx scripts/audio/trim.ts",
+    "audio:sections": "tsx scripts/audio/sections.ts",
+    "audio:join": "tsx scripts/audio/join.ts",
+    "audio:align": "tsx scripts/audio/align.ts",
+    "audio:check": "tsx scripts/audio/check-align.ts"
   },
   "dependencies": {
     "next": "16.3.5",

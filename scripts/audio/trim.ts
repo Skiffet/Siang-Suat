@@ -24,9 +24,11 @@ const FADE_SEC = 0.8; // fade applied inside that tail
 const args = process.argv.slice(2);
 const toIndex = args.indexOf("--to");
 const cutAtSec = toIndex >= 0 ? Number(args[toIndex + 1]) : null;
-const [input, outName] = args.filter(
-  (a, i) => i !== toIndex && i !== toIndex + 1,
-);
+// indexOf returns -1 when the flag is absent, which must not be read as an
+// index to drop — that would eat the last argument.
+const positional =
+  toIndex < 0 ? args : args.filter((_, i) => i !== toIndex && i !== toIndex + 1);
+const [input, outName] = positional;
 if (!input || !outName || (cutAtSec !== null && !Number.isFinite(cutAtSec))) {
   console.error("usage: trim.ts <in.wav> <out-name> [--to <seconds>]");
   process.exit(1);

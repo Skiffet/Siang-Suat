@@ -74,7 +74,16 @@ export interface Chant {
    * into `public/audio`. The manifest never sees these, so the file and its
    * length are declared here instead.
    */
-  audio?: { file: string; durationSec: number };
+  audio?: {
+    file: string;
+    durationSec: number;
+    /**
+     * Line start times recovered by `scripts/audio/align.ts`, which finds them
+     * in the pauses between lines. Absent until that has been run, and the
+     * player falls back to a plain reading panel without them.
+     */
+    timings?: SegmentTiming[];
+  };
   segments: ChantSegment[];
 }
 
