@@ -1,17 +1,23 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { DailyReminderSettings } from "./DailyReminderSettings";
+import { PlaylistReminderSettings } from "./PlaylistReminderSettings";
 import { BellIcon } from "./Icons";
 
 /**
- * A quick-access way into the daily reminder from wherever someone actually
- * is — a playlist they were about to start, say — rather than making them
- * navigate all the way to their profile to turn it on. Opens the exact same
- * settings the profile page has (one reminder, not a separate one per
- * playlist); this is a shortcut to it, not a second setting.
+ * A bell next to a specific playlist's controls, opening that playlist's own
+ * reminder — "remind me about this one at this time." Each playlist keeps
+ * its own on/off and time; this is not a shortcut to one shared setting.
  */
-export function ReminderButton() {
+export function ReminderButton({
+  playlistKey,
+  title,
+  cover,
+}: {
+  playlistKey: string;
+  title: string;
+  cover: string;
+}) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -34,7 +40,7 @@ export function ReminderButton() {
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        aria-label="ตั้งเตือนถ้ายังไม่ได้เข้ามา"
+        aria-label={`ตั้งเตือน ${title}`}
         aria-expanded={open}
         className="grid size-9 shrink-0 place-items-center rounded-full border border-line-light text-muted transition-colors hover:text-ink"
       >
@@ -44,9 +50,9 @@ export function ReminderButton() {
       {open && (
         <div className="animate-fade-in absolute left-0 top-full z-50 mt-2 w-64 rounded-xl bg-card p-4 shadow-[var(--shadow-dialog)]">
           <p className="mb-3 type-small text-muted">
-            เตือนถ้าวันนั้นยังไม่ได้เข้ามาเปิดแอปเลย
+            เตือนถ้าวันนั้นยังไม่ได้สวด &ldquo;{title}&rdquo;
           </p>
-          <DailyReminderSettings compact />
+          <PlaylistReminderSettings playlistKey={playlistKey} title={title} cover={cover} compact />
         </div>
       )}
     </div>

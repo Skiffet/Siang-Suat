@@ -63,6 +63,7 @@ export function MyPlaylistDetail({
         items,
         totalSec,
       }}
+      reminderKey={`mine:${saved.id}`}
       editHref={`/playlist/edit/${saved.id}`}
     />
   );

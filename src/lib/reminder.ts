@@ -1,26 +1,27 @@
 "use client";
 
 /**
- * "You haven't come in today" — a reminder shown as a browser notification.
+ * "Remind me about this one at this time, that one at that time" — one
+ * reminder per playlist, each with its own on/off and time, rather than a
+ * single app-wide alarm.
  *
- * There is no server here, so this cannot be a real push notification: it
- * only fires while some tab of this site is open somewhere (foreground or
- * backgrounded), checked on an interval. Close the tab or the browser and
- * nothing fires, no matter what time is set. A reminder that works even with
- * the browser fully closed needs a server to send it — a separate, much
- * bigger piece of infrastructure this project does not have.
+ * Still local browser notifications, not push: there is no server here, so
+ * this only fires while some tab of the site is open somewhere, checked on
+ * an interval. Close the tab and nothing fires no matter what time is set.
  */
-export interface ReminderSettings {
-  enabled: boolean;
+export interface Reminder {
+  /** "curated:<slug>" for one of ours, "mine:<id>" for one made in the browser. */
+  key: string;
+  /** Shown in the notification and wherever reminders are listed. */
+  title: string;
+  cover: string;
   /** 24-hour "HH:MM", compared against the visitor's own local clock. */
   time: string;
 }
 
-const DEFAULT_SETTINGS: ReminderSettings = { enabled: false, time: "20:00" };
-
-const SETTINGS_KEY = "siang-suad.reminder.v1";
-const LAST_VISIT_KEY = "siang-suad.reminder.last-visit";
-const LAST_NOTIFIED_KEY = "siang-suad.reminder.last-notified";
+const REMINDERS_KEY = "siang-suad.reminders.v1";
+const lastPlayedKey = (key: string) => `siang-suad.reminder.last-played.${key}`;
+const lastNotifiedKey = (key: string) => `siang-suad.reminder.last-notified.${key}`;
 
 /** Local calendar day, so a reminder at 20:00 compares against the visitor's
  *  own midnight rather than UTC's. */
@@ -47,19 +48,35 @@ function writeRaw(key: string, value: string): boolean {
   }
 }
 
+function readList(): Reminder[] {
+  const raw = readRaw(REMINDERS_KEY);
+  if (!raw) return [];
+  try {
+    return JSON.parse(raw) as Reminder[];
+  } catch {
+    return [];
+  }
+}
+
 // See lib/myPlaylists.ts for why a store shared across mounted components
-// needs an explicit subscribe/notify pair rather than a one-shot read: the
-// component that flips the setting and the one driving the timer are not
-// the same component, and neither remounts when the other writes.
+// needs an explicit subscribe/notify pair: the component that changes a
+// reminder and the one polling to fire it are not the same component, and
+// neither remounts when the other writes.
 const listeners = new Set<() => void>();
 function notify() {
   for (const l of listeners) l();
 }
 
-export function subscribeReminder(onChange: () => void): () => void {
+function writeList(list: Reminder[]): boolean {
+  const ok = writeRaw(REMINDERS_KEY, JSON.stringify(list));
+  if (ok) notify();
+  return ok;
+}
+
+export function subscribeReminders(onChange: () => void): () => void {
   listeners.add(onChange);
   const onStorage = (e: StorageEvent) => {
-    if (e.key === SETTINGS_KEY) onChange();
+    if (e.key === REMINDERS_KEY) onChange();
   };
   window.addEventListener("storage", onStorage);
   return () => {
@@ -68,45 +85,59 @@ export function subscribeReminder(onChange: () => void): () => void {
   };
 }
 
+const EMPTY: Reminder[] = [];
 let cachedRaw: string | null | undefined;
-let cachedSettings: ReminderSettings = DEFAULT_SETTINGS;
+let cachedList: Reminder[] = EMPTY;
 
 /** For `useSyncExternalStore`'s getSnapshot — cached so an unchanged read
  *  returns the same reference (see myPlaylists.ts for why that matters). */
-export function getReminderSnapshot(): ReminderSettings {
-  const raw = readRaw(SETTINGS_KEY);
+export function getRemindersSnapshot(): Reminder[] {
+  const raw = readRaw(REMINDERS_KEY);
   if (raw !== cachedRaw) {
     cachedRaw = raw;
-    try {
-      cachedSettings = raw ? { ...DEFAULT_SETTINGS, ...JSON.parse(raw) } : DEFAULT_SETTINGS;
-    } catch {
-      cachedSettings = DEFAULT_SETTINGS;
-    }
+    cachedList = raw ? (() => {
+      try {
+        return JSON.parse(raw) as Reminder[];
+      } catch {
+        return EMPTY;
+      }
+    })() : EMPTY;
   }
-  return cachedSettings;
+  return cachedList;
 }
 
-export function getReminderServerSnapshot(): ReminderSettings {
-  return DEFAULT_SETTINGS;
+export function getRemindersServerSnapshot(): Reminder[] {
+  return EMPTY;
 }
 
-export function saveReminderSettings(next: ReminderSettings): boolean {
-  const ok = writeRaw(SETTINGS_KEY, JSON.stringify(next));
-  if (ok) notify();
-  return ok;
+export function getReminder(key: string): Reminder | undefined {
+  return getRemindersSnapshot().find((r) => r.key === key);
 }
 
-/** Call once per app load — any page counts as "came in today". */
-export function markVisitedToday(): void {
-  writeRaw(LAST_VISIT_KEY, todayKey());
+export function saveReminder(reminder: Reminder): boolean {
+  const list = readList();
+  const at = list.findIndex((r) => r.key === reminder.key);
+  if (at >= 0) list[at] = reminder;
+  else list.push(reminder);
+  return writeList(list);
 }
 
-function hasVisitedToday(): boolean {
-  return readRaw(LAST_VISIT_KEY) === todayKey();
+export function deleteReminder(key: string): boolean {
+  return writeList(readList().filter((r) => r.key !== key));
 }
 
-function hasNotifiedToday(): boolean {
-  return readRaw(LAST_NOTIFIED_KEY) === todayKey();
+/** Call when a playlist's own play button is pressed — that press is the
+ *  clearest signal that today's routine happened. */
+export function markPlaylistPlayedToday(key: string): void {
+  writeRaw(lastPlayedKey(key), todayKey());
+}
+
+function hasPlayedToday(key: string): boolean {
+  return readRaw(lastPlayedKey(key)) === todayKey();
+}
+
+function hasNotifiedToday(key: string): boolean {
+  return readRaw(lastNotifiedKey(key)) === todayKey();
 }
 
 export type PermissionState = "default" | "granted" | "denied" | "unsupported";
@@ -123,26 +154,28 @@ export async function requestNotificationPermission(): Promise<PermissionState> 
 }
 
 /**
- * Fire the reminder if it is due. Cheap to call often: every check after the
- * first one that day is a few localStorage reads and a string compare.
+ * Fire whichever reminders are due. Cheap to call often: each reminder that
+ * has already fired or already been played today costs a couple of
+ * localStorage reads and a string compare.
  */
 export function checkAndNotify(): void {
   if (typeof window === "undefined" || !("Notification" in window)) return;
-  const settings = getReminderSnapshot();
-  if (!settings.enabled) return;
   if (Notification.permission !== "granted") return;
-  if (hasVisitedToday() || hasNotifiedToday()) return;
 
-  const [hh, mm] = settings.time.split(":").map(Number);
-  if (!Number.isFinite(hh) || !Number.isFinite(mm)) return;
   const now = new Date();
-  const target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hh, mm, 0, 0);
-  if (now < target) return;
+  for (const reminder of getRemindersSnapshot()) {
+    if (hasPlayedToday(reminder.key) || hasNotifiedToday(reminder.key)) continue;
 
-  new Notification("ยังไม่ได้แวะมาสวดมนต์วันนี้", {
-    body: "เปิดแอปแล้วเลือกบทสวดสักบทก่อนนอนไหม",
-    icon: "/covers/temple-sunrise.jpg",
-    tag: "daily-reminder", // replaces yesterday's rather than piling up
-  });
-  writeRaw(LAST_NOTIFIED_KEY, todayKey());
+    const [hh, mm] = reminder.time.split(":").map(Number);
+    if (!Number.isFinite(hh) || !Number.isFinite(mm)) continue;
+    const target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hh, mm, 0, 0);
+    if (now < target) continue;
+
+    new Notification(`ยังไม่ได้สวด "${reminder.title}" วันนี้`, {
+      body: "แตะเพื่อเปิดฟังตอนนี้เลย",
+      icon: `/covers/${reminder.cover}.jpg`,
+      tag: `reminder-${reminder.key}`, // replaces yesterday's rather than piling up
+    });
+    writeRaw(lastNotifiedKey(reminder.key), todayKey());
+  }
 }

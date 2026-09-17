@@ -2,52 +2,65 @@
 
 import { useState, useSyncExternalStore } from "react";
 import {
+  deleteReminder,
   getNotificationPermission,
-  getReminderServerSnapshot,
-  getReminderSnapshot,
+  getReminder,
   requestNotificationPermission,
-  saveReminderSettings,
-  subscribeReminder,
+  saveReminder,
+  subscribeReminders,
   type PermissionState,
 } from "@/lib/reminder";
 import { BellIcon, CheckIcon } from "./Icons";
 
 const neverChanges = () => () => {};
+const DEFAULT_TIME = "20:00";
 
 /**
- * "Remind me if I haven't come in today" — the opening bookend to the sleep
- * timer's closing one.
+ * One playlist's own reminder — "remind me about this one at this time",
+ * separate from whatever time every other playlist is set to. Reusable
+ * wherever a specific playlist needs its own on/off and time, rather than a
+ * single app-wide alarm.
  *
  * This is not a push notification: nothing here has a server, so it only
  * fires while some tab of this site is open somewhere. Said plainly in the
- * UI rather than left to be discovered the day it silently doesn't fire,
- * because the difference is the whole trust of the feature.
+ * UI rather than left to be discovered the day it silently doesn't fire.
  */
-export function DailyReminderSettings({ compact = false }: { compact?: boolean }) {
-  const settings = useSyncExternalStore(
-    subscribeReminder,
-    getReminderSnapshot,
-    getReminderServerSnapshot,
+export function PlaylistReminderSettings({
+  playlistKey,
+  title,
+  cover,
+  compact = false,
+}: {
+  playlistKey: string;
+  title: string;
+  cover: string;
+  compact?: boolean;
+}) {
+  const reminder = useSyncExternalStore(
+    subscribeReminders,
+    () => getReminder(playlistKey),
+    () => undefined,
   );
   // Browsers give no change event for Notification.permission, so there is
-  // nothing real to subscribe to — this is read fresh on every render instead
-  // (via the no-op subscribe below), which is enough because the only thing
-  // that ever changes it while this component is mounted is `toggle` itself,
-  // and that already triggers a re-render through the settings store above.
+  // nothing real to subscribe to — read fresh on every render instead (via
+  // the no-op subscribe below).
   const permission = useSyncExternalStore(
     neverChanges,
     getNotificationPermission,
     (): PermissionState => "default",
   );
   const [justEnabled, setJustEnabled] = useState(false);
-  // Bumped after a request that does NOT flip `enabled` (permission refused),
-  // since nothing else would otherwise cause this component to re-render and
-  // pick up the freshly-denied permission.
+  // Bumped after a request that does NOT turn the reminder on (permission
+  // refused), since nothing else would otherwise cause a re-render to pick
+  // up the freshly-denied permission.
   const [, forceRefresh] = useState(0);
 
+  const enabled = Boolean(reminder);
+  const time = reminder?.time ?? DEFAULT_TIME;
+
   async function toggle() {
-    if (settings.enabled) {
-      saveReminderSettings({ ...settings, enabled: false });
+    if (enabled) {
+      deleteReminder(playlistKey);
       return;
     }
     const result = await requestNotificationPermission();
@@ -55,12 +68,12 @@ export function DailyReminderSettings({ compact = false }: { compact?: boolean }
       forceRefresh((n) => n + 1);
       return;
     }
-    saveReminderSettings({ ...settings, enabled: true });
+    saveReminder({ key: playlistKey, title, cover, time: DEFAULT_TIME });
     // A visible confirmation right away, rather than asking for trust that
     // something will happen hours later at the chosen time.
-    new Notification("ตั้งการแจ้งเตือนแล้ว", {
-      body: `จะเตือนเวลา ${settings.time} น. ถ้าวันนั้นยังไม่ได้เข้ามา (ต้องเปิดแท็บนี้ค้างไว้)`,
-      tag: "daily-reminder",
+    new Notification(`ตั้งเตือน "${title}" แล้ว`, {
+      body: `จะเตือนเวลา ${DEFAULT_TIME} น. ถ้าวันนั้นยังไม่ได้สวดบทนี้`,
+      tag: `reminder-${playlistKey}`,
     });
     setJustEnabled(true);
     setTimeout(() => setJustEnabled(false), 4000);
@@ -80,9 +93,9 @@ export function DailyReminderSettings({ compact = false }: { compact?: boolean }
     <section className={compact ? "" : "mt-8"}>
       {!compact && (
         <>
-          <h2 className="type-feature text-ink">เตือนถ้ายังไม่ได้เข้ามา</h2>
+          <h2 className="type-feature text-ink">เตือนบทนี้</h2>
           <p className="mt-1 type-small text-muted">
-            ตั้งเวลาไว้ ถ้าวันนั้นยังไม่ได้เปิดแอปเลยจะเด้งเตือนให้
+            ตั้งเวลาไว้ ถ้าวันนั้นยังไม่ได้สวดบทนี้เลยจะเด้งเตือนให้
           </p>
         </>
       )}
@@ -91,7 +104,7 @@ export function DailyReminderSettings({ compact = false }: { compact?: boolean }
         <label className="flex cursor-pointer items-center gap-3">
           <span
             className={`grid size-6 shrink-0 place-items-center rounded-md transition-colors ${
-              settings.enabled
+              enabled
                 ? "bg-green text-on-green"
                 : "border border-line-light text-transparent"
             }`}
@@ -100,7 +113,7 @@ export function DailyReminderSettings({ compact = false }: { compact?: boolean }
           </span>
           <input
             type="checkbox"
-            checked={settings.enabled}
+            checked={enabled}
             onChange={toggle}
             className="sr-only"
           />
@@ -109,7 +122,7 @@ export function DailyReminderSettings({ compact = false }: { compact?: boolean }
           </span>
           <span className="min-w-0">
             <span className="block type-caption text-ink">
-              {settings.enabled ? "เปิดการแจ้งเตือนอยู่" : "เปิดการแจ้งเตือน"}
+              {enabled ? "เปิดการแจ้งเตือนอยู่" : "เปิดการแจ้งเตือน"}
             </span>
             {permission === "denied" && (
               <span className="block type-small text-muted">
@@ -119,15 +132,15 @@ export function DailyReminderSettings({ compact = false }: { compact?: boolean }
           </span>
         </label>
 
-        {settings.enabled && (
+        {enabled && (
           <div className="mt-4 flex items-center gap-3 border-t border-line pt-4">
             <label className="flex items-center gap-3">
               <span className="type-caption text-ink">เตือนเวลา</span>
               <input
                 type="time"
-                value={settings.time}
+                value={time}
                 onChange={(e) =>
-                  saveReminderSettings({ ...settings, time: e.target.value })
+                  saveReminder({ key: playlistKey, title, cover, time: e.target.value })
                 }
                 className="input-inset rounded-lg bg-mid px-3 py-2 type-caption text-ink outline-none transition-shadow [color-scheme:dark]"
               />

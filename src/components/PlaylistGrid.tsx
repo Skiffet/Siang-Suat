@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import type { PlaylistWithChants } from "@/lib/types";
 import { isPlayingIn } from "@/lib/nowPlaying";
 import { newMyPlaylistId } from "@/lib/myPlaylists";
+import { markPlaylistPlayedToday } from "@/lib/reminder";
 import { Cover } from "./Cover";
 import { EqualizerIcon, PauseIcon, PlayIcon, PlusIcon } from "./Icons";
 import { usePlayer } from "./player/PlayerProvider";
@@ -25,7 +26,7 @@ export function PlaylistGrid({ playlists }: { playlists: PlaylistWithChants[] })
   const { playQueue, current, playing, toggle } = usePlayer();
 
   return (
-    <div className="grid grid-cols-2 gap-3 px-4 lg:grid-cols-3 lg:px-0">
+    <div className="grid grid-cols-2 gap-2 px-4 lg:grid-cols-3 lg:px-0">
       {/*
        * The id is minted on the click rather than while rendering — it comes
        * from the clock, so rendering it here would give the server and the
@@ -35,12 +36,12 @@ export function PlaylistGrid({ playlists }: { playlists: PlaylistWithChants[] })
       <button
         type="button"
         onClick={() => router.push(`/playlist/edit/${newMyPlaylistId()}`)}
-        className="group relative flex aspect-[4/3] flex-col items-center justify-center gap-2 overflow-hidden rounded-xl border border-dashed border-line-light bg-surface text-left transition-colors duration-200 hover:bg-card"
+        className="group relative flex aspect-[16/9] flex-col items-center justify-center gap-1.5 overflow-hidden rounded-lg border border-dashed border-line-light bg-surface text-left transition-colors duration-200 hover:bg-card"
       >
-        <span className="grid size-11 place-items-center rounded-full bg-green text-on-green shadow-[var(--shadow-elevated)] transition-transform duration-150 group-hover:scale-105">
-          <PlusIcon size={20} />
+        <span className="grid size-8 place-items-center rounded-full bg-green text-on-green shadow-[var(--shadow-elevated)] transition-transform duration-150 group-hover:scale-105">
+          <PlusIcon size={16} />
         </span>
-        <span className="type-caption-bold text-ink">สร้างเพลย์ลิสต์ใหม่</span>
+        <span className="type-small-bold text-ink">สร้างเพลย์ลิสต์ใหม่</span>
       </button>
 
       {playlists.map((playlist) => {
@@ -49,27 +50,27 @@ export function PlaylistGrid({ playlists }: { playlists: PlaylistWithChants[] })
           <Link
             key={playlist.slug}
             href={`/playlist/${playlist.slug}`}
-            className="group relative overflow-hidden rounded-xl bg-surface shadow-[var(--shadow-elevated)] transition-colors duration-200 hover:bg-card"
+            className="group relative overflow-hidden rounded-lg bg-surface shadow-[var(--shadow-elevated)] transition-colors duration-200 hover:bg-card"
           >
             <Cover
               src={playlist.cover}
               alt={playlist.title}
               sizes="(min-width: 1024px) 260px, 45vw"
               rounded="rounded-none"
-              className="aspect-[4/3]"
+              className="aspect-[16/9]"
             />
             <span
               aria-hidden
               className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/85 via-black/35 to-transparent"
             />
 
-            <span className="absolute inset-x-3 bottom-3 flex items-end justify-between gap-2">
+            <span className="absolute inset-x-2 bottom-2 flex items-end justify-between gap-2">
               <span className="min-w-0">
-                <span className="block truncate type-body-bold text-ink">
+                <span className="block truncate type-small-bold text-ink">
                   {playlist.title}
                 </span>
-                <span className="mt-0.5 flex items-center gap-1.5 type-small text-near-white">
-                  {active && playing && <EqualizerIcon size={12} />}
+                <span className="mt-0.5 flex items-center gap-1 type-micro text-near-white">
+                  {active && playing && <EqualizerIcon size={10} />}
                   {playlist.items.length} ตอน
                 </span>
               </span>
@@ -79,19 +80,22 @@ export function PlaylistGrid({ playlists }: { playlists: PlaylistWithChants[] })
                 onClick={(e) => {
                   e.preventDefault();
                   if (active) toggle();
-                  else playQueue(playlist.items);
+                  else {
+                    playQueue(playlist.items);
+                    markPlaylistPlayedToday(`curated:${playlist.slug}`);
+                  }
                 }}
                 aria-label={
                   active && playing
                     ? `หยุด ${playlist.title}`
                     : `เล่นเพลย์ลิสต์ ${playlist.title}`
                 }
-                className="grid size-11 shrink-0 place-items-center rounded-full bg-green text-on-green shadow-[var(--shadow-elevated)] transition-transform duration-150 hover:scale-105 active:scale-95"
+                className="grid size-8 shrink-0 place-items-center rounded-full bg-green text-on-green shadow-[var(--shadow-elevated)] transition-transform duration-150 hover:scale-105 active:scale-95"
               >
                 {active && playing ? (
-                  <PauseIcon size={18} />
+                  <PauseIcon size={14} />
                 ) : (
-                  <PlayIcon size={18} className="translate-x-[1px]" />
+                  <PlayIcon size={14} className="translate-x-[1px]" />
                 )}
               </button>
             </span>

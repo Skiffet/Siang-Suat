@@ -1,20 +1,19 @@
 "use client";
 
 import { useEffect } from "react";
-import { checkAndNotify, markVisitedToday } from "@/lib/reminder";
+import { checkAndNotify } from "@/lib/reminder";
 
 /**
- * Renders nothing. Marks today as visited once, then polls every 30s for the
- * rest of the session so the reminder can fire the moment its time arrives
- * without needing the settings screen open.
+ * Renders nothing. Polls every 30s for the rest of the session so any
+ * playlist's reminder can fire the moment its time arrives without needing
+ * that playlist's own page open.
  *
  * Mounted once at the root, alongside PlayerProvider — both are the same
  * shape of thing: state that has to survive whichever page is on screen.
  */
 export function DailyReminderRunner() {
   useEffect(() => {
-    markVisitedToday();
-    checkAndNotify(); // covers opening the tab right at or after the target time
+    checkAndNotify(); // covers opening a tab right at or after some reminder's time
     const id = setInterval(checkAndNotify, 30_000);
     return () => clearInterval(id);
   }, []);

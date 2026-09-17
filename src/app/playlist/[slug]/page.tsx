@@ -22,5 +22,5 @@ export default async function PlaylistPage({
   const { slug } = await params;
   const playlist = getPlaylist(slug);
   if (!playlist) notFound();
-  return <PlaylistDetail playlist={playlist} />;
+  return <PlaylistDetail playlist={playlist} reminderKey={`curated:${playlist.slug}`} />;
 }

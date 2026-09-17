@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { PlaylistWithChants } from "@/lib/types";
 import { isPlayingIn } from "@/lib/nowPlaying";
 import { formatDurationLong } from "@/lib/format";
+import { markPlaylistPlayedToday } from "@/lib/reminder";
 import { Cover } from "./Cover";
 import { ReminderButton } from "./ReminderButton";
 import { TrackRow } from "./TrackRow";
@@ -12,9 +13,12 @@ import { PauseIcon, PencilIcon, PlayIcon, ShuffleIcon } from "./Icons";
 
 export function PlaylistDetail({
   playlist,
+  /** "curated:<slug>" or "mine:<id>" — which reminder this playlist's own is. */
+  reminderKey,
   editHref,
 }: {
   playlist: PlaylistWithChants;
+  reminderKey: string;
   /** Set only for a playlist the listener made — nothing else can be edited. */
   editHref?: string;
 }) {
@@ -63,7 +67,13 @@ export function PlaylistDetail({
         <div className="relative mt-6 flex items-center gap-4">
           <button
             type="button"
-            onClick={() => (active ? toggle() : playQueue(playlist.items))}
+            onClick={() => {
+              if (active) toggle();
+              else {
+                playQueue(playlist.items);
+                markPlaylistPlayedToday(reminderKey);
+              }
+            }}
             disabled={playable === 0}
             aria-label={active && playing ? "หยุดชั่วคราว" : `เล่น ${playlist.title}`}
             className="grid size-14 place-items-center rounded-full bg-green text-on-green transition-transform duration-150 hover:scale-105 active:scale-95 disabled:opacity-40 disabled:hover:scale-100"
@@ -83,7 +93,11 @@ export function PlaylistDetail({
           >
             <ShuffleIcon size={24} />
           </button>
-          <ReminderButton />
+          <ReminderButton
+            playlistKey={reminderKey}
+            title={playlist.title}
+            cover={playlist.cover}
+          />
           {editHref && (
             <Link
               href={editHref}
