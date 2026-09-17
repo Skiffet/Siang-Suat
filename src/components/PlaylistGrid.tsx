@@ -26,22 +26,24 @@ export function PlaylistGrid({ playlists }: { playlists: PlaylistWithChants[] })
   const { playQueue, current, playing, toggle } = usePlayer();
 
   return (
-    <div className="grid grid-cols-2 gap-2 px-4 lg:grid-cols-3 lg:px-0">
+    <div className="grid grid-cols-3 gap-2 px-4 lg:grid-cols-4 lg:px-0">
       {/*
        * The id is minted on the click rather than while rendering — it comes
        * from the clock, so rendering it here would give the server and the
        * browser different hrefs and break hydration (see PlaylistsView's own
-       * create button, which hit exactly this).
+       * create button, which hit exactly this). Rendered as a small circle
+       * rather than a full card so it reads as an action sitting among the
+       * playlist tiles, not another playlist-sized box.
        */}
       <button
         type="button"
         onClick={() => router.push(`/playlist/edit/${newMyPlaylistId()}`)}
-        className="group relative flex aspect-[16/9] flex-col items-center justify-center gap-1.5 overflow-hidden rounded-lg border border-dashed border-line-light bg-surface text-left transition-colors duration-200 hover:bg-card"
+        className="group flex aspect-[16/9] flex-col items-center justify-center gap-1 text-center"
       >
-        <span className="grid size-8 place-items-center rounded-full bg-green text-on-green shadow-[var(--shadow-elevated)] transition-transform duration-150 group-hover:scale-105">
-          <PlusIcon size={16} />
+        <span className="grid size-9 place-items-center rounded-full bg-green text-on-green shadow-[var(--shadow-elevated)] transition-transform duration-150 group-hover:scale-105">
+          <PlusIcon size={14} />
         </span>
-        <span className="type-small-bold text-ink">สร้างเพลย์ลิสต์ใหม่</span>
+        <span className="type-micro text-muted">สร้างใหม่</span>
       </button>
 
       {playlists.map((playlist) => {
