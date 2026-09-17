@@ -63,7 +63,7 @@ export function NowPlaying() {
   const [rateOpen, setRateOpen] = useState(false);
   const [roundsOpen, setRoundsOpen] = useState(false);
   /** Swaps the art for the chant text, so reading along keeps the controls. */
-  const [reading, setReading] = useState(false);
+  const [reading, setReading] = useState(true);
 
   if (!current || !expanded) return null;
 
