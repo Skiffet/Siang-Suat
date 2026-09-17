@@ -37,7 +37,7 @@ export function PlaylistGrid({ playlists }: { playlists: PlaylistWithChants[] })
       <button
         type="button"
         onClick={() => router.push(`/playlist/edit/${newMyPlaylistId()}`)}
-        className="group flex w-20 shrink-0 flex-col items-center justify-center gap-1 text-center lg:w-24"
+        className="group flex w-20 shrink-0 flex-col items-center justify-center gap-1 rounded-lg text-center transition-colors duration-200 hover:bg-card lg:w-24"
       >
         <span className="grid size-9 place-items-center rounded-full bg-green text-on-green shadow-[var(--shadow-elevated)] transition-transform duration-150 group-hover:scale-105">
           <PlusIcon size={14} />
