@@ -26,7 +26,12 @@ export function PlaylistGrid({ playlists }: { playlists: PlaylistWithChants[] })
   const { playQueue, current, playing, toggle } = usePlayer();
 
   return (
-    <div className="grid grid-cols-3 gap-2 px-4 lg:grid-cols-4 lg:px-0">
+    // Fixed-width tracks on desktop (rather than N equal-fraction columns)
+    // so tiles stay a sane size and the "+" tile doesn't turn into a huge
+    // empty box when there are only one or two playlists to sit next to it —
+    // the page has no max-width wrapper, so on a wide monitor equal-fraction
+    // columns would otherwise stretch to fill the whole window.
+    <div className="grid grid-cols-3 gap-2 px-4 lg:grid-cols-[repeat(auto-fill,minmax(180px,1fr))] lg:px-0">
       {/*
        * The id is minted on the click rather than while rendering — it comes
        * from the clock, so rendering it here would give the server and the
