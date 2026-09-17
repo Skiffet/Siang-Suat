@@ -141,12 +141,18 @@ export function resolveMyPlaylist(
   saved: MyPlaylist,
   bySlug: Map<string, ChantWithAudio>,
 ): QueuedChant[] {
+  // If นะโม ตัสสะ is already one of the playlist's own entries, it will be
+  // pushed when the loop reaches it — auto-inserting it earlier too would
+  // duplicate the slug and break React's keys on the track list.
+  const hasOwnNamoEntry = saved.entries.some(
+    (entry) => (typeof entry === "string" ? entry : entry.slug) === "namo-tassa",
+  );
   const out: QueuedChant[] = [];
   for (const entry of saved.entries) {
     const spec = typeof entry === "string" ? { slug: entry } : entry;
     const chant = bySlug.get(spec.slug);
     if (!chant) continue;
-    if (typeof entry !== "string" && entry.namo) {
+    if (typeof entry !== "string" && entry.namo && !hasOwnNamoEntry) {
       const namo = bySlug.get("namo-tassa");
       if (namo && !out.some((c) => c.slug === "namo-tassa")) {
         out.push({ ...namo, rounds: namo.defaultRounds ?? 1 });
