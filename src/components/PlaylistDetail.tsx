@@ -5,6 +5,7 @@ import type { PlaylistWithChants } from "@/lib/types";
 import { isPlayingIn } from "@/lib/nowPlaying";
 import { formatDurationLong } from "@/lib/format";
 import { Cover } from "./Cover";
+import { ReminderButton } from "./ReminderButton";
 import { TrackRow } from "./TrackRow";
 import { usePlayer } from "./player/PlayerProvider";
 import { PauseIcon, PencilIcon, PlayIcon, ShuffleIcon } from "./Icons";
@@ -82,6 +83,7 @@ export function PlaylistDetail({
           >
             <ShuffleIcon size={24} />
           </button>
+          <ReminderButton />
           {editHref && (
             <Link
               href={editHref}

@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type { PlaylistWithChants } from "@/lib/types";
 import { isPlayingIn } from "@/lib/nowPlaying";
+import { newMyPlaylistId } from "@/lib/myPlaylists";
 import { Cover } from "./Cover";
-import { EqualizerIcon, PauseIcon, PlayIcon } from "./Icons";
+import { EqualizerIcon, PauseIcon, PlayIcon, PlusIcon } from "./Icons";
 import { usePlayer } from "./player/PlayerProvider";
 
 /**
@@ -19,10 +21,28 @@ import { usePlayer } from "./player/PlayerProvider";
  * touch device has no hover to reveal it with.
  */
 export function PlaylistGrid({ playlists }: { playlists: PlaylistWithChants[] }) {
+  const router = useRouter();
   const { playQueue, current, playing, toggle } = usePlayer();
 
   return (
     <div className="grid grid-cols-2 gap-3 px-4 lg:grid-cols-3 lg:px-0">
+      {/*
+       * The id is minted on the click rather than while rendering — it comes
+       * from the clock, so rendering it here would give the server and the
+       * browser different hrefs and break hydration (see PlaylistsView's own
+       * create button, which hit exactly this).
+       */}
+      <button
+        type="button"
+        onClick={() => router.push(`/playlist/edit/${newMyPlaylistId()}`)}
+        className="group relative flex aspect-[4/3] flex-col items-center justify-center gap-2 overflow-hidden rounded-xl border border-dashed border-line-light bg-surface text-left transition-colors duration-200 hover:bg-card"
+      >
+        <span className="grid size-11 place-items-center rounded-full bg-green text-on-green shadow-[var(--shadow-elevated)] transition-transform duration-150 group-hover:scale-105">
+          <PlusIcon size={20} />
+        </span>
+        <span className="type-caption-bold text-ink">สร้างเพลย์ลิสต์ใหม่</span>
+      </button>
+
       {playlists.map((playlist) => {
         const active = isPlayingIn(playlist.items, current?.slug);
         return (

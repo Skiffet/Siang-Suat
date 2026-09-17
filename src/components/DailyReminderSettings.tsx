@@ -23,7 +23,7 @@ const neverChanges = () => () => {};
  * UI rather than left to be discovered the day it silently doesn't fire,
  * because the difference is the whole trust of the feature.
  */
-export function DailyReminderSettings() {
+export function DailyReminderSettings({ compact = false }: { compact?: boolean }) {
   const settings = useSyncExternalStore(
     subscribeReminder,
     getReminderSnapshot,
@@ -68,7 +68,7 @@ export function DailyReminderSettings() {
 
   if (permission === "unsupported") {
     return (
-      <section className="mt-8 rounded-xl bg-surface p-4">
+      <section className={compact ? "" : "mt-8 rounded-xl bg-surface p-4"}>
         <p className="type-caption text-muted">
           เบราว์เซอร์นี้ไม่รองรับการแจ้งเตือน
         </p>
@@ -77,13 +77,17 @@ export function DailyReminderSettings() {
   }
 
   return (
-    <section className="mt-8">
-      <h2 className="type-feature text-ink">เตือนถ้ายังไม่ได้เข้ามา</h2>
-      <p className="mt-1 type-small text-muted">
-        ตั้งเวลาไว้ ถ้าวันนั้นยังไม่ได้เปิดแอปเลยจะเด้งเตือนให้
-      </p>
+    <section className={compact ? "" : "mt-8"}>
+      {!compact && (
+        <>
+          <h2 className="type-feature text-ink">เตือนถ้ายังไม่ได้เข้ามา</h2>
+          <p className="mt-1 type-small text-muted">
+            ตั้งเวลาไว้ ถ้าวันนั้นยังไม่ได้เปิดแอปเลยจะเด้งเตือนให้
+          </p>
+        </>
+      )}
 
-      <div className="mt-3 rounded-xl bg-surface p-4">
+      <div className={compact ? "" : "mt-3 rounded-xl bg-surface p-4"}>
         <label className="flex cursor-pointer items-center gap-3">
           <span
             className={`grid size-6 shrink-0 place-items-center rounded-md transition-colors ${
