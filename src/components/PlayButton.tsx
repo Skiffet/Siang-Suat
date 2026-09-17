@@ -20,7 +20,7 @@ export function PlayButton({
   size?: number;
   className?: string;
 }) {
-  const { play, toggle, isCurrent, playing } = usePlayer();
+  const { play, toggle, isCurrent, playing, setExpanded } = usePlayer();
   const active = isCurrent(chant.slug);
   const showPause = active && playing;
 
@@ -30,8 +30,14 @@ export function PlayButton({
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
-        if (active) toggle();
-        else play(chant, queue);
+        if (showPause) toggle();
+        else if (active) {
+          // Resuming a chant that's already loaded but paused — this is as
+          // much an explicit "play this" press as starting fresh, so it
+          // should bring the full-screen player back too.
+          toggle();
+          setExpanded(true);
+        } else play(chant, queue);
       }}
       aria-label={showPause ? `หยุด ${chant.title}` : `เล่น ${chant.title}`}
       style={{ width: size, height: size }}

@@ -22,7 +22,8 @@ export function PlaylistDetail({
   /** Set only for a playlist the listener made — nothing else can be edited. */
   editHref?: string;
 }) {
-  const { playQueue, current, playing, toggle, shuffle, toggleShuffle } = usePlayer();
+  const { playQueue, current, playing, toggle, shuffle, toggleShuffle, setExpanded } =
+    usePlayer();
   const active = isPlayingIn(playlist.items, current?.slug);
   const playable = playlist.items.filter((c) => c.audioUrl).length;
 
@@ -68,8 +69,11 @@ export function PlaylistDetail({
           <button
             type="button"
             onClick={() => {
-              if (active) toggle();
-              else {
+              if (active && playing) toggle();
+              else if (active) {
+                toggle();
+                setExpanded(true);
+              } else {
                 playQueue(playlist.items);
                 markPlaylistPlayedToday(reminderKey);
               }

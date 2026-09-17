@@ -23,7 +23,7 @@ import { usePlayer } from "./player/PlayerProvider";
  */
 export function PlaylistGrid({ playlists }: { playlists: PlaylistWithChants[] }) {
   const router = useRouter();
-  const { playQueue, current, playing, toggle } = usePlayer();
+  const { playQueue, current, playing, toggle, setExpanded } = usePlayer();
 
   return (
     // The "+" tile is a flex sibling next to the grid, not a grid item
@@ -87,8 +87,11 @@ export function PlaylistGrid({ playlists }: { playlists: PlaylistWithChants[] })
                   type="button"
                   onClick={(e) => {
                     e.preventDefault();
-                    if (active) toggle();
-                    else {
+                    if (active && playing) toggle();
+                    else if (active) {
+                      toggle();
+                      setExpanded(true);
+                    } else {
                       playQueue(playlist.items);
                       markPlaylistPlayedToday(`curated:${playlist.slug}`);
                     }

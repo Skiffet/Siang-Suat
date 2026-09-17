@@ -23,19 +23,29 @@ export function TrackRow({
   queue?: ChantWithAudio[];
   position?: number;
 }) {
-  const { play, toggle, isCurrent, playing } = usePlayer();
+  const { play, toggle, isCurrent, playing, setExpanded } = usePlayer();
   const active = isCurrent(chant.slug);
+
+  // Resuming a paused-but-current chant is as much an explicit "play this"
+  // press as starting fresh, so it should bring the full-screen player back
+  // too — only an actual pause should leave the browsing view alone.
+  function pressPlay() {
+    if (active && playing) toggle();
+    else if (active) {
+      toggle();
+      setExpanded(true);
+    } else play(chant, queue);
+  }
 
   return (
     <div
       role="button"
       tabIndex={0}
-      onClick={() => (active ? toggle() : play(chant, queue))}
+      onClick={pressPlay}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
-          if (active) toggle();
-          else play(chant, queue);
+          pressPlay();
         }
       }}
       className="group flex cursor-pointer items-center gap-3 rounded-md px-2 py-2 transition-colors duration-150 hover:bg-card-alt"
