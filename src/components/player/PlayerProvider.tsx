@@ -148,8 +148,16 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
   const roundsActive = roundsIndex === index;
   const upNext = queue[index + 1] ?? (repeat === "all" ? queue[0] ?? null : null);
 
-  /** Load a track and start it. Kept in one place so every entry point matches. */
-  const start = useCallback((list: QueuedChant[], at: number) => {
+  /**
+   * Load a track and start it. Kept in one place so every entry point matches.
+   *
+   * `expandOnStart` opens the full-screen player, and is true only for a
+   * chant someone explicitly pressed play on (via `play`/`playQueue`) — not
+   * for the queue quietly advancing to the next track on its own, which
+   * should not yank someone back to the full-screen view if they had
+   * deliberately collapsed it to browse while listening.
+   */
+  const start = useCallback((list: QueuedChant[], at: number, expandOnStart = false) => {
     const chant = list[at];
     if (!chant) return;
     if (!chant.audioUrl) {
@@ -158,6 +166,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
       return;
     }
     setNotice(null);
+    if (expandOnStart) setExpanded(true);
     queueRef.current = list;
     setQueue(list);
     setIndex(at);
@@ -185,7 +194,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
       const at = ordered.findIndex(
         (c) => c.slug === chant.slug || c.slug.startsWith(`${chant.slug}#`),
       );
-      start(ordered, at < 0 ? 0 : at);
+      start(ordered, at < 0 ? 0 : at, true);
     },
     [shuffle, start],
   );
@@ -195,7 +204,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
       const queue = expand(list);
       // Pressing play on a playlist should land on something audible.
       const firstPlayable = queue.findIndex((c, i) => i >= startAt && c.audioUrl);
-      start(queue, firstPlayable < 0 ? startAt : firstPlayable);
+      start(queue, firstPlayable < 0 ? startAt : firstPlayable, true);
     },
     [start],
   );
