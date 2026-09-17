@@ -7,6 +7,7 @@ import { CATEGORY_LABELS } from "@/lib/categories";
 import { formatDurationLong } from "@/lib/format";
 import { Cover } from "./Cover";
 import { usePlayer } from "./player/PlayerProvider";
+import { AddToPlaylistButton } from "./AddToPlaylistButton";
 import { PlayButton } from "./PlayButton";
 import { Rail } from "./Rail";
 import { Transcript } from "./Transcript";
@@ -106,6 +107,7 @@ export function ChantDetail({
            * than leaving the audio to just stop.
            */}
           <PlayButton chant={chant} queue={[chant, ...related]} size={56} />
+          <AddToPlaylistButton chant={chant} size={40} />
         </div>
       </header>
 
