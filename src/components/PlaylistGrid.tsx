@@ -18,8 +18,10 @@ import { usePlayer } from "./player/PlayerProvider";
  * weight.
  *
  * Pressing the play circle starts the whole playlist; pressing the tile
- * itself opens it. The circle is always visible, not hover-revealed — a
- * touch device has no hover to reveal it with.
+ * itself opens it. The circle only appears on hover, matching the rail
+ * cards below — a touch device that can't hover still has a way in, the
+ * same way it does for a rail card: tapping the tile opens the playlist
+ * page, which has its own always-visible play button.
  */
 export function PlaylistGrid({ playlists }: { playlists: PlaylistWithChants[] }) {
   const router = useRouter();
@@ -83,32 +85,40 @@ export function PlaylistGrid({ playlists }: { playlists: PlaylistWithChants[] })
                   </span>
                 </span>
 
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    if (active && playing) toggle();
-                    else if (active) {
-                      toggle();
-                      setExpanded(true);
-                    } else {
-                      playQueue(playlist.items);
-                      markPlaylistPlayedToday(`curated:${playlist.slug}`);
-                    }
-                  }}
-                  aria-label={
+                <span
+                  className={`shrink-0 transition-all duration-200 ${
                     active && playing
-                      ? `หยุด ${playlist.title}`
-                      : `เล่นเพลย์ลิสต์ ${playlist.title}`
-                  }
-                  className="grid size-8 shrink-0 place-items-center rounded-full bg-green text-on-green shadow-[var(--shadow-elevated)] transition-transform duration-150 hover:scale-105 active:scale-95"
+                      ? "opacity-100"
+                      : "translate-y-1 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100"
+                  }`}
                 >
-                  {active && playing ? (
-                    <PauseIcon size={14} />
-                  ) : (
-                    <PlayIcon size={14} className="translate-x-[1px]" />
-                  )}
-                </button>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (active && playing) toggle();
+                      else if (active) {
+                        toggle();
+                        setExpanded(true);
+                      } else {
+                        playQueue(playlist.items);
+                        markPlaylistPlayedToday(`curated:${playlist.slug}`);
+                      }
+                    }}
+                    aria-label={
+                      active && playing
+                        ? `หยุด ${playlist.title}`
+                        : `เล่นเพลย์ลิสต์ ${playlist.title}`
+                    }
+                    className="grid size-8 place-items-center rounded-full bg-green text-on-green shadow-[var(--shadow-elevated)] transition-transform duration-150 hover:scale-105 active:scale-95"
+                  >
+                    {active && playing ? (
+                      <PauseIcon size={14} />
+                    ) : (
+                      <PlayIcon size={14} className="translate-x-[1px]" />
+                    )}
+                  </button>
+                </span>
               </span>
             </Link>
           );
