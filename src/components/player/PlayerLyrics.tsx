@@ -15,7 +15,14 @@ import { useLyrics } from "../useLyrics";
  * The list scrolls itself rather than the page, so the controls below stay put
  * while the lines move.
  */
-export function PlayerLyrics({ chant }: { chant: ChantWithAudio }) {
+export function PlayerLyrics({
+  chant,
+  textScale = 1,
+}: {
+  chant: ChantWithAudio;
+  /** Multiplies the Pali/translation line sizes — the cue lines stay fixed. */
+  textScale?: number;
+}) {
   const { lines, activeIndex, synced, goTo } = useLyrics(chant);
   const listRef = useRef<HTMLDivElement>(null);
 
@@ -66,12 +73,20 @@ export function PlayerLyrics({ chant }: { chant: ChantWithAudio }) {
               type="button"
               disabled={!synced}
               onClick={() => goTo(line)}
+              style={
+                cue
+                  ? undefined
+                  : {
+                      fontSize: `${(pali ? 22 : 16) * textScale}px`,
+                      lineHeight: `${(pali ? 42 : 30) * textScale}px`,
+                    }
+              }
               className={`block w-full rounded-lg px-3 py-2 transition-all duration-300 ${
                 cue
                   ? "text-center text-[13px] font-semibold uppercase tracking-[2px]"
                   : pali
-                    ? "text-left font-serif text-[22px] leading-[42px]"
-                    : "text-left text-[16px] leading-[30px]"
+                    ? "text-left font-serif"
+                    : "text-left"
               } ${
                 isActive
                   ? "text-ink"

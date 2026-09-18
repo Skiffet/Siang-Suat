@@ -185,6 +185,19 @@ export function TextIcon(p: IconProps) {
   );
 }
 
+export function TextSizeIcon(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <text x="1" y="18" fontSize="11" fontWeight="700" fontFamily="sans-serif">
+        ก
+      </text>
+      <text x="11" y="20" fontSize="17" fontWeight="700" fontFamily="sans-serif">
+        ก
+      </text>
+    </Svg>
+  );
+}
+
 export function MoreIcon(p: IconProps) {
   return (
     <Svg {...p}>

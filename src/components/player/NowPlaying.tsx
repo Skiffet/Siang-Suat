@@ -15,7 +15,9 @@ import {
   ShuffleIcon,
   SpeedIcon,
   TextIcon,
+  TextSizeIcon,
 } from "../Icons";
+import { loadTextSize, saveTextSize, TEXT_SIZE_LABELS, TEXT_SIZE_STEPS } from "@/lib/textSize";
 import { PlayerLyrics } from "./PlayerLyrics";
 import { usePlayer } from "./PlayerProvider";
 import { RATE_OPTIONS } from "./RatePicker";
@@ -62,8 +64,17 @@ export function NowPlaying() {
   const [sleepOpen, setSleepOpen] = useState(false);
   const [rateOpen, setRateOpen] = useState(false);
   const [roundsOpen, setRoundsOpen] = useState(false);
+  const [textSizeOpen, setTextSizeOpen] = useState(false);
   /** Swaps the art for the chant text, so reading along keeps the controls. */
   const [reading, setReading] = useState(true);
+  // Read once from storage at mount. This component is always in the tree
+  // client-side (it just renders nothing until `expanded`), so there is no
+  // SSR value to mismatch against, and no later remount to re-read on.
+  const [textScale, setTextScaleState] = useState(loadTextSize);
+  function setTextScale(scale: number) {
+    setTextScaleState(scale);
+    saveTextSize(scale);
+  }
 
   if (!current || !expanded) return null;
 
@@ -130,7 +141,7 @@ export function NowPlaying() {
                 </p>
               </div>
             </div>
-            <PlayerLyrics chant={current} />
+            <PlayerLyrics chant={current} textScale={textScale} />
           </>
         ) : (
           <div className="mt-6">
@@ -246,11 +257,33 @@ export function NowPlaying() {
               <TextIcon size={16} />
               บทสวด
             </button>
+            {reading && (
+              <button
+                type="button"
+                onClick={() => {
+                  setTextSizeOpen((o) => !o);
+                  setRateOpen(false);
+                  setSleepOpen(false);
+                  setRoundsOpen(false);
+                }}
+                aria-pressed={textScale !== 1}
+                aria-label="ขนาดตัวอักษรบทสวด"
+                className={`flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full px-4 py-2.5 type-small-bold transition-colors ${
+                  textScale !== 1
+                    ? "bg-green text-on-green"
+                    : "bg-mid text-ink hover:bg-card"
+                }`}
+              >
+                <TextSizeIcon size={16} />
+                ขนาดตัวอักษร
+              </button>
+            )}
             <button
               type="button"
               onClick={() => {
                 setRateOpen((o) => !o);
                 setSleepOpen(false);
+                setTextSizeOpen(false);
               }}
               aria-pressed={rate !== 1}
               className={`flex items-center gap-1.5 shrink-0 whitespace-nowrap rounded-full px-4 py-2.5 type-small-bold transition-colors ${
@@ -267,6 +300,7 @@ export function NowPlaying() {
               onClick={() => {
                 setSleepOpen((o) => !o);
                 setRateOpen(false);
+                setTextSizeOpen(false);
               }}
               className={`flex items-center gap-2 shrink-0 whitespace-nowrap rounded-full px-4 py-2.5 type-small-bold transition-colors ${
                 sleepLeftSec != null
@@ -285,6 +319,7 @@ export function NowPlaying() {
                 setRoundsOpen((o) => !o);
                 setRateOpen(false);
                 setSleepOpen(false);
+                setTextSizeOpen(false);
               }}
               aria-pressed={rounds > 1}
               className={`flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full px-4 py-2.5 type-small-bold transition-colors ${
@@ -390,6 +425,33 @@ export function NowPlaying() {
                   ยกเลิก
                 </button>
               )}
+            </div>
+          </div>
+        )}
+
+        {textSizeOpen && (
+          <div className="animate-fade-in mt-3 shrink-0 rounded-xl bg-card p-3 shadow-[var(--shadow-dialog)]">
+            <p className="px-1 pb-2 type-small text-muted">ขนาดตัวอักษรบทสวด</p>
+            <div className="flex flex-wrap gap-2">
+              {TEXT_SIZE_STEPS.map((scale, i) => (
+                <button
+                  key={scale}
+                  type="button"
+                  onClick={() => {
+                    setTextScale(scale);
+                    setTextSizeOpen(false);
+                  }}
+                  aria-pressed={textScale === scale}
+                  style={{ fontSize: `${13 * scale}px` }}
+                  className={`rounded-full px-3.5 py-2 font-bold transition-colors ${
+                    textScale === scale
+                      ? "bg-green text-on-green"
+                      : "bg-mid text-ink hover:bg-base"
+                  }`}
+                >
+                  {TEXT_SIZE_LABELS[i]}
+                </button>
+              ))}
             </div>
           </div>
         )}
