@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState, useSyncExternalStore } from "react";
 import type { ChantWithAudio, PlaylistEntry } from "@/lib/types";
 import { formatDurationLong } from "@/lib/format";
@@ -37,14 +37,19 @@ const neverChanges = () => () => {};
  * client lets the editor below seed itself as it mounts instead, so it is
  * correct on its first paint.
  */
-export function PlaylistEditor(props: { id: string; chants: ChantWithAudio[] }) {
+export function PlaylistEditor({ chants }: { chants: ChantWithAudio[] }) {
+  const searchParams = useSearchParams();
+  // Minted once per mount rather than read fresh on every render — a missing
+  // `?id=` (a stale bookmark, say) still needs one stable id for the
+  // lifetime of this visit instead of a new one on every re-render.
+  const [id] = useState(() => searchParams.get("id") ?? newMyPlaylistId());
   const onClient = useSyncExternalStore(
     neverChanges,
     () => true,
     () => false,
   );
   if (!onClient) return null;
-  return <Editor {...props} />;
+  return <Editor id={id} chants={chants} />;
 }
 
 function Editor({ id, chants }: { id: string; chants: ChantWithAudio[] }) {

@@ -78,7 +78,7 @@ export function PlaylistsView({
       const items = resolveMyPlaylist(saved, bySlug);
       return {
         key: `mine:${saved.id}`,
-        href: `/playlist/mine/${saved.id}`,
+        href: `/playlist/mine?id=${saved.id}`,
         title: saved.title,
         cover: saved.cover,
         count: items.length,
@@ -108,7 +108,7 @@ export function PlaylistsView({
   // The id is minted on the click rather than while rendering: it is made
   // from the clock, so rendering it would give the server and the browser
   // different answers and break hydration.
-  const createPlaylist = () => router.push(`/playlist/edit/${newMyPlaylistId()}`);
+  const createPlaylist = () => router.push(`/playlist/edit?id=${newMyPlaylistId()}`);
 
   return (
     <div className="px-4 py-6 lg:px-8 lg:py-8">

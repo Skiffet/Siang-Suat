@@ -16,7 +16,7 @@ import { PlusIcon } from "./Icons";
 function hrefFor(key: string): string {
   const [kind, ...rest] = key.split(":");
   const id = rest.join(":");
-  return kind === "mine" ? `/playlist/mine/${id}` : `/playlist/${id}`;
+  return kind === "mine" ? `/playlist/mine?id=${id}` : `/playlist/${id}`;
 }
 
 /**

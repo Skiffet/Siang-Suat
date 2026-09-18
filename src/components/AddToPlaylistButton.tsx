@@ -64,7 +64,7 @@ export function AddToPlaylistButton({
     const id = newMyPlaylistId();
     saveMyPlaylist({ id, title: chant.title, cover: chant.cover, entries: [chant.slug] });
     setOpen(false);
-    router.push(`/playlist/edit/${id}`);
+    router.push(`/playlist/edit?id=${id}`);
   }
 
   return (

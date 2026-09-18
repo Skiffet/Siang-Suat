@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useMemo, useSyncExternalStore } from "react";
 import type { ChantWithAudio } from "@/lib/types";
 import {
@@ -19,13 +20,8 @@ import { PlaylistDetail } from "./PlaylistDetail";
  * Reactive rather than a one-shot read: coming back here from the editor
  * (save, rename, reorder) has to show the result immediately.
  */
-export function MyPlaylistDetail({
-  id,
-  chants,
-}: {
-  id: string;
-  chants: ChantWithAudio[];
-}) {
+export function MyPlaylistDetail({ chants }: { chants: ChantWithAudio[] }) {
+  const id = useSearchParams().get("id") ?? "";
   const bySlug = useMemo(() => new Map(chants.map((c) => [c.slug, c])), [chants]);
   const saved = useSyncExternalStore(
     subscribeMyPlaylists,
@@ -64,7 +60,7 @@ export function MyPlaylistDetail({
         totalSec,
       }}
       reminderKey={`mine:${saved.id}`}
-      editHref={`/playlist/edit/${saved.id}`}
+      editHref={`/playlist/edit?id=${saved.id}`}
     />
   );
 }
