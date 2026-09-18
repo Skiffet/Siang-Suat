@@ -5,17 +5,15 @@ import { useState } from "react";
 import { Cover } from "../Cover";
 import {
   ChevronDownIcon,
-  ClockIcon,
   MoreIcon,
   NextIcon,
   PauseIcon,
   PlayIcon,
   PrevIcon,
   RepeatIcon,
+  SettingsIcon,
   ShuffleIcon,
-  SpeedIcon,
   TextIcon,
-  TextSizeIcon,
 } from "../Icons";
 import { loadTextSize, saveTextSize, TEXT_SIZE_LABELS, TEXT_SIZE_STEPS } from "@/lib/textSize";
 import { PlayerLyrics } from "./PlayerLyrics";
@@ -61,10 +59,11 @@ export function NowPlaying() {
     setRounds,
   } = usePlayer();
 
-  const [sleepOpen, setSleepOpen] = useState(false);
-  const [rateOpen, setRateOpen] = useState(false);
   const [roundsOpen, setRoundsOpen] = useState(false);
-  const [textSizeOpen, setTextSizeOpen] = useState(false);
+  // Speed, sleep timer and text size are all "set once and forget" —
+  // grouped behind one gear so the row of pills doesn't itself need
+  // scrolling to reach the things people actually touch every listen.
+  const [settingsOpen, setSettingsOpen] = useState(false);
   /** Swaps the art for the chant text, so reading along keeps the controls. */
   const [reading, setReading] = useState(true);
   // Read once from storage at mount. This component is always in the tree
@@ -239,7 +238,9 @@ export function NowPlaying() {
           </button>
         </div>
 
-        {/* Reading, sleep timer, save — what people reach for at night. */}
+        {/* Reading and rounds — what changes every listen. Speed, sleep and
+            text size are set-once preferences, tucked behind the gear so
+            this row stays put rather than needing a scroll to see it all. */}
         <div
           className={`no-scrollbar -mx-5 shrink-0 overflow-x-auto px-5 ${reading ? "mt-4" : "mt-7"}`}
         >
@@ -257,69 +258,11 @@ export function NowPlaying() {
               <TextIcon size={16} />
               บทสวด
             </button>
-            {reading && (
-              <button
-                type="button"
-                onClick={() => {
-                  setTextSizeOpen((o) => !o);
-                  setRateOpen(false);
-                  setSleepOpen(false);
-                  setRoundsOpen(false);
-                }}
-                aria-pressed={textScale !== 1}
-                aria-label="ขนาดตัวอักษรบทสวด"
-                className={`flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full px-4 py-2.5 type-small-bold transition-colors ${
-                  textScale !== 1
-                    ? "bg-green text-on-green"
-                    : "bg-mid text-ink hover:bg-card"
-                }`}
-              >
-                <TextSizeIcon size={16} />
-                ขนาดตัวอักษร
-              </button>
-            )}
-            <button
-              type="button"
-              onClick={() => {
-                setRateOpen((o) => !o);
-                setSleepOpen(false);
-                setTextSizeOpen(false);
-              }}
-              aria-pressed={rate !== 1}
-              className={`flex items-center gap-1.5 shrink-0 whitespace-nowrap rounded-full px-4 py-2.5 type-small-bold transition-colors ${
-                rate !== 1
-                  ? "bg-green text-on-green"
-                  : "bg-mid text-ink hover:bg-card"
-              }`}
-            >
-              <SpeedIcon size={16} />
-              {rate}x
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setSleepOpen((o) => !o);
-                setRateOpen(false);
-                setTextSizeOpen(false);
-              }}
-              className={`flex items-center gap-2 shrink-0 whitespace-nowrap rounded-full px-4 py-2.5 type-small-bold transition-colors ${
-                sleepLeftSec != null
-                  ? "bg-green text-on-green"
-                  : "bg-mid text-ink hover:bg-card"
-              }`}
-            >
-              <ClockIcon size={16} />
-              {sleepLeftSec != null
-                ? `${Math.ceil(sleepLeftSec / 60)} นาที`
-                : "ตั้งเวลา"}
-            </button>
             <button
               type="button"
               onClick={() => {
                 setRoundsOpen((o) => !o);
-                setRateOpen(false);
-                setSleepOpen(false);
-                setTextSizeOpen(false);
+                setSettingsOpen(false);
               }}
               aria-pressed={rounds > 1}
               className={`flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full px-4 py-2.5 type-small-bold transition-colors ${
@@ -334,6 +277,26 @@ export function NowPlaying() {
                 : roundsActive
                   ? `${round}/${rounds} จบ`
                   : `${rounds} จบ`}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setSettingsOpen((o) => !o);
+                setRoundsOpen(false);
+              }}
+              aria-expanded={settingsOpen}
+              aria-label="ตั้งค่าเพิ่มเติม"
+              className={`relative grid size-10 shrink-0 place-items-center rounded-full transition-colors ${
+                settingsOpen
+                  ? "bg-green text-on-green"
+                  : "bg-mid text-ink hover:bg-card"
+              }`}
+            >
+              <SettingsIcon size={18} />
+              {!settingsOpen &&
+                (rate !== 1 || sleepLeftSec != null || (reading && textScale !== 1)) && (
+                  <span className="absolute right-0.5 top-0.5 size-2 rounded-full bg-green" />
+                )}
             </button>
           </div>
         </div>
@@ -366,92 +329,87 @@ export function NowPlaying() {
           </div>
         )}
 
-        {rateOpen && (
-          <div className="animate-fade-in mt-3 shrink-0 rounded-xl bg-card p-3 shadow-[var(--shadow-dialog)]">
-            <p className="px-1 pb-2 type-small text-muted">
-              ความเร็วในการสวด — เสียงยังคงระดับเดิม ไม่แหลมขึ้น
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {RATE_OPTIONS.map((r) => (
-                <button
-                  key={r}
-                  type="button"
-                  onClick={() => {
-                    setRate(r);
-                    setRateOpen(false);
-                  }}
-                  aria-pressed={rate === r}
-                  className={`rounded-full px-3.5 py-2 type-small-bold transition-colors ${
-                    rate === r
-                      ? "bg-green text-on-green"
-                      : "bg-mid text-ink hover:bg-base"
-                  }`}
-                >
-                  {r === 1 ? "ปกติ" : `${r}x`}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
+        {settingsOpen && (
+          <div className="animate-fade-in mt-3 shrink-0 space-y-4 rounded-xl bg-card p-3 shadow-[var(--shadow-dialog)]">
+            {reading && (
+              <div>
+                <p className="px-1 pb-2 type-small text-muted">ขนาดตัวอักษรบทสวด</p>
+                <div className="flex flex-wrap gap-2">
+                  {TEXT_SIZE_STEPS.map((scale, i) => (
+                    <button
+                      key={scale}
+                      type="button"
+                      onClick={() => setTextScale(scale)}
+                      aria-pressed={textScale === scale}
+                      style={{ fontSize: `${13 * scale}px` }}
+                      className={`rounded-full px-3.5 py-2 font-bold transition-colors ${
+                        textScale === scale
+                          ? "bg-green text-on-green"
+                          : "bg-mid text-ink hover:bg-base"
+                      }`}
+                    >
+                      {TEXT_SIZE_LABELS[i]}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
-        {sleepOpen && (
-          <div className="animate-fade-in mt-3 shrink-0 rounded-xl bg-card p-3 shadow-[var(--shadow-dialog)]">
-            <p className="px-1 pb-2 type-small text-muted">
-              หยุดเล่นอัตโนมัติหลังจาก
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {SLEEP_OPTIONS.map((min) => (
-                <button
-                  key={min}
-                  type="button"
-                  onClick={() => {
-                    startSleepTimer(min);
-                    setSleepOpen(false);
-                  }}
-                  className="rounded-full bg-mid px-3.5 py-2 type-small-bold text-ink transition-colors hover:bg-base"
-                >
-                  {min} นาที
-                </button>
-              ))}
-              {sleepLeftSec != null && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    startSleepTimer(null);
-                    setSleepOpen(false);
-                  }}
-                  className="rounded-full border border-line-light px-3.5 py-2 type-small-bold text-muted transition-colors hover:text-ink"
-                >
-                  ยกเลิก
-                </button>
-              )}
+            <div>
+              <p className="px-1 pb-2 type-small text-muted">
+                ความเร็วในการสวด — เสียงยังคงระดับเดิม ไม่แหลมขึ้น
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {RATE_OPTIONS.map((r) => (
+                  <button
+                    key={r}
+                    type="button"
+                    onClick={() => setRate(r)}
+                    aria-pressed={rate === r}
+                    className={`rounded-full px-3.5 py-2 type-small-bold transition-colors ${
+                      rate === r
+                        ? "bg-green text-on-green"
+                        : "bg-mid text-ink hover:bg-base"
+                    }`}
+                  >
+                    {r === 1 ? "ปกติ" : `${r}x`}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
 
-        {textSizeOpen && (
-          <div className="animate-fade-in mt-3 shrink-0 rounded-xl bg-card p-3 shadow-[var(--shadow-dialog)]">
-            <p className="px-1 pb-2 type-small text-muted">ขนาดตัวอักษรบทสวด</p>
-            <div className="flex flex-wrap gap-2">
-              {TEXT_SIZE_STEPS.map((scale, i) => (
-                <button
-                  key={scale}
-                  type="button"
-                  onClick={() => {
-                    setTextScale(scale);
-                    setTextSizeOpen(false);
-                  }}
-                  aria-pressed={textScale === scale}
-                  style={{ fontSize: `${13 * scale}px` }}
-                  className={`rounded-full px-3.5 py-2 font-bold transition-colors ${
-                    textScale === scale
-                      ? "bg-green text-on-green"
-                      : "bg-mid text-ink hover:bg-base"
-                  }`}
-                >
-                  {TEXT_SIZE_LABELS[i]}
-                </button>
-              ))}
+            <div>
+              <p className="px-1 pb-2 type-small text-muted">
+                หยุดเล่นอัตโนมัติหลังจาก
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {SLEEP_OPTIONS.map((min) => (
+                  <button
+                    key={min}
+                    type="button"
+                    onClick={() => startSleepTimer(min)}
+                    aria-pressed={
+                      sleepLeftSec != null && Math.ceil(sleepLeftSec / 60) === min
+                    }
+                    className={`rounded-full px-3.5 py-2 type-small-bold transition-colors ${
+                      sleepLeftSec != null && Math.ceil(sleepLeftSec / 60) === min
+                        ? "bg-green text-on-green"
+                        : "bg-mid text-ink hover:bg-base"
+                    }`}
+                  >
+                    {min} นาที
+                  </button>
+                ))}
+                {sleepLeftSec != null && (
+                  <button
+                    type="button"
+                    onClick={() => startSleepTimer(null)}
+                    className="rounded-full border border-line-light px-3.5 py-2 type-small-bold text-muted transition-colors hover:text-ink"
+                  >
+                    ยกเลิก
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         )}
