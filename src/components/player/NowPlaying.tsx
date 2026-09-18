@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Cover } from "../Cover";
 import {
   ChevronDownIcon,
@@ -64,6 +64,26 @@ export function NowPlaying() {
   // grouped behind one gear so the row of pills doesn't itself need
   // scrolling to reach the things people actually touch every listen.
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const settingsPanelRef = useRef<HTMLDivElement>(null);
+  const settingsButtonRef = useRef<HTMLButtonElement>(null);
+
+  // A tap anywhere else on the full-screen player closes the settings sheet,
+  // rather than only the gear that opened it — it's an inline panel, not a
+  // small floating popover, so "elsewhere" reasonably means most of the screen.
+  useEffect(() => {
+    if (!settingsOpen) return;
+    const onDown = (e: MouseEvent) => {
+      const target = e.target as Node;
+      if (
+        !settingsPanelRef.current?.contains(target) &&
+        !settingsButtonRef.current?.contains(target)
+      ) {
+        setSettingsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, [settingsOpen]);
   /** Swaps the art for the chant text, so reading along keeps the controls. */
   const [reading, setReading] = useState(true);
   // Read once from storage at mount. This component is always in the tree
@@ -279,6 +299,7 @@ export function NowPlaying() {
                   : `${rounds} จบ`}
             </button>
             <button
+              ref={settingsButtonRef}
               type="button"
               onClick={() => {
                 setSettingsOpen((o) => !o);
@@ -330,7 +351,10 @@ export function NowPlaying() {
         )}
 
         {settingsOpen && (
-          <div className="animate-fade-in mt-3 shrink-0 space-y-4 rounded-xl bg-card p-3 shadow-[var(--shadow-dialog)]">
+          <div
+            ref={settingsPanelRef}
+            className="animate-fade-in mt-3 shrink-0 space-y-4 rounded-xl bg-card p-3 shadow-[var(--shadow-dialog)]"
+          >
             {reading && (
               <div>
                 <p className="px-1 pb-2 type-small text-muted">ขนาดตัวอักษรบทสวด</p>
