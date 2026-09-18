@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef } from "react";
 import type { ChantWithAudio } from "@/lib/types";
 import { CATEGORY_LABELS } from "@/lib/categories";
 import { formatDurationLong } from "@/lib/format";
+import { BackButton } from "./BackButton";
 import { Cover } from "./Cover";
 import { usePlayer } from "./player/PlayerProvider";
 import { AddToPlaylistButton } from "./AddToPlaylistButton";
@@ -72,6 +73,8 @@ export function ChantDetail({
             WebkitMaskImage: "linear-gradient(to bottom, black, transparent)",
           }}
         />
+
+        <BackButton />
 
         <div className="relative flex flex-col gap-5 sm:flex-row sm:items-end">
           <Cover

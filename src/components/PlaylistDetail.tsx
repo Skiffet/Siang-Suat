@@ -5,6 +5,7 @@ import type { PlaylistWithChants } from "@/lib/types";
 import { isPlayingIn } from "@/lib/nowPlaying";
 import { formatDurationLong } from "@/lib/format";
 import { markPlaylistPlayedToday } from "@/lib/reminder";
+import { BackButton } from "./BackButton";
 import { Cover } from "./Cover";
 import { ReminderButton } from "./ReminderButton";
 import { TrackRow } from "./TrackRow";
@@ -41,6 +42,8 @@ export function PlaylistDetail({
             WebkitMaskImage: "linear-gradient(to bottom, black, transparent)",
           }}
         />
+
+        <BackButton />
 
         <div className="relative flex flex-col gap-5 sm:flex-row sm:items-end">
           <Cover

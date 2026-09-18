@@ -10,6 +10,7 @@ import {
   newMyPlaylistId,
   saveMyPlaylist,
 } from "@/lib/myPlaylists";
+import { BackButton } from "./BackButton";
 import { Cover } from "./Cover";
 import { ROUND_OPTIONS } from "./player/RoundsPicker";
 import { CheckIcon, ChevronDownIcon, PlusIcon, SearchIcon } from "./Icons";
@@ -115,7 +116,8 @@ function Editor({ id, chants }: { id: string; chants: ChantWithAudio[] }) {
 
   return (
     <div className="px-4 py-6 lg:px-8 lg:py-8">
-      <h1 className="type-section text-ink">เพลย์ลิสต์ของฉัน</h1>
+      <BackButton overlay={false} />
+      <h1 className="mt-2 type-section text-ink">เพลย์ลิสต์ของฉัน</h1>
       <p className="mt-1 type-caption text-muted">
         เลือกบท เรียงลำดับ แล้วกำหนดว่าจะสวดบทละกี่จบ
       </p>

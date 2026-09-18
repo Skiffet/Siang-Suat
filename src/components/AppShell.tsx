@@ -1,6 +1,9 @@
 "use client";
 
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import type { ChantWithAudio, PlaylistWithChants } from "@/lib/types";
+import { markNavigated } from "@/lib/navHistory";
 import { DailyReminderRunner } from "./DailyReminderRunner";
 import { BottomNav } from "./nav/BottomNav";
 import { SideNav } from "./nav/SideNav";
@@ -25,6 +28,17 @@ export function AppShell({
   children: React.ReactNode;
 }) {
   const { current, notice } = usePlayer();
+
+  // The very first pathname this tab renders is a landing, not a step
+  // forward — only a change away from it means there's now somewhere for a
+  // back button to actually return to. Compared against the pathname itself
+  // rather than an effect-ran-once ref, since Strict Mode's dev-only double
+  // invocation would otherwise mark that first landing as a navigation too.
+  const pathname = usePathname();
+  const [initialPathname] = useState(pathname);
+  useEffect(() => {
+    if (pathname !== initialPathname) markNavigated();
+  }, [pathname, initialPathname]);
 
   return (
     <>
