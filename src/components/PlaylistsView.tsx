@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo, useSyncExternalStore } from "react";
-import type { ChantWithAudio, PlaylistWithChants } from "@/lib/types";
+import { useMemo, useState, useSyncExternalStore } from "react";
+import type { ChantWithAudio, PlaylistWithChants, QueuedChant } from "@/lib/types";
 import { formatDurationLong } from "@/lib/format";
 import {
   getMyPlaylistsServerSnapshot,
@@ -12,17 +12,38 @@ import {
   resolveMyPlaylist,
   subscribeMyPlaylists,
 } from "@/lib/myPlaylists";
-import { Cover } from "./Cover";
-import { EqualizerIcon, PlusIcon } from "./Icons";
 import { isPlayingIn } from "@/lib/nowPlaying";
+import { Cover } from "./Cover";
+import { EqualizerIcon, PlusIcon, SearchIcon } from "./Icons";
 import { usePlayer } from "./player/PlayerProvider";
+
+type Kind = "mine" | "curated";
+
+/** A playlist, curated or homemade, reduced to what a row needs to show. */
+interface PlaylistRow {
+  key: string;
+  href: string;
+  title: string;
+  cover: string;
+  count: number;
+  totalSec: number;
+  items: QueuedChant[];
+  kind: Kind;
+}
+
+const FILTERS: { key: Kind | "all"; label: string }[] = [
+  { key: "all", label: "ทั้งหมด" },
+  { key: "mine", label: "ของฉัน" },
+  { key: "curated", label: "จัดไว้ให้" },
+];
 
 /**
  * Playlists — the ones you made, and the ones we arranged.
  *
- * They are the same kind of thing, so they sit on one screen rather than
- * being split across a library and a browse page. The difference is only who
- * arranged them: yours can be edited, ours are shortcuts to start from.
+ * One scrolling list rather than a library split into sections: the chips
+ * above it narrow by who arranged it, the same job Spotify's library gives
+ * its "playlists / albums" filter, so finding your own stays one tap away
+ * without the page having to duplicate that grouping as separate shelves too.
  */
 export function PlaylistsView({
   playlists,
@@ -37,6 +58,9 @@ export function PlaylistsView({
     () => new Map(chants.map((c) => [c.slug, c])),
     [chants],
   );
+  const [filter, setFilter] = useState<Kind | "all">("all");
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [query, setQuery] = useState("");
 
   // Reactive, not a one-shot read: creating, editing or deleting a playlist
   // from its own editor navigates back here, and this list has to reflect
@@ -47,124 +71,185 @@ export function PlaylistsView({
     getMyPlaylistsServerSnapshot,
   );
 
-  const isPlaying = (items: { slug: string }[]) =>
-    playing && isPlayingIn(items, current?.slug);
+  // Yours first — landing here should surface what you made before what we
+  // arranged, even while browsing "ทั้งหมด".
+  const rows: PlaylistRow[] = [
+    ...mine.map((saved): PlaylistRow => {
+      const items = resolveMyPlaylist(saved, bySlug);
+      return {
+        key: `mine:${saved.id}`,
+        href: `/playlist/mine/${saved.id}`,
+        title: saved.title,
+        cover: saved.cover,
+        count: items.length,
+        totalSec: items.reduce((n, c) => n + (c.durationSec ?? 0) * c.rounds, 0),
+        items,
+        kind: "mine",
+      };
+    }),
+    ...playlists.map(
+      (playlist): PlaylistRow => ({
+        key: `curated:${playlist.slug}`,
+        href: `/playlist/${playlist.slug}`,
+        title: playlist.title,
+        cover: playlist.cover,
+        count: playlist.items.length,
+        totalSec: playlist.totalSec,
+        items: playlist.items,
+        kind: "curated",
+      }),
+    ),
+  ];
+
+  const byFilter = filter === "all" ? rows : rows.filter((r) => r.kind === filter);
+  const q = query.trim().toLowerCase();
+  const visible = q ? byFilter.filter((r) => r.title.toLowerCase().includes(q)) : byFilter;
+
+  // The id is minted on the click rather than while rendering: it is made
+  // from the clock, so rendering it would give the server and the browser
+  // different answers and break hydration.
+  const createPlaylist = () => router.push(`/playlist/edit/${newMyPlaylistId()}`);
 
   return (
     <div className="px-4 py-6 lg:px-8 lg:py-8">
-      <h1 className="type-section text-ink">เพลย์ลิสต์</h1>
-      <p className="mt-1 type-caption text-muted">
-        จัดลำดับบทสวดและจำนวนจบเองได้ หรือเริ่มจากชุดที่จัดไว้ให้
-      </p>
+      <div className="flex items-center justify-between gap-3">
+        <h1 className="type-section text-ink">เพลย์ลิสต์</h1>
+        <div className="flex shrink-0 items-center gap-1">
+          <button
+            type="button"
+            onClick={() => {
+              setSearchOpen((open) => !open);
+              setQuery("");
+            }}
+            aria-label="ค้นหาเพลย์ลิสต์"
+            aria-pressed={searchOpen}
+            className={`grid size-9 place-items-center rounded-full transition-colors ${
+              searchOpen ? "bg-mid text-ink" : "text-muted hover:bg-card hover:text-ink"
+            }`}
+          >
+            <SearchIcon size={19} />
+          </button>
+          <button
+            type="button"
+            onClick={createPlaylist}
+            aria-label="สร้างเพลย์ลิสต์ใหม่"
+            className="grid size-9 place-items-center rounded-full text-muted transition-colors hover:bg-card hover:text-ink"
+          >
+            <PlusIcon size={19} />
+          </button>
+        </div>
+      </div>
 
-      {/*
-        The id is minted on the click rather than while rendering: it is made
-        from the clock, so rendering it would give the server and the browser
-        different answers and break hydration.
-      */}
-      <button
-        type="button"
-        onClick={() => router.push(`/playlist/edit/${newMyPlaylistId()}`)}
-        className="mt-5 flex w-full items-center gap-3 rounded-xl bg-surface px-4 py-4 text-left transition-colors hover:bg-card"
-      >
-        <span className="grid size-11 shrink-0 place-items-center rounded-full bg-green text-on-green">
-          <PlusIcon size={22} />
-        </span>
-        <span className="min-w-0">
-          <span className="block type-caption-bold text-ink">
-            สร้างเพลย์ลิสต์ใหม่
-          </span>
-          <span className="block type-small text-muted">
-            เลือกบท เรียงลำดับ กำหนดว่าบทไหนกี่จบ
-          </span>
-        </span>
-      </button>
-
-      {mine.length > 0 && (
-        <section className="mt-8">
-          <h2 className="type-feature text-ink">ของฉัน</h2>
-          <ul className="mt-3 space-y-1">
-            {mine.map((saved) => {
-              const items = resolveMyPlaylist(saved, bySlug);
-              const total = items.reduce(
-                (n, c) => n + (c.durationSec ?? 0) * c.rounds,
-                0,
-              );
-              const live = isPlaying(items);
-              return (
-                <li key={saved.id}>
-                  {/*
-                   * Same pattern as a curated playlist: the row opens the
-                   * view-and-play page rather than starting playback itself.
-                   * Editing is a separate, explicit action next to it.
-                   */}
-                  <Link
-                    href={`/playlist/mine/${saved.id}`}
-                    className="flex items-center gap-3 rounded-md px-2 py-2 transition-colors hover:bg-card-alt"
-                  >
-                    <Cover
-                      src={saved.cover}
-                      alt={saved.title}
-                      sizes="48px"
-                      className="w-12 shrink-0"
-                    />
-                    <span className="min-w-0 flex-1">
-                      <span
-                        className={`block truncate type-caption-bold ${live ? "text-green" : "text-ink"}`}
-                      >
-                        {saved.title}
-                      </span>
-                      <span className="block truncate type-small text-muted">
-                        {items.length} บท · {formatDurationLong(total)}
-                      </span>
-                    </span>
-                    {live && <EqualizerIcon size={16} />}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
+      {searchOpen && (
+        <div className="input-inset mt-4 flex items-center gap-3 rounded-[500px] bg-mid px-4 py-3">
+          <SearchIcon size={18} className="shrink-0 text-muted" />
+          <input
+            type="search"
+            autoFocus
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="ค้นหาเพลย์ลิสต์"
+            aria-label="ค้นหาเพลย์ลิสต์"
+            className="w-full bg-transparent type-caption text-ink outline-none placeholder:text-muted"
+          />
+        </div>
       )}
 
-      <section className="mt-8">
-        <h2 className="type-feature text-ink">จัดไว้ให้</h2>
-        <p className="mt-1 type-small text-muted">
-          ชุดสำเร็จสำหรับเริ่มเร็ว ๆ — กดแล้วสวดได้เลย
-        </p>
-        <ul className="mt-3 space-y-1">
-          {playlists.map((playlist) => {
-            const live = isPlaying(playlist.items);
-            return (
-              <li key={playlist.slug}>
-                <Link
-                  href={`/playlist/${playlist.slug}`}
-                  className="flex items-center gap-3 rounded-md px-2 py-2 transition-colors hover:bg-card-alt"
-                >
-                  <Cover
-                    src={playlist.cover}
-                    alt={playlist.title}
-                    sizes="48px"
-                    className="w-12 shrink-0"
-                  />
-                  <span className="min-w-0 flex-1">
-                    <span
-                      className={`block truncate type-caption-bold ${live ? "text-green" : "text-ink"}`}
-                    >
-                      {playlist.title}
-                    </span>
-                    <span className="block truncate type-small text-muted">
-                      {playlist.items.length} บท ·{" "}
-                      {formatDurationLong(playlist.totalSec)}
-                    </span>
-                  </span>
-                  {live && <EqualizerIcon size={16} />}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      </section>
+      <div className="no-scrollbar mt-5 flex gap-2 overflow-x-auto">
+        {FILTERS.map(({ key, label }) => {
+          if (key === "mine" && mine.length === 0) return null;
+          const active = filter === key;
+          return (
+            <button
+              key={key}
+              type="button"
+              onClick={() => setFilter(key)}
+              aria-pressed={active}
+              className={`shrink-0 rounded-full px-4 py-2 type-small-bold transition-colors ${
+                active ? "bg-green text-on-green" : "bg-mid text-ink hover:bg-card"
+              }`}
+            >
+              {label}
+            </button>
+          );
+        })}
+      </div>
+
+      <ul className="mt-4 space-y-0.5">
+        {visible.map((row) => (
+          <PlaylistRowItem
+            key={row.key}
+            row={row}
+            live={playing && isPlayingIn(row.items, current?.slug)}
+          />
+        ))}
+
+        {/*
+          The create affordance closes the list rather than opening it — the
+          header's "+" is for someone who already knows what they want, this
+          is for someone scanning past everything that exists first and
+          finding nothing to arrange has changed their mind.
+        */}
+        <li>
+          <button
+            type="button"
+            onClick={createPlaylist}
+            className="flex w-full items-center gap-3 rounded-md px-2 py-2 text-left transition-colors hover:bg-card-alt"
+          >
+            <span className="grid size-16 shrink-0 place-items-center rounded-md bg-mid text-muted">
+              <PlusIcon size={24} />
+            </span>
+            <span className="min-w-0">
+              <span className="block type-caption-bold text-ink">
+                สร้างเพลย์ลิสต์ใหม่
+              </span>
+              <span className="block type-small text-muted">
+                เลือกบท เรียงลำดับ กำหนดว่าบทไหนกี่จบ
+              </span>
+            </span>
+          </button>
+        </li>
+      </ul>
     </div>
+  );
+}
+
+/**
+ * One playlist, list-style: a bigger cover than a plain row so it still
+ * reads at a glance, title, and a type-and-source subtitle the way an owner
+ * name would sit under an album — "เสียงสวด" standing in for the owner on a
+ * curated set, matching how a listener would name whoever picked it.
+ *
+ * The row opens the view-and-play page rather than starting playback
+ * itself — pressing play is one explicit tap away there, the same distance
+ * as editing, rather than a second control competing for space in the row.
+ */
+function PlaylistRowItem({ row, live }: { row: PlaylistRow; live: boolean }) {
+  return (
+    <li>
+      <Link
+        href={row.href}
+        className="flex items-center gap-3 rounded-md px-2 py-2 transition-colors hover:bg-card-alt"
+      >
+        <Cover
+          src={row.cover}
+          alt={row.title}
+          sizes="64px"
+          className="w-16 shrink-0"
+        />
+        <span className="min-w-0 flex-1">
+          <span
+            className={`block truncate type-caption-bold ${live ? "text-green" : "text-ink"}`}
+          >
+            {row.title}
+          </span>
+          <span className="mt-0.5 flex items-center gap-1 truncate type-small text-muted">
+            {live && <EqualizerIcon size={12} />}
+            เพลย์ลิสต์ • {row.kind === "mine" ? "คุณ" : "เสียงสวด"} · {row.count} บท ·{" "}
+            {formatDurationLong(row.totalSec)}
+          </span>
+        </span>
+      </Link>
+    </li>
   );
 }
