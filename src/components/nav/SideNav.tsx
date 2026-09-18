@@ -57,10 +57,7 @@ export function SideNav({
       <nav className="rounded-lg bg-surface px-3 py-3">
         <ul>
           {NAV_ITEMS.map((item) => {
-            const active =
-              item.href === "/"
-                ? pathname === "/"
-                : pathname.startsWith(item.href);
+            const active = pathname.startsWith(item.href);
             return (
               <li key={item.href}>
                 <Link

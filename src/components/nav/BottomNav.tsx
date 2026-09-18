@@ -18,8 +18,7 @@ export function BottomNav() {
     <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-white/5 bg-gradient-to-t from-base via-base to-base/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden">
       <ul className="flex items-stretch">
         {NAV_ITEMS.map((item) => {
-          const active =
-            item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+          const active = pathname.startsWith(item.href);
           return (
             <li key={item.href} className="flex-1">
               <Link

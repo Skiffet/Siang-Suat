@@ -1,10 +1,4 @@
-import {
-  ClockIcon,
-  HomeIcon,
-  LibraryIcon,
-  SearchIcon,
-  UserIcon,
-} from "../Icons";
+import { ClockIcon, HomeIcon, LibraryIcon, UserIcon } from "../Icons";
 import type { NavIcon as NavIconName } from "./navItems";
 
 export function NavIcon({
@@ -19,8 +13,6 @@ export function NavIcon({
   switch (name) {
     case "home":
       return <HomeIcon size={size} filled={active} />;
-    case "search":
-      return <SearchIcon size={size} />;
     case "library":
       return <LibraryIcon size={size} filled={active} />;
     case "clock":
