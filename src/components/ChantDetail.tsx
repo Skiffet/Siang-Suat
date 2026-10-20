@@ -32,9 +32,6 @@ export function ChantDetail({
   // with.
   const { rounds: liveRounds, isCurrent, current } = usePlayer();
   const playing = isCurrent(chant.slug);
-  // Shared by the play button and a tap on any line, so however listening
-  // starts here it carries on into the related chants rather than stopping.
-  const queue = useMemo(() => [chant, ...related], [chant, related]);
 
   /**
    * Follow the queue to whatever plays next.
@@ -112,7 +109,7 @@ export function ChantDetail({
            * this page, so it doubles as where listening continues to rather
            * than leaving the audio to just stop.
            */}
-          <PlayButton chant={chant} queue={queue} size={56} />
+          <PlayButton chant={chant} queue={[chant, ...related]} size={56} />
           <AddToPlaylistButton chant={chant} size={40} />
         </div>
       </header>
@@ -158,12 +155,12 @@ export function ChantDetail({
                     </span>
                   )}
                 </div>
-                <Transcript chant={part} queue={queue} heading={null} />
+                <Transcript chant={part} heading={null} />
               </section>
             ))}
           </div>
         ) : (
-          <Transcript chant={chant} queue={queue} />
+          <Transcript chant={chant} />
         )}
       </div>
 

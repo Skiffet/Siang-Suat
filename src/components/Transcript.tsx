@@ -14,16 +14,13 @@ import { useLyrics } from "./useLyrics";
  */
 export function Transcript({
   chant,
-  queue,
   heading = "บทสวดและคำแปล",
 }: {
   chant: ChantWithAudio;
-  /** What a tap on a line starts playing, when this chant is not already. */
-  queue?: ChantWithAudio[];
   /** Null when a caller supplies its own heading, as the parts view does. */
   heading?: string | null;
 }) {
-  const { lines, activeIndex, synced, goTo } = useLyrics(chant, queue);
+  const { lines, activeIndex, synced, goTo } = useLyrics(chant);
   const listRef = useRef<HTMLOListElement>(null);
 
   // Keep the spoken line in view, but only while this chant is the one playing.
