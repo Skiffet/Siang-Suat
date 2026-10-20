@@ -189,7 +189,12 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
   const play = useCallback(
     (chant: ChantWithAudio, list?: ChantWithAudio[]) => {
       const base = list?.length ? list : [chant];
-      const ordered = expand(shuffle ? shuffled(base, chant) : base);
+      // A part (a line tapped inside a คาถา) is entered through the chant it
+      // belongs to, so shuffle keeps that chant whole rather than queueing the
+      // part alone and then the full chant again behind it.
+      const parent = (chant as Partial<QueuedChant>).parentSlug;
+      const head = (parent && base.find((c) => c.slug === parent)) || chant;
+      const ordered = expand(shuffle ? shuffled(base, head) : base);
       // A chant in parts is entered at its first part, whose slug is prefixed.
       const at = ordered.findIndex(
         (c) => c.slug === chant.slug || c.slug.startsWith(`${chant.slug}#`),

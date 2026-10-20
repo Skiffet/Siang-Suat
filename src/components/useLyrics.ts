@@ -16,8 +16,12 @@ export interface LyricLine {
  *
  * Shared by the reading panel on the chant page and the follow-along view
  * inside the player, so both stay on the same line as each other.
+ *
+ * `queue` is what tapping a line starts when this chant is not already
+ * playing — the same list the page's play button uses, so listening carries
+ * on past this chant instead of stopping when it ends.
  */
-export function useLyrics(chant: ChantWithAudio) {
+export function useLyrics(chant: ChantWithAudio, queue?: ChantWithAudio[]) {
   const { time, isCurrent, seek, play } = usePlayer();
   const active = isCurrent(chant.slug);
   const synced = chant.timings.length > 0;
@@ -55,7 +59,7 @@ export function useLyrics(chant: ChantWithAudio) {
       seek(line.startSec);
       return;
     }
-    play(chant);
+    play(chant, queue);
     // The element needs a source before a seek will stick.
     setTimeout(() => seek(line.startSec!), 120);
   }
