@@ -1,0 +1,295 @@
+{
+  "slug": "arathana-phra-khrueang",
+  "title": "คำอาราธนาพระเครื่อง",
+  "subtitle": "อิติปิ โส ภะคะวา อะระหัง สัมมาสัมพุทโธ",
+  "category": "protection",
+  "description": "บทอิติปิโส สรรเสริญพระพุทธคุณ พระธรรมคุณ พระสังฆคุณ แล้วอธิษฐานขอให้พระเครื่องเป็นที่พึ่ง ท่องซ้ำได้ตามกำลัง จบด้วยกลืนน้ำลาย 3 ครั้ง นิยมสวดก่อนแขวนพระหรือก่อนออกจากบ้าน",
+  "tags": [
+    "คาถา",
+    "คุ้มครอง",
+    "พระเครื่อง"
+  ],
+  "cover": "forest-monk",
+  "defaultRounds": 1,
+  "segments": [
+    {
+      "kind": "thai",
+      "text": "คำอาราธนาพระเครื่อง"
+    },
+    {
+      "kind": "pali",
+      "text": "อิติปิ โส ภะคะวา"
+    },
+    {
+      "kind": "pali",
+      "text": "อะระหัง สัมมาสัมพุทโธ"
+    },
+    {
+      "kind": "pali",
+      "text": "วิชชาจะระณะสัมปันโน"
+    },
+    {
+      "kind": "pali",
+      "text": "สุคะโต โลกะวิทู"
+    },
+    {
+      "kind": "pali",
+      "text": "อะนุตตะโร ปุริสะทัมมะสาระถิ"
+    },
+    {
+      "kind": "pali",
+      "text": "สัตถา เทวะมะนุสสานัง"
+    },
+    {
+      "kind": "pali",
+      "text": "พุทโธ ภะคะวาติ"
+    },
+    {
+      "kind": "pali",
+      "text": "สวากขาโต ภะคะวะตา ธัมโม"
+    },
+    {
+      "kind": "pali",
+      "text": "สันทิฏฐิโก อะกาลิโก"
+    },
+    {
+      "kind": "pali",
+      "text": "เอหิปัสสิโก โอปะนะยิโก"
+    },
+    {
+      "kind": "pali",
+      "text": "ปัจจัตตัง เวทิตัพโพ วิญญูหีติ"
+    },
+    {
+      "kind": "pali",
+      "text": "สุปะฏิปันโน ภะคะวะโต สาวะกะสังโฆ"
+    },
+    {
+      "kind": "pali",
+      "text": "อุชุปะฏิปันโน ภะคะวะโต สาวะกะสังโฆ"
+    },
+    {
+      "kind": "pali",
+      "text": "ญายะปะฏิปันโน ภะคะวะโต สาวะกะสังโฆ"
+    },
+    {
+      "kind": "pali",
+      "text": "สามีจิปะฏิปันโน ภะคะวะโต สาวะกะสังโฆ"
+    },
+    {
+      "kind": "pali",
+      "text": "ยะทิทัง จัตตาริ ปุริสะยุคานิ"
+    },
+    {
+      "kind": "pali",
+      "text": "อัฏฐะ ปุริสะปุคคะลา"
+    },
+    {
+      "kind": "pali",
+      "text": "เอสะ ภะคะวะโต สาวะกะสังโฆ"
+    },
+    {
+      "kind": "pali",
+      "text": "อาหุเนยโย ปาหุเนยโย"
+    },
+    {
+      "kind": "pali",
+      "text": "ทักขิเณยโย อัญชะลีกะระณีโย"
+    },
+    {
+      "kind": "pali",
+      "text": "อะนุตตะรัง ปุญญักเขตตัง โลกัสสาติ"
+    },
+    {
+      "kind": "pali",
+      "text": "อิทธิฤทธิ พุทธะนิมิตตัง"
+    },
+    {
+      "kind": "pali",
+      "text": "ขอเดชะเดชัง ขอเดชเดชะ"
+    },
+    {
+      "kind": "pali",
+      "text": "จงมาเป็นที่พึ่งของข้าพเจ้า"
+    },
+    {
+      "kind": "pali",
+      "text": "มะอะอุ ณ กาลบัดนี้เถิด"
+    },
+    {
+      "kind": "cue",
+      "text": "(กลืนน้ำลาย 3 ครั้ง)"
+    }
+  ],
+  "parts": [
+    {
+      "file": "arathana-phra-khrueang-intro.m4a",
+      "durationSec": 3.5,
+      "segments": [
+        0,
+        0
+      ],
+      "label": "ชื่อบท",
+      "timings": [
+        {
+          "sourceIndex": 0,
+          "repeatIndex": 0,
+          "startSec": 0.26
+        }
+      ]
+    },
+    {
+      "file": "arathana-phra-khrueang-verse.m4a",
+      "durationSec": 97.4,
+      "segments": [
+        1,
+        25
+      ],
+      "label": "ตัวบท",
+      "rounds": 1,
+      "timings": [
+        {
+          "sourceIndex": 0,
+          "repeatIndex": 0,
+          "startSec": 0.44
+        },
+        {
+          "sourceIndex": 1,
+          "repeatIndex": 0,
+          "startSec": 4.08
+        },
+        {
+          "sourceIndex": 2,
+          "repeatIndex": 0,
+          "startSec": 6.48
+        },
+        {
+          "sourceIndex": 3,
+          "repeatIndex": 0,
+          "startSec": 9.36
+        },
+        {
+          "sourceIndex": 4,
+          "repeatIndex": 0,
+          "startSec": 12.46
+        },
+        {
+          "sourceIndex": 5,
+          "repeatIndex": 0,
+          "startSec": 16.12
+        },
+        {
+          "sourceIndex": 6,
+          "repeatIndex": 0,
+          "startSec": 19.46
+        },
+        {
+          "sourceIndex": 7,
+          "repeatIndex": 0,
+          "startSec": 22.32
+        },
+        {
+          "sourceIndex": 8,
+          "repeatIndex": 0,
+          "startSec": 25.88
+        },
+        {
+          "sourceIndex": 9,
+          "repeatIndex": 0,
+          "startSec": 29.56
+        },
+        {
+          "sourceIndex": 10,
+          "repeatIndex": 0,
+          "startSec": 33.6
+        },
+        {
+          "sourceIndex": 11,
+          "repeatIndex": 0,
+          "startSec": 38.26
+        },
+        {
+          "sourceIndex": 12,
+          "repeatIndex": 0,
+          "startSec": 43.08
+        },
+        {
+          "sourceIndex": 13,
+          "repeatIndex": 0,
+          "startSec": 48.14
+        },
+        {
+          "sourceIndex": 14,
+          "repeatIndex": 0,
+          "startSec": 53.3
+        },
+        {
+          "sourceIndex": 15,
+          "repeatIndex": 0,
+          "startSec": 59.06
+        },
+        {
+          "sourceIndex": 16,
+          "repeatIndex": 0,
+          "startSec": 63.32
+        },
+        {
+          "sourceIndex": 17,
+          "repeatIndex": 0,
+          "startSec": 66.02
+        },
+        {
+          "sourceIndex": 18,
+          "repeatIndex": 0,
+          "startSec": 69.9
+        },
+        {
+          "sourceIndex": 19,
+          "repeatIndex": 0,
+          "startSec": 73.46
+        },
+        {
+          "sourceIndex": 20,
+          "repeatIndex": 0,
+          "startSec": 77.86
+        },
+        {
+          "sourceIndex": 21,
+          "repeatIndex": 0,
+          "startSec": 82.94
+        },
+        {
+          "sourceIndex": 22,
+          "repeatIndex": 0,
+          "startSec": 85.94
+        },
+        {
+          "sourceIndex": 23,
+          "repeatIndex": 0,
+          "startSec": 90.04
+        },
+        {
+          "sourceIndex": 24,
+          "repeatIndex": 0,
+          "startSec": 93.54
+        }
+      ]
+    },
+    {
+      "file": "arathana-phra-khrueang-closing.m4a",
+      "durationSec": 0.9,
+      "segments": [
+        26,
+        26
+      ],
+      "label": "ปิดท้าย",
+      "timings": [
+        {
+          "sourceIndex": 0,
+          "repeatIndex": 0,
+          "startSec": 0
+        }
+      ]
+    }
+  ]
+}
